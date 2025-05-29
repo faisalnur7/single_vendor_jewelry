@@ -1,0 +1,94 @@
+.customer_side_nav,
+.dark_bg {
+    background: #252f51 !important;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    flex: 1 0 auto;
+}
+
+.main-footer {
+    flex-shrink: 0;
+}
+
+.page-item.active .page-link {
+    background-color: green !important;
+    border-color: green !important;
+    color: white !important;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.pagination-container .pagination a {
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.pagination-container .pagination .disabled {
+    background-color: #f0f0f0;
+}
+
+.pagination-container svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.package-card:hover {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+.package-card.selected {
+    border-color: #007bff;
+    background-color: #e9f5ff;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+.feature-item{
+    font-weight: 500;
+}
+.feature-item::before {
+    content: '✔'; /* Unicode tick */
+    font-weight: 500;
+    color: #0d6efd; /* Bootstrap primary blue */
+    margin-right: 0.5rem;
+}
+
+.save_amount{
+    background: #7894ee;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: white;
+}
+
+.choose_btn{
+    background: #1f54ff;
+}
+
+.choose_btn:hover{
+    background: #0c43f7;
+}
+
+.package_selected{
+    border: 2px solid #1d5ab7 !important;
+}
+
+.justify-end{
+    justify-content: end;
+}
