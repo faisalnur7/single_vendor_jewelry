@@ -12,6 +12,10 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('homepage');
+Route::get('/collections', [DashboardController::class, 'product_list_page'])->name('collections');
+Route::get('/collections/{category:slug}', [DashboardController::class, 'show_categorywise'])->name('category.show');
+Route::get('/collections/{category:slug}/{subcategory:slug}', [DashboardController::class, 'show_subcategorywise'])->name('subcategory.show');
+Route::get('/collections/{product:slug}', [DashboardController::class, 'show_product'])->name('product.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

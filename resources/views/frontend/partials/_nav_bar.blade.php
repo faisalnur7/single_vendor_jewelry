@@ -3,7 +3,7 @@
 @endphp
 <nav class="hidden md:flex gap-6 items-center text-lg font-bold">
     <div class="relative group w-full">
-        <a href="#" class="hover:text-orange-500 flex items-center gap-1 px-4 py-2 whitespace-nowrap">Categories</a>
+        <a href="#" class="hover:text-orange-500 flex items-center gap-1 px-4 py-2 whitespace-nowrap text-xl">Categories <i class="fa-solid fa-angle-down"></i></a>
 
         <!-- Dropdown -->
         <div class="absolute left-1/2 top-full z-50 w-[1100px] bg-white border shadow-2xl pl-4 pt-6 rounded-lg transform -translate-x-1/2 translate-y-[15px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
@@ -14,7 +14,7 @@
                         @foreach ($categories as $category)
                             <li class="p-0 min-w-[230px] left_panel" data-id="{{ $category->id }}">
                                 <div class="flex justify-between items-center text-gray-600 hover:text-black py-2 pr-3">
-                                    <span class="font-normal text-lg">{{ $category->name }}</span>
+                                    <a href="#" class="font-normal text-lg">{{ $category->name }}</a>
                                     <svg class="w-4 h-4 text-gray-400 hover:text-black" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
