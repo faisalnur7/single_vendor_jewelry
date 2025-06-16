@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChildSubCategory extends Model
 {
+    protected $table = 'child_sub_categories';
     protected $fillable = [
         'category_id',
         'subcategory_id',
@@ -21,4 +22,9 @@ class ChildSubCategory extends Model
     public function subcategory(){
         return $this->belongsTo(SubCategory::class,'subcategory_id');
     }
+
+    public function getRouteKeyName(){
+        return 'slug';
+    }
+
 }

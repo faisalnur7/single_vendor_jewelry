@@ -1,9 +1,9 @@
 <div class="flex flex-col product_card">
-    <a href="/">
+    <a href="{{route('show_product', $product->slug)}}">
 
         <!-- Image with overlay icons -->
         <div class="relative bg-white border rounded-none group overflow-hidden">
-            <img src="{{ $product->image }}" alt="Product 1"
+            <img src="{{ asset($product->image) }}" alt="Product 1"
                 class="mx-auto transition-transform duration-[3000ms] group-hover:scale-[1.5]" />
 
             <!-- Icons (eye + heart) -->
@@ -34,7 +34,7 @@
         <div class="flex space-x-2 my-2">
             @foreach ($product->variants as $variant)
                 <div class="bg-white border rounded-none group overflow-hidden max-w-20">
-                    <img src="{{ $variant->image }}" alt="Product 1"
+                    <img src="{{ asset($variant->image) }}" alt="Product 1"
                         class="mx-auto transition-all duration-500 p-[1px] border-0 group-hover:bg-black" />
                 </div>
             @endforeach

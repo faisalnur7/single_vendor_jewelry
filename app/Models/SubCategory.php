@@ -15,4 +15,14 @@ class SubCategory extends Model
     public function child_sub_categories(){
         return $this->hasMany(ChildSubCategory::class,'subcategory_id');
     }
+
+    public function childsubcategories(){
+        return $this->hasMany(ChildSubCategory::class,'subcategory_id');
+    }
+
+
+    public function getRouteKeyName(){
+        return 'slug';
+    }
+
 }
