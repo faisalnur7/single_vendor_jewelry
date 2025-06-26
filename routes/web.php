@@ -44,6 +44,10 @@ Route::get('/login/otp/{temp_id}', [AuthenticatedSessionController::class, 'logi
 Route::post('/login/verify', [AuthenticatedSessionController::class, 'verifyLoginOTP'])->name('login_verify');
 
 
+// Cart Operations routes
+Route::post('/add_to_cart', [CartController::class, 'add_to_cart'])->name('add_to_cart');
+
+
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/user/list', [UserController::class, 'index'])->name('user.list');

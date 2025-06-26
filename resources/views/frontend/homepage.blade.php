@@ -10,9 +10,7 @@
     <section class="py-12 px-6">
         <h2 class="text-4xl font-bold text-center mb-8">Wholesale Trending Discovery</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-6">
-            @for ($i = 0; $i < 6; $i++)
-                @include('frontend.partials._trending_card')
-            @endfor
+            @include('frontend.partials._trending_card')
         </div>
     </section>
 
@@ -20,9 +18,7 @@
     <section class="py-12 px-6">
         <h2 class="text-4xl font-bold text-center mb-8">Featured Categories</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-            @for ($i = 0; $i < 16; $i++)
-                @include('frontend.partials._featured_category_card')
-            @endfor
+            @include('frontend.partials._featured_category_card')
         </div>
     </section>
 
@@ -52,10 +48,10 @@
     <script>
         const swiper = new Swiper('.swiper', {
             loop: true,
-            //effect: 'fade',
-            //fadeEffect: {
-            //  crossFade: true,
-            // },
+            effect: 'fade',
+            fadeEffect: {
+              crossFade: true,
+             },
             autoplay: {
                 delay: 3000,
                 //disableOnInteraction: false,
