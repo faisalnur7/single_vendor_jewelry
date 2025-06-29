@@ -75,11 +75,13 @@ class CartController extends Controller
     // }
 
 
-    public function add_to_cart(Request $request){
+    public function add_to_cart(Request $request)
+    {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer|min:1',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.price' => 'required|numeric|min:0',
+            'items.*.quantity' => 'required|integer|min:1',
         ]);
 
         $user = auth()->user();
@@ -87,48 +89,54 @@ class CartController extends Controller
         if ($user) {
             $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
-            $cartItem = CartItem::where('prime_cart_id', $cart->id)
-                ->where('product_id', $request->product_id)
-                ->first();
+            foreach ($request->items as $item) {
+                $cartItem = CartItem::where('cart_id', $cart->id)
+                    ->where('product_id', $item['product_id'])
+                    ->first();
 
-            if ($cartItem) {
-                $cartItem->increment('quantity', $request->quantity);
-            } else {
-                CartItem::create([
-                    'prime_cart_id' => $cart->id,
-                    'product_id' => $request->product_id,
-                    'quantity' => $request->quantity,
-                    'price' => $request->price,
-                ]);
+                if ($cartItem) {
+                    $cartItem->increment('quantity', $item['quantity']);
+                } else {
+                    CartItem::create([
+                        'cart_id' => $cart->id,
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                    ]);
+                }
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Product added to cart successfully!',
+                'message' => 'Products added to cart successfully!',
             ]);
         }
 
-        // Guest: store in session
+        // Guest (not logged in)
         $cart = session()->get('guest_cart', []);
-        $key = $request->product_id;
 
-        if (isset($cart[$key])) {
-            $cart[$key]['quantity'] += $request->quantity;
-        } else {
-            $cart[$key] = [
-                'product_id' => $request->product_id,
-                'quantity' => $request->quantity,
-                'price' => $request->price,
-            ];
+        foreach ($request->items as $item) {
+            $key = $item['product_id'];
+
+            if (isset($cart[$key])) {
+                $cart[$key]['quantity'] += $item['quantity'];
+            } else {
+                $cart[$key] = [
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                ];
+            }
         }
 
         session()->put('guest_cart', $cart);
 
         return response()->json([
             'success' => true,
-            'message' => 'Product added to guest cart',
+            'message' => 'Products added to guest cart',
         ]);
     }
+
 
 
     public function remove_item(Request $request){

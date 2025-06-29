@@ -92,3 +92,7 @@ body {
 .justify-end{
     justify-content: end;
 }
+
+.dropzone{
+    border: 1px dashed #ccc !important;
+}

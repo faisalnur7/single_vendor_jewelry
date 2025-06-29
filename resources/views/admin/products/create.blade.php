@@ -2,7 +2,9 @@
 
 @section('title', 'Add New Product')
 @section('page_title', 'Add New Product')
-
+@section('styles')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
+@endsection
 @section('contents')
     <div class="container-fluid">
         <div class="card">
@@ -187,8 +189,13 @@
                                                     <input type="file" name="variants[{{ $index }}][image]"
                                                         class="form-control-file">
                                                 </div>
+                                                <div class="col-md-12 mb-2">
+                                                    <label>Description</label>
+                                                    <textarea name="variants[{{$index}}][description]" class="form-control summernote" rows="3"></textarea>
+                                                </div>
                                                 <div class="col-md-2 d-flex align-items-center justify-end">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i
+                                                    <button type="button"
+                                                        class="btn btn-outline-danger btn-sm remove-variant"><i
                                                             class="fas fa-minus"></i></button>
                                                 </div>
                                             </div>
@@ -212,8 +219,13 @@
                                                 <input type="file" name="variants[0][image]"
                                                     class="form-control-file">
                                             </div>
+                                            <div class="col-md-12 mb-2">
+                                                <label>Description</label>
+                                                <textarea name="variants[0][description]" class="form-control summernote" rows="3"></textarea>
+                                            </div>
                                             <div class="col-md-2 d-flex align-items-center justify-end">
-                                                <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i
+                                                <button type="button"
+                                                    class="btn btn-outline-danger btn-sm remove-variant"><i
                                                         class="fas fa-minus"></i></button>
                                             </div>
                                         </div>
@@ -239,6 +251,8 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
+
     <script>
         function slugify(text) {
             return text
@@ -250,6 +264,10 @@
         }
 
         $(document).ready(function() {
+            $('.summernote').summernote({
+                height: 100
+            });
+
             var slugManuallyEdited = false;
 
             // Auto-generate slug when product name is typed
@@ -292,11 +310,18 @@
                     <div class="col-md-3">
                         <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
                     </div>
+                    <div class="col-md-12 mb-2">
+                        <label>Description</label>
+                        <textarea name="variants[${variantIndex}][description]" class="form-control summernote" rows="3"></textarea>
+                    </div>
                     <div class="col-md-2 d-flex align-items-center justify-end">
                         <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
                     </div>
                 </div>`;
                 $('#variants_container').append(variantHtml);
+                $(`.summernote`).last().summernote({
+                    height: 100
+                });
                 variantIndex++;
             });
 
@@ -312,7 +337,7 @@
             function fetchUpcomingProductIdAndGenerateSKU() {
                 // Call backend to get the next product ID
                 $.ajax({
-                    url: "{{route('getNextProductId')}}", // Laravel route
+                    url: "{{ route('getNextProductId') }}", // Laravel route
                     type: 'GET',
                     success: function(response) {
                         $('#upcoming_product_id').val(response.product_id);
@@ -328,20 +353,20 @@
                 var upcomingProductId = $('#upcoming_product_id').val() || '';
 
                 if (category && subcategory && childsubcategory && upcomingProductId) {
-                    var sku = category + subcategory + childsubcategory  + upcomingProductId;
+                    var sku = category + subcategory + childsubcategory + upcomingProductId;
                     $('#sku').val(sku);
                 } else {
                     $('#sku').val('');
                 }
             }
 
-            $(document).on('change','#category_id, #subcategory_id, #childsubcategory_id', function() {
+            $(document).on('change', '#category_id, #subcategory_id, #childsubcategory_id', function() {
                 // When all three selected, fetch product id
                 console.log($('#category_id').val());
                 console.log($('#subcategory_id').val());
                 console.log($('#childsubcategory_id').val());
                 if ($('#category_id').val() && $('#subcategory_id').val() && $('#childsubcategory_id')
-                .val()) {
+                    .val()) {
                     fetchUpcomingProductIdAndGenerateSKU();
                 } else {
                     $('#sku').val('');

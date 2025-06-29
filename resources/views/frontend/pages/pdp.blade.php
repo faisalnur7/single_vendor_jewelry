@@ -19,7 +19,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Image Viewer -->
                 <div>
-                    <div class="sticky top-0 flex gap-4">
+                    <div class=" flex gap-4">
                         <!-- Main Image Full Width, Natural Height -->
                         <div class="relative border rounded overflow-hidden w-full">
                             <img id="mainImage" src="{{ asset($product->image) }}"
@@ -31,7 +31,7 @@
 
                         <!-- Zoom Preview -->
                         <div id="zoomWrapper"
-                            class="absolute left-full top-0 ml-6 w-[400px] h-[400px] border overflow-hidden rounded shadow-xl hidden z-50 bg-white">
+                            class="absolute left-full top-0 ml-6 w-[400px] h-[400px] border overflow-hidden rounded shadow-xl hidden z-[999999] bg-white">
                             <div id="result" class="w-full h-full bg-no-repeat bg-center bg-white"></div>
                         </div>
                     </div>
@@ -88,11 +88,11 @@
                                 @foreach ($product->variants as $index => $variant)
                                     <div onclick="changeImage('{{ asset($variant->image) }}', this)"
                                         data-image="{{ asset($variant->image) }}"
-                                        class="grid grid-cols-3 items-center mt-1 border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer ">
+                                        class="grid grid-cols-3 items-center mt-1  border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer ">
                                         <!-- Color + Image -->
                                         <div class="p-2 flex items-center gap-2">
                                             <img src="{{ asset($variant->image) }}"
-                                                class="w-10 h-10 object-cover rounded" />
+                                                class="w-12 h-12 object-cover  rounded" />
                                             <span>{{ $variant->color }}</span>
                                         </div>
 
@@ -105,10 +105,12 @@
                                             <div class="flex items-center justify-center gap-2 pdp_quantity">
                                                 <button class="qty-decrease px-2 py-1 border rounded"
                                                     data-index="{{ $index }}"
+                                                    data-product_id="{{$variant->id}}"
                                                     data-price="{{ $variant->price }}">-</button>
                                                 <span id="qty-{{ $index }}">0</span>
                                                 <button class="qty-increase px-2 py-1 border rounded"
                                                     data-index="{{ $index }}"
+                                                    data-product_id="{{$variant->id}}"
                                                     data-price="{{ $variant->price }}">+</button>
 
                                             </div>
@@ -252,7 +254,6 @@
                 const $result = $("#result");
 
                 // Update the selected row style
-                console.log(el);
                 $(".variant_row").removeClass("border-gray-700");
                 if (el) {
                     $(el).addClass("border-gray-700");
@@ -321,7 +322,7 @@
                     if (qty > 0) {
                         const index = $(this).attr('id').split('-')[1];
                         const price = $('[data-index="' + index + '"]').first().data('price');
-                        const productId = '{{ $product->id }}'; // assuming you have this
+                        const productId = $('[data-index="' + index + '"]').first().data('product_id'); // assuming you have this
                         const variant = @json($product->variants);
 
                         itemsToAdd.push({
@@ -339,16 +340,13 @@
                 }
 
                 // Send one by one — or batch if you create such backend support
-                itemsToAdd.forEach(item => {
+
                     $.ajax({
                         url: "{{ route('add_to_cart') }}",
                         method: "POST",
                         data: {
                             _token: '{{ csrf_token() }}',
-                            product_id: item.product_id,
-                            price: item.price,
-                            quantity: item.quantity,
-                            variant_index: item.variant_index // optional
+                            items: itemsToAdd
                         },
                         success: function(res) {
                             console.log(res);
@@ -366,7 +364,7 @@
                         }
                     });
                 });
-            });
+
         });
     </script>
 @endsection
