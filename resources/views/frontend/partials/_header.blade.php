@@ -12,8 +12,17 @@
         <a href="#" class="text-lg">
             <i class="fa-regular fa-heart"></i>
         </a>
-        <a href="#" class="text-lg">
+        <a href="#" class="relative text-lg">
             <i class="fa-solid fa-cart-shopping"></i>
+            @php
+                $cartCount = session()->has('guest_cart') ? count(session('guest_cart')) : 0;
+            @endphp
+            @if($cartCount > 0)
+                <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 flex justify-center items-center leading-none">
+                    {{ $cartCount }}
+                </span>
+            @endif
         </a>
+
     </div>
 </header>

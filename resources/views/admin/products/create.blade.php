@@ -2,9 +2,6 @@
 
 @section('title', 'Add New Product')
 @section('page_title', 'Add New Product')
-@section('styles')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
-@endsection
 @section('contents')
     <div class="container-fluid">
         <div class="card">
@@ -251,7 +248,6 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
 
     <script>
         function slugify(text) {

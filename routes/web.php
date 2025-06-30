@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\PrimeRequestController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;

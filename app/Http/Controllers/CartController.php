@@ -32,48 +32,6 @@ class CartController extends Controller
 
         return view('prime_user.product_purchase.cart_page', compact('cart', 'subtotal', 'total'));
     }
-    // public function add_to_cart(Request $request){
-    //     $request->validate([
-    //         'product_id' => 'required|exists:products,id',
-    //     ]);
-
-    //     $user = auth()->user();
-
-    //     if (!$user) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Please log in to add items to cart.'
-    //         ], 401);
-    //     }
-
-    //     // Get or create Cart for the user
-    //     $cart = Cart::firstOrCreate(['user_id' => $user->id]);
-
-    //     // Check if item already exists
-    //     $cartItem = CartItem::where('prime_cart_id', $cart->id)
-    //         ->where('product_id', $request->product_id)
-    //         ->first();
-
-    //     if ($cartItem) {
-    //         // Increase quantity
-    //         $cartItem->increment('quantity');
-    //     } else {
-    //         // Add new item
-    //         CartItem::create([
-    //             'prime_cart_id' => $cart->id,
-    //             'product_id' => $request->product_id,
-    //             'quantity' => 1,
-    //             'price' => $request->price ?? 0,
-    //         ]);
-    //     }
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Product added to cart successfully!',
-    //         'html' => view('layouts.partials._top_cart')->render()
-    //     ]);
-    // }
-
 
     public function add_to_cart(Request $request)
     {

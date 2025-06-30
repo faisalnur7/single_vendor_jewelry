@@ -214,6 +214,7 @@ class ProductController extends Controller
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
                     $vProduct->stock = $variant['stock'];
+                    $vProduct->description = $variant['description'];
 
                     if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
                         $filename = time() . '_' . $variant['image']->getClientOriginalName();
@@ -232,6 +233,7 @@ class ProductController extends Controller
                     $vProduct->name = $product->name.'-'.($key+1);
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
+                    $vProduct->description = $variant['description'];
                     $vProduct->parent_id = $product->id;
                     $vProduct->sku = $product->sku . ($key + 1);
                     $vProduct->has_variants = 0;

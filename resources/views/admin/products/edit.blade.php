@@ -2,7 +2,9 @@
 
 @section('title', 'Edit Product')
 @section('page_title', 'Edit Product')
-
+@section('styles')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
+@endsection
 @section('contents')
     <div class="container-fluid">
         <div class="card">
@@ -118,7 +120,7 @@
                         </div>
 
                         @if ($product->parent_id !== 0)
-                            <input type="hidden" name="is_variant" value="1" >
+                            <input type="hidden" name="is_variant" value="1">
                             <div class="col-md-4 form-group">
                                 <label>Color</label>
                                 <input type="text" name="color" class="form-control" value="{{ $product->color }}">
@@ -130,7 +132,7 @@
                                     value="{{ $product->price }}">
                             </div>
                         @else
-                            <input type="hidden" name="is_variant" value="0" >
+                            <input type="hidden" name="is_variant" value="0">
                             <div class="col-md-4 form-group">
                                 <label>Min Price</label>
                                 <input type="number" step="0.01" name="min_price" class="form-control"
@@ -153,23 +155,23 @@
                             <input type="number" step="0.01" name="weight" class="form-control"
                                 value="{{ $product->weight }}">
                         </div>
-                        
+
                         @if ($product->parent_id == 0)
-                        {{-- Descriptions --}}
-                        <div class="col-md-4 form-group">
-                            <label>Description</label>
-                            <textarea name="description" class="form-control">{{ $product->description }}</textarea>
-                        </div>
+                            {{-- Descriptions --}}
+                            <div class="col-md-4 form-group">
+                                <label>Description</label>
+                                <textarea name="description" class="form-control">{{ $product->description }}</textarea>
+                            </div>
 
-                        <div class="col-md-4 form-group">
-                            <label>Short Description</label>
-                            <textarea name="short_description" class="form-control" rows="2">{{ $product->short_description }}</textarea>
-                        </div>
+                            <div class="col-md-4 form-group">
+                                <label>Short Description</label>
+                                <textarea name="short_description" class="form-control" rows="2">{{ $product->short_description }}</textarea>
+                            </div>
 
-                        <div class="col-md-4 form-group">
-                            <label>Meta Data</label>
-                            <textarea name="meta" class="form-control" rows="2">{{ $product->meta }}</textarea>
-                        </div>
+                            <div class="col-md-4 form-group">
+                                <label>Meta Data</label>
+                                <textarea name="meta" class="form-control" rows="2">{{ $product->meta }}</textarea>
+                            </div>
                         @endif
                         {{-- Image --}}
                         <div class="col-md-6 form-group">
@@ -195,6 +197,9 @@
                                     @if (count($product->variants))
                                         @foreach ($product->variants as $index => $variant)
                                             <div class="form-row variant-item mb-3 border p-3 rounded">
+                                                <div class="col-md-12 d-flex align-items-center justify-end">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
+                                                </div>
                                                 <input type="hidden" name="variants[{{ $index }}][id]"
                                                     value="{{ $variant->id }}" />
                                                 <div class="col-md-3">
@@ -216,16 +221,18 @@
                                                     <input type="file" name="variants[{{ $index }}][image]"
                                                         class="form-control-file">
                                                 </div>
-                                                <div class="col-md-2 d-flex align-items-center justify-end">
-                                                    <button type="button"
-                                                        class="btn btn-outline-danger btn-sm remove-variant"><i
-                                                            class="fas fa-minus"></i></button>
+                                                <div class="col-md-12 mb-2">
+                                                    <label>Description</label>
+                                                    <textarea name="variants[{{ $index }}][description]" class="form-control summernote" rows="3">{{ $variant->description }}</textarea>
                                                 </div>
                                             </div>
                                         @endforeach
                                     @else
                                         <!-- Default One -->
                                         <div class="form-row variant-item mb-3 border p-3 rounded">
+                                            <div class="col-md-12 d-flex align-items-center justify-end">
+                                                <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
+                                            </div>
                                             <input type="hidden" name="variants[0][id]" value="" />
                                             <div class="col-md-3">
                                                 <input type="text" name="variants[0][color]" class="form-control"
@@ -243,10 +250,9 @@
                                                 <input type="file" name="variants[0][image]"
                                                     class="form-control-file">
                                             </div>
-                                            <div class="col-md-2 d-flex align-items-center justify-end">
-                                                <button type="button"
-                                                    class="btn btn-outline-danger btn-sm remove-variant"><i
-                                                        class="fas fa-minus"></i></button>
+                                            <div class="col-md-12 mb-2">
+                                                <label>Description</label>
+                                                <textarea name="variants[{{ $index }}][description]" class="form-control summernote" rows="3">{{ $variant->description }}</textarea>
                                             </div>
                                         </div>
                                     @endif
@@ -269,30 +275,26 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
     <script>
         function slugify(text) {
-            return text
-                .toString()
-                .toLowerCase()
-                .trim()
+            return text.toString().toLowerCase().trim()
                 .replace(/[\s\W-]+/g, '-') // replace spaces & special chars with -
                 .replace(/^-+|-+$/g, ''); // trim leading & trailing hyphens
         }
 
         $(document).ready(function() {
             var slugEdited = false;
-            var variantIndex = {{ isset($variantIndex) ? $variantIndex : 1 }};
+            var variantIndex = {{ count($product->variants) ?? 1 }};
 
-            var variant_count = $('#variant_section').data('variant_count');
-
-            if (variant_count > 0) {
-                variantIndex = variant_count;
-            }
+            // Initialize Summernote for existing variant descriptions
+            $('.summernote').summernote({
+                height: 100
+            });
 
             $('input[name="name"]').on('input', function() {
                 if (!slugEdited) {
-                    let slug = slugify($(this).val());
-                    $('input[name="slug"]').val(slug);
+                    $('input[name="slug"]').val(slugify($(this).val()));
                 }
             });
 
@@ -305,26 +307,33 @@
             });
 
             $('#add_variant_btn').on('click', function() {
-                $('#variants_container').append(`
-                <div class="form-row variant-item mb-3 border p-3 rounded">
-                    <input type="hidden" name="variants[${variantIndex}][id]" />
-                    <div class="col-md-3">
-                        <input type="text" name="variants[${variantIndex}][color]" class="form-control" placeholder="Color">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="variants[${variantIndex}][stock]" class="form-control" placeholder="Stock">
-                    </div>
-                    <div class="col-md-3">
-                        <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center justify-end">
-                        <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
-                    </div>
+                const html = `
+            <div class="form-row variant-item mb-3 border p-3 rounded">
+                <div class="col-md-12 d-flex align-items-center justify-end">
+                    <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
                 </div>
-            `);
+                <input type="hidden" name="variants[${variantIndex}][id]" />
+                <div class="col-md-3">
+                    <input type="text" name="variants[${variantIndex}][color]" class="form-control" placeholder="Color">
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="variants[${variantIndex}][stock]" class="form-control" placeholder="Stock">
+                </div>
+                <div class="col-md-3">
+                    <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
+                </div>
+                <div class="col-md-12 mb-2">
+                    <label>Description</label>
+                    <textarea name="variants[${variantIndex}][description]" class="form-control summernote" rows="3"></textarea>
+                </div>
+            </div>`;
+                $('#variants_container').append(html);
+                $(`.summernote`).last().summernote({
+                    height: 100
+                });
                 variantIndex++;
             });
 

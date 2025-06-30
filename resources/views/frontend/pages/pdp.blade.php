@@ -10,18 +10,35 @@
             transform: scale(1.5);
             transition: transform 0.3s ease;
         }
+
+        /* Fixed Zoom Wrapper */
+        #zoomWrapper.fixed {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-left: 0 !important;
+            z-index: 9999;
+        }
+
+        /* Blur effect on product details */
+        #productDetailsSection.blurred {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+        }
     </style>
 @endsection
 @section('contents')
     @include('frontend.partials._breadcrumbs')
     <section class="pt-0 pb-12 px-6">
         <div class="mx-auto p-0">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Image Viewer -->
                 <div>
-                    <div class=" flex gap-4">
+                    <div class="relative flex gap-4">
                         <!-- Main Image Full Width, Natural Height -->
-                        <div class="relative border rounded overflow-hidden w-full">
+                        <div class="relative  rounded overflow-hidden w-full">
                             <img id="mainImage" src="{{ asset($product->image) }}"
                                 class="w-full h-auto object-contain transition-opacity duration-300 opacity-100" />
                             <div id="lens"
@@ -31,7 +48,7 @@
 
                         <!-- Zoom Preview -->
                         <div id="zoomWrapper"
-                            class="absolute left-full top-0 ml-6 w-[400px] h-[400px] border overflow-hidden rounded shadow-xl hidden z-[999999] bg-white">
+                            class="absolute left-full top-0 ml-6 w-[400px] h-[400px] border overflow-hidden rounded shadow-xl hidden z-50 bg-white">
                             <div id="result" class="w-full h-full bg-no-repeat bg-center bg-white"></div>
                         </div>
                     </div>
@@ -44,8 +61,7 @@
                             <div class="swiper-wrapper">
                                 @foreach ($product->variants as $variant)
                                     <div class="swiper-slide w-24 cursor-pointer">
-                                        <img onclick="changeImage(this.src)" src="{{ asset($variant->image) }}"
-                                            class="w-full border rounded" />
+                                        <img onclick="changeImage(this.src, this)" src="{{ asset($variant->image) }}" data-product_details="{{ $variant->description }}" class="w-full border sw-item rounded" />
                                     </div>
                                 @endforeach
                             </div>
@@ -54,7 +70,8 @@
                 </div>
 
                 <!-- Product Details (dummy content) -->
-                <div class="w-full bg-white p-6 pt-0 rounded shadow-none">
+                <div id="productDetailsSection"
+                    class="w-full bg-white p-6 pt-0 rounded shadow-none relative transition-all duration-300">
                     <h2 class="text-xl font-semibold">{{ $product->name }}</h2>
                     {{-- <p class="mt-2 text-sm text-gray-600">From collection <span class="bg-black text-white px-2 py-1 rounded">Liora</span></p> --}}
 
@@ -70,7 +87,7 @@
 
 
                     <!-- Price Range -->
-                    <p class="text-2xl font-semibold my-4">${{ $product->variants->min('price') }} -
+                    <p class="text-2xl font-semibold my-4 text-gray-400">${{ $product->variants->min('price') }} -
                         ${{ $product->variants->max('price') }}</p>
 
                     <!-- Table -->
@@ -88,6 +105,7 @@
                                 @foreach ($product->variants as $index => $variant)
                                     <div onclick="changeImage('{{ asset($variant->image) }}', this)"
                                         data-image="{{ asset($variant->image) }}"
+                                        data-product_details="{{ $variant->description }}"
                                         class="grid grid-cols-3 items-center mt-1  border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer ">
                                         <!-- Color + Image -->
                                         <div class="p-2 flex items-center gap-2">
@@ -104,13 +122,11 @@
                                         <div class="p-2 flex justify-center text-center">
                                             <div class="flex items-center justify-center gap-2 pdp_quantity">
                                                 <button class="qty-decrease px-2 py-1 border rounded"
-                                                    data-index="{{ $index }}"
-                                                    data-product_id="{{$variant->id}}"
+                                                    data-index="{{ $index }}" data-product_id="{{ $variant->id }}"
                                                     data-price="{{ $variant->price }}">-</button>
                                                 <span id="qty-{{ $index }}">0</span>
                                                 <button class="qty-increase px-2 py-1 border rounded"
-                                                    data-index="{{ $index }}"
-                                                    data-product_id="{{$variant->id}}"
+                                                    data-index="{{ $index }}" data-product_id="{{ $variant->id }}"
                                                     data-price="{{ $variant->price }}">+</button>
 
                                             </div>
@@ -168,12 +184,8 @@
 
                     <div class="mt-6">
                         <h3 class="text-lg font-semibold">Product Details</h3>
-                        <ul class="list-disc list-inside text-sm text-gray-600 mt-2">
-                            <li>Material: Stainless Steel</li>
-                            <li>Plating: 18K Gold</li>
-                            <li>Water-Resistant: Yes</li>
-                            <li>Hypoallergenic: Yes</li>
-                            <li>Dimensions: Adjustable chain length</li>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-2 product_details">
+                            {!! $product->variants->first()->description !!}
                         </ul>
                     </div>
                 </div>
@@ -204,15 +216,27 @@
             // Mouse enter
             $img.on("mouseenter", function() {
                 $lens.show();
-                $zoomWrapper.show();
+                $zoomWrapper.addClass("fixed").show();
                 $result.css("background-image", `url('${$img.attr("src")}')`);
+                const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                $('body').css({
+                    'overflow': 'hidden',
+                    'padding-right': `${scrollbarWidth}px`
+                });
+                $('#productDetailsSection').addClass('blurred'); // blur the details
             });
 
-            // Mouse leave
             $img.on("mouseleave", function() {
                 $lens.hide();
-                $zoomWrapper.hide();
+                $zoomWrapper.removeClass("fixed").hide();
+                $('body').css({
+                    'overflow': '',
+                    'padding-right': ''
+                });
+
+                $('#productDetailsSection').removeClass('blurred'); // remove blur
             });
+
 
             // Mouse move
             $img.on("mousemove", function(e) {
@@ -252,12 +276,15 @@
             window.changeImage = function(src, el = null) {
                 const $img = $("#mainImage");
                 const $result = $("#result");
+                const product_details = $(el).data('product_details');
 
                 // Update the selected row style
                 $(".variant_row").removeClass("border-gray-700");
+                $(".sw-item").removeClass("border-gray-700");
                 if (el) {
                     $(el).addClass("border-gray-700");
                 }
+                $('.product_details').html(product_details);
 
                 // Fade out current image
                 $img.removeClass("opacity-100").addClass("opacity-0");
@@ -322,7 +349,8 @@
                     if (qty > 0) {
                         const index = $(this).attr('id').split('-')[1];
                         const price = $('[data-index="' + index + '"]').first().data('price');
-                        const productId = $('[data-index="' + index + '"]').first().data('product_id'); // assuming you have this
+                        const productId = $('[data-index="' + index + '"]').first().data(
+                            'product_id'); // assuming you have this
                         const variant = @json($product->variants);
 
                         itemsToAdd.push({
@@ -341,29 +369,29 @@
 
                 // Send one by one — or batch if you create such backend support
 
-                    $.ajax({
-                        url: "{{ route('add_to_cart') }}",
-                        method: "POST",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            items: itemsToAdd
-                        },
-                        success: function(res) {
-                            console.log(res);
-                            if (res.success) {
-                                // Optional: show a toast or update top cart HTML
-                            }
-                        },
-                        error: function(err) {
-                            if (err.status === 401) {
-                                alert('Please login to add items to cart.');
-                                window.location.href = '/login';
-                            } else {
-                                alert('Failed to add item to cart.');
-                            }
+                $.ajax({
+                    url: "{{ route('add_to_cart') }}",
+                    method: "POST",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        items: itemsToAdd
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        if (res.success) {
+                            // Optional: show a toast or update top cart HTML
                         }
-                    });
+                    },
+                    error: function(err) {
+                        if (err.status === 401) {
+                            alert('Please login to add items to cart.');
+                            window.location.href = '/login';
+                        } else {
+                            alert('Failed to add item to cart.');
+                        }
+                    }
                 });
+            });
 
         });
     </script>
