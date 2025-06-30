@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -11,27 +12,68 @@ use Illuminate\Support\Facades\Session;
 class CartController extends Controller
 {
 
-    public function cart(Request $request){
+    public function cart(){
         $user = auth()->user();
 
-        if (!$user) {
-            return redirect()->route('login');
-        }
+        if ($user) {
+            // Get user cart and load items with product details
+            $cart = Cart::with('items.product')->where('user_id', $user->id)->first();
 
-        $cart = Cart::with(['items.product'])->where('user_id', $user->id)->first();
-
-        $subtotal = 0;
-
-        if ($cart && $cart->items) {
-            foreach ($cart->items as $item) {
-                $subtotal += $item->price * $item->quantity;
+            if (!$cart || $cart->items->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'cart' => [],
+                    'message' => 'Cart is empty',
+                ]);
             }
+
+            return response()->json([
+                'success' => true,
+                'cart' => $cart->items->map(function ($item) {
+                    return [
+                        'product_id' => $item->product_id,
+                        'product_name' => $item->product->name ?? 'N/A',
+                        'price' => $item->price,
+                        'quantity' => $item->quantity,
+                        'subtotal' => $item->price * $item->quantity,
+                    ];
+                }),
+            ]);
         }
 
-        $total = $subtotal;
+        // Guest cart from session
+        $guestCart = session()->get('guest_cart', []);
 
-        return view('prime_user.product_purchase.cart_page', compact('cart', 'subtotal', 'total'));
+        if (empty($guestCart)) {
+            return response()->json([
+                'success' => true,
+                'cart' => [],
+                'message' => 'Guest cart is empty',
+            ]);
+        }
+
+        // Load product details for guest cart
+        $productIds = array_keys($guestCart);
+        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+
+        $cartItems = [];
+        foreach ($guestCart as $productId => $item) {
+            $product = $products[$productId] ?? null;
+            $cartItems[] = [
+                'product_id' => $productId,
+                'product_name' => $product->name ?? 'N/A',
+                'price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['price'] * $item['quantity'],
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'cart' => $cartItems,
+        ]);
     }
+
 
     public function add_to_cart(Request $request)
     {
@@ -65,6 +107,7 @@ class CartController extends Controller
             }
 
             return response()->json([
+                'cart' => count($cart->items),
                 'success' => true,
                 'message' => 'Products added to cart successfully!',
             ]);
@@ -89,9 +132,11 @@ class CartController extends Controller
 
         session()->put('guest_cart', $cart);
 
+
         return response()->json([
+            'cart' => count($cart),
             'success' => true,
-            'message' => 'Products added to guest cart',
+            'message' => 'Products added to cart',
         ]);
     }
 

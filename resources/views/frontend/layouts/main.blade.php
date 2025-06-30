@@ -14,9 +14,8 @@
 
 
 @include('frontend.partials._footer')
+    @include('frontend.partials._script')
     @yield('scripts')
-    
-
 </body>
 
 </html>

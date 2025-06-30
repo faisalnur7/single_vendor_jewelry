@@ -1,5 +1,5 @@
 @extends('frontend.layouts.main')
-
+@section('title','Stainless Steel Jewelry')
 @section('contents')
     <!-- Hero Section -->
     <section class="bg-beige text-center bg-gradient-to-br from-amber-100 to-white">

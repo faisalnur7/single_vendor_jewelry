@@ -52,20 +52,5 @@
   <!-- Bottom Bar -->
   <div class="mt-10 border-t pt-6 text-center text-sm">
     <p>Copyright © 2025 all rights reserved.</p>
-    <div class="flex flex-wrap justify-center gap-2 mt-4">
-      <!-- Replace with appropriate image sources or icon fonts -->
-      {{-- <img src="https://img.icons8.com/color/48/000000/paypal.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/visa.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/mastercard-logo.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/discover.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/amex.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/apple-pay.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/amazon.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/diners-club.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/venmo.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/unionpay.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/jcb.png" class="h-6" />
-      <img src="https://img.icons8.com/color/48/000000/elo-card.png" class="h-6" /> --}}
-    </div>
   </div>
 </footer>

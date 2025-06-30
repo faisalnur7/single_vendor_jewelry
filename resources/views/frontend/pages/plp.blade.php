@@ -1,5 +1,5 @@
 @extends('frontend.layouts.main')
-
+@section('title','Stainless Steel Jewelry')
 @section('contents')
     @include('frontend.partials._breadcrumbs')
     <!-- Products you may like Section -->

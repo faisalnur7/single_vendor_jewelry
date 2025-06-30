@@ -47,6 +47,7 @@ Route::post('/login/verify', [AuthenticatedSessionController::class, 'verifyLogi
 
 // Cart Operations routes
 Route::post('/add_to_cart', [CartController::class, 'add_to_cart'])->name('add_to_cart');
+Route::get('/cart', [CartController::class, 'cart'])->name('cart');
 
 
 

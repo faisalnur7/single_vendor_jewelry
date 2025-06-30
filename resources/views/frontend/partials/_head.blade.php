@@ -1,6 +1,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Factory Price Jewelry</title>
+<title>@yield('title')</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
     rel="stylesheet">
@@ -11,6 +11,8 @@
     integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<!-- toastr -->
+<link rel="stylesheet" href="{{ asset('assets/plugins/toastr/toastr.min.css') }}">
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <style>
