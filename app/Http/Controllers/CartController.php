@@ -20,36 +20,20 @@ class CartController extends Controller
             $cart = Cart::with('items.product')->where('user_id', $user->id)->first();
 
             if (!$cart || $cart->items->isEmpty()) {
-                return response()->json([
-                    'success' => true,
-                    'cart' => [],
-                    'message' => 'Cart is empty',
-                ]);
+                $cartItems = [];
+                return view('frontend.pages.cart', compact('cartItems'));
             }
-
-            return response()->json([
-                'success' => true,
-                'cart' => $cart->items->map(function ($item) {
-                    return [
-                        'product_id' => $item->product_id,
-                        'product_name' => $item->product->name ?? 'N/A',
-                        'price' => $item->price,
-                        'quantity' => $item->quantity,
-                        'subtotal' => $item->price * $item->quantity,
-                    ];
-                }),
-            ]);
+            
+            $cartItems = $cart->items;
+            return view('frontend.pages.cart', compact('cartItems'));
         }
 
         // Guest cart from session
         $guestCart = session()->get('guest_cart', []);
 
         if (empty($guestCart)) {
-            return response()->json([
-                'success' => true,
-                'cart' => [],
-                'message' => 'Guest cart is empty',
-            ]);
+            $cartItems = [];
+            return view('frontend.pages.cart', compact('cartItems'));
         }
 
         // Load product details for guest cart
@@ -62,16 +46,15 @@ class CartController extends Controller
             $cartItems[] = [
                 'product_id' => $productId,
                 'product_name' => $product->name ?? 'N/A',
+                'color' => $product->color ?? 'N/A',
+                'image' => $product->image ?? 'N/A',
                 'price' => $item['price'],
                 'quantity' => $item['quantity'],
                 'subtotal' => $item['price'] * $item['quantity'],
             ];
         }
 
-        return response()->json([
-            'success' => true,
-            'cart' => $cartItems,
-        ]);
+        return view('frontend.pages.cart', compact('cartItems'));
     }
 
 
@@ -90,6 +73,7 @@ class CartController extends Controller
             $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
             foreach ($request->items as $item) {
+                $product = Product::query()->findOrFail($item['product_id']);
                 $cartItem = CartItem::where('cart_id', $cart->id)
                     ->where('product_id', $item['product_id'])
                     ->first();
@@ -100,6 +84,7 @@ class CartController extends Controller
                     CartItem::create([
                         'cart_id' => $cart->id,
                         'product_id' => $item['product_id'],
+                        'image' => $product->image,
                         'quantity' => $item['quantity'],
                         'price' => $item['price'],
                     ]);
@@ -118,12 +103,13 @@ class CartController extends Controller
 
         foreach ($request->items as $item) {
             $key = $item['product_id'];
-
+            $product = Product::query()->findOrFail($item['product_id']);
             if (isset($cart[$key])) {
                 $cart[$key]['quantity'] += $item['quantity'];
             } else {
                 $cart[$key] = [
                     'product_id' => $item['product_id'],
+                    'image' => $product->image,
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                 ];
@@ -142,47 +128,53 @@ class CartController extends Controller
 
 
 
-    public function remove_item(Request $request){
+    public function remove($productId){
         $user = auth()->user();
-        $item = CartItem::where('id', $request->item_id)
-            ->whereHas('cart', fn($q) => $q->where('user_id', $user->id))
-            ->firstOrFail();
 
-        $item->delete();
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+            if ($cart) {
+                CartItem::where('cart_id', $cart->id)->where('product_id', $productId)->delete();
+            }
+        } else {
+            $cart = session()->get('guest_cart', []);
+            unset($cart[$productId]);
+            session()->put('guest_cart', $cart);
+        }
 
-        $cart = Cart::with(['items.product'])->where('user_id', $user->id)->first();
-        $view = view('layouts.partials._top_cart', compact('cart'))->render();
-        $cartView = view('prime_user.product_purchase.partials.cart_item', compact('cart'))->render();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Item removed from cart.',
-            'view' => $view,
-            'cart_view' => $cartView
-        ]);
+        return back()->with('success', 'Item removed from cart.');
     }
 
 
+
     public function update_item_qty(Request $request){
-        $request->validate(['quantity' => 'required|integer|min:1']);
+        $request->validate([
+            'product_id' => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
         $user = auth()->user();
 
-        $item = CartItem::findOrFail($request->id);
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+            if ($cart) {
+                $cartItem = CartItem::where('cart_id', $cart->id)
+                    ->where('product_id', $request->product_id)
+                    ->first();
 
-        if ($item->cart->user_id !== auth()->id()) {
-            return response()->json(['success' => false], 403);
+                if ($cartItem) {
+                    $cartItem->quantity = $request->quantity;
+                    $cartItem->save();
+                }
+            }
+        } else {
+            $cart = session()->get('guest_cart', []);
+            if (isset($cart[$request->product_id])) {
+                $cart[$request->product_id]['quantity'] = $request->quantity;
+                session()->put('guest_cart', $cart);
+            }
         }
 
-        $item->quantity = $request->quantity;
-        $item->save();
-
-        $cart = Cart::with(['items.product'])->where('user_id', $user->id)->first();
-        $view = view('layouts.partials._top_cart', compact('cart'))->render();
-
-
-        return response()->json([
-            'success' => true,
-            'view' => $view
-        ]);
+        return response()->json(['success' => true, 'message' => 'Cart updated']);
     }
 }

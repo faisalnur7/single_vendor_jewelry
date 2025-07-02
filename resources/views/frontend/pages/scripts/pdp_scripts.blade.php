@@ -184,6 +184,7 @@
                     if (res.success) {
                         toastr.success(res.message);
                         $('.cart-count').text(res.cart)
+                        $('.cart-count').addClass('bg-red-500')
                     }
                 },
                 error: function(err) {

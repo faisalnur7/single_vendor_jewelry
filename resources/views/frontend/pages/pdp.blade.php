@@ -1,7 +1,33 @@
 @extends('frontend.layouts.main')
+@section('title','Stainless Steel Jewelry')
 @section('styles')
     <style>
-        
+        .zoom-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zoom-containe img:hover {
+            transform: scale(1.5);
+            transition: transform 0.3s ease;
+        }
+
+        /* Fixed Zoom Wrapper */
+        #zoomWrapper.fixed {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-left: 0 !important;
+            z-index: 9999;
+        }
+
+        /* Blur effect on product details */
+        #productDetailsSection.blurred {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+        }
     </style>
 @endsection
 @section('contents')

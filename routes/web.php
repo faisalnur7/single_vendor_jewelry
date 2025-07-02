@@ -48,7 +48,9 @@ Route::post('/login/verify', [AuthenticatedSessionController::class, 'verifyLogi
 // Cart Operations routes
 Route::post('/add_to_cart', [CartController::class, 'add_to_cart'])->name('add_to_cart');
 Route::get('/cart', [CartController::class, 'cart'])->name('cart');
-
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.page');
+Route::delete('/cart/remove/{product_id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'update_item_qty'])->name('cart.update');
 
 
 Route::group(['middleware' => ['auth']], function () {
