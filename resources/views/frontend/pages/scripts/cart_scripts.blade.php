@@ -90,9 +90,9 @@
             text: "You won't be able to undo this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, remove it!',
+            confirmButtonColor: '#000000',
+            cancelButtonColor: '#F97316',
+            confirmButtonText: 'Remove',
             reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
