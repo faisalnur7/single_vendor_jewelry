@@ -142,7 +142,7 @@ class CartController extends Controller
             session()->put('guest_cart', $cart);
         }
 
-        return back()->with('success', 'Item removed from cart.');
+        return response()->json(['success' => true]);
     }
 
 

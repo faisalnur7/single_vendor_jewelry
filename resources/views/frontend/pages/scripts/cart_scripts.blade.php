@@ -79,11 +79,9 @@
         });
     });
 
-    $('.delete-cart-item-form').on('submit', function(e) {
-        e.preventDefault();
-
-        const $form = $(this);
-        const productId = $form.data('product-id');
+    $('.delete-cart-item-btn').on('click', function() {
+        const productId = $(this).data('id');
+        const $cartItem = $(this).closest('.relative');
 
         Swal.fire({
             title: 'Are you sure?',
@@ -96,10 +94,53 @@
             reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
-                $form.off('submit').submit();
-                toastr.success("Cart updated.")
+                $.ajax({
+                    url: `/cart/remove/${productId}`,
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Remove item from DOM
+                            $cartItem.remove();
+
+                            // Recalculate total
+                            let total = 0;
+                            $('.quantity-input').each(function() {
+                                const qty = parseInt($(this).val());
+                                const price = parseFloat(
+                                    $(this).closest('.relative').find(
+                                        '[data-price]').data('price')
+                                );
+                                if (!isNaN(qty) && !isNaN(price)) {
+                                    total += price * qty;
+                                }
+                            });
+
+                            $('.cart-total').text('Total: $' + total.toFixed(2));
+
+                            // If cart is now empty
+                            if ($('.quantity-input').length === 0) {
+                                $('.space-y-4').remove();
+                                $('.cart-total').remove();
+                                $('.checkout-trigger').remove();
+                                $('.max-w-7xl').append(`
+                                        <div class="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-4 mt-4" role="alert">
+                                            <p class="font-bold">Your cart is empty!</p>
+                                            <p>Start adding products to your cart.</p>
+                                        </div>
+                                    `);
+                            }
+
+                            toastr.success("Item removed from cart.");
+                        }
+                    },
+                    error: function() {
+                        toastr.error("Error removing item. Try again.");
+                    }
+                });
             }
         });
     });
-
 </script>

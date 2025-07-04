@@ -68,15 +68,19 @@
                                         Subtotal: ${{ number_format($subtotal, 2) }}
                                     </p>
 
-                                    <form method="POST" class="delete-cart-item-form" action="{{route('cart.remove', $product_id)}}"
+                                    {{-- <form method="POST" class="delete-cart-item-form" action="{{route('cart.remove', $product_id)}}"
                                         data-product-id="{{ $product_id }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-gray-700 hover:text-red-800 text-lg font-bold">
                                             <i class="fa-solid fa-xmark"></i>
                                         </button>
-                                    </form>
-
+                                    </form> --}}
+                                    <button type="button"
+                                        class="delete-cart-item-btn text-gray-700 hover:text-red-800 text-lg font-bold"
+                                        data-id="{{ $product_id }}">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
