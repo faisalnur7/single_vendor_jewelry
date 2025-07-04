@@ -96,7 +96,8 @@
             reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
-                $form.off('submit').submit(); // prevent recursion
+                $form.off('submit').submit();
+                toastr.success("Cart updated.")
             }
         });
     });

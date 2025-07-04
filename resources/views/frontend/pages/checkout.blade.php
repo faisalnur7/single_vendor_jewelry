@@ -22,65 +22,190 @@
             <!-- Left: Checkout Form (Scrollable) -->
 
             <div class="w-full bg-white p-6 flex justify-end">
-                <div class="w-full max-w-[600px] bg-white p-6 ">
+                <div class="w-full max-w-[500px] bg-white p-6 ">
                     <!-- Express Checkout -->
-                    <h2 class="text-xl font-semibold mb-4">Express checkout</h2>
-                    <div class="flex gap-4 mb-6">
-                        <button class="bg-yellow-400 hover:bg-yellow-300 px-6 py-3 rounded font-semibold">PayPal</button>
-                        <button class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded font-semibold">G Pay</button>
+                    <h2 class="text-md font-semibold text-center mb-4">Express checkout</h2>
+                    <div class="flex gap-4 mb-6 justify-between">
+                        <button
+                            class="flex w-full justify-center items-center gap-2 bg-yellow-400 hover:bg-yellow-300 rounded font-semibold">
+                            <img src="{{ asset('assets/img/payment_icons/paypal.png') }}" alt="PayPal"
+                                class="w-auto h-11 flex justify-center items-center p-3">
+                        </button>
+                        <button
+                            class="flex w-full justify-center items-center gap-2 bg-black text-white hover:bg-gray-800 rounded font-semibold">
+                            <img src="{{ asset('assets/img/payment_icons/gpay.png') }}" alt="GPay"
+                                class="w-auto h-11 flex justify-center items-center p-3">
+                        </button>
                     </div>
 
-                    <div class="border-t py-6 space-y-6">
+                    <div class="flex items-center my-3">
+                        <div class="flex-grow border-t border-gray-300"></div>
+                        <span class="mx-4 text-sm text-gray-500 font-semibold">OR</span>
+                        <div class="flex-grow border-t border-gray-300"></div>
+                    </div>
+
+                    <div class="py-4 space-y-4">
                         <!-- Account -->
                         <div>
-                            <label class="block text-sm font-medium mb-1">Email</label>
-                            <input type="email" placeholder="you@example.com"
-                                class="w-full border-gray-200 px-4 py-2 rounded focus:outline-none focus:ring" />
+                            <label class="block text-gray-700 text-sm font-medium mb-1">Account</label>
+                            <p class="text-gray-800">@if(!empty(auth()->user())){{ auth()->user()->email }}@endif</p>
                         </div>
+
+                        <div class="flex items-start space-x-3 mt-4">
+                            <input type="checkbox" id="marketing_opt_in" name="marketing_opt_in" checked
+                                class="w-5 h-5 text-[#1773b0] border-gray-300 rounded focus:ring-blue-500" />
+                            <label for="marketing_opt_in" class="text-sm text-gray-700 font-medium leading-5">
+                                Email me with news and offers
+                            </label>
+                        </div>
+
+
 
                         <!-- Delivery -->
-                        <h3 class="text-lg font-semibold">Delivery</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="text" placeholder="First name"
-                                class="border-gray-200 px-4 py-2 rounded w-full" />
-                            <input type="text" placeholder="Last name"
-                                class="border-gray-200 px-4 py-2 rounded w-full" />
-                        </div>
-                        <input type="text" placeholder="Address" class="border-gray-200 px-4 py-2 rounded w-full mt-4" />
-                        <div class="grid grid-cols-2 gap-4 mt-4">
-                            <input type="text" placeholder="City" class="border-gray-200 px-4 py-2 rounded w-full" />
-                            <input type="text" placeholder="Postal code"
-                                class="border-gray-200 px-4 py-2 rounded w-full" />
-                        </div>
-                        <input type="text" placeholder="Phone (optional)"
-                            class="border-gray-200 px-4 py-2 rounded w-full mt-4" />
+                        <!-- DELIVERY SECTION -->
+                        <div class="bg-white rounded shadow-sm mb-6">
+                            <h2 class="text-lg font-semibold mb-4">Delivery</h2>
 
-                        <!-- Payment -->
-                        <h3 class="text-lg font-semibold mt-6">Payment</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="payment" checked />
-                                <label class="text-sm font-medium">Credit/Debit Card</label>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" class="h-5 ml-2" />
+                            <!-- Country -->
+
+                            <div class="mb-4">
+                                <label for="country" class="block text-sm font-medium mb-1">Country/Region</label>
+                                <select id="country" name="country" required autocomplete="shipping country"
+                                    class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">---</option>
+                                    <option value="US">United States</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="GR">Greece</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="BD">Bangladesh</option>
+                                    <option value="AT">Austria</option>
+                                    <option value="BE">Belgium</option>
+                                    <option value="BR">Brazil</option>
+                                    <option value="BG">Bulgaria</option>
+                                    <option value="CL">Chile</option>
+                                    <option value="CO">Colombia</option>
+                                    <option value="HR">Croatia</option>
+                                    <option value="CY">Cyprus</option>
+                                    <option value="CZ">Czechia</option>
+                                    <option value="DK">Denmark</option>
+                                    <option value="EE">Estonia</option>
+                                    <option value="FI">Finland</option>
+                                    <option value="FR">France</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="HU">Hungary</option>
+                                    <option value="IE">Ireland</option>
+                                    <option value="IL">Israel</option>
+                                    <option value="IT">Italy</option>
+                                    <option value="LV">Latvia</option>
+                                    <option value="LT">Lithuania</option>
+                                    <option value="LU">Luxembourg</option>
+                                    <option value="MY">Malaysia</option>
+                                    <option value="MT">Malta</option>
+                                    <option value="MX">Mexico</option>
+                                    <option value="NL">Netherlands</option>
+                                    <option value="NZ">New Zealand</option>
+                                    <option value="NO">Norway</option>
+                                    <option value="PL">Poland</option>
+                                    <option value="PT">Portugal</option>
+                                    <option value="QA">Qatar</option>
+                                    <option value="RO">Romania</option>
+                                    <option value="SA">Saudi Arabia</option>
+                                    <option value="SG">Singapore</option>
+                                    <option value="SK">Slovakia</option>
+                                    <option value="SI">Slovenia</option>
+                                    <option value="ZA">South Africa</option>
+                                    <option value="ES">Spain</option>
+                                    <option value="SE">Sweden</option>
+                                    <option value="CH">Switzerland</option>
+                                    <option value="TH">Thailand</option>
+                                    <option value="TR">Türkiye</option>
+                                    <option value="AE">United Arab Emirates</option>
+                                </select>
                             </div>
 
-                            <input type="text" placeholder="Card number"
-                                class="border-gray-200 px-4 py-2 rounded w-full" />
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="MM/YY"
-                                    class="border-gray-200 px-4 py-2 rounded w-full" />
-                                <input type="text" placeholder="CVC" class="border-gray-200 px-4 py-2 rounded w-full" />
+                            <!-- Name -->
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">First name (optional)</label>
+                                    <input type="text" name="first_name"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Last name</label>
+                                    <input type="text" name="last_name"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-1">Address</label>
+                                <div class="relative">
+                                    <input type="text" name="address"
+                                        class="w-full border-gray-300 rounded px-4 py-2 pr-10 focus:ring-blue-500 focus:border-blue-500" />
+                                    <span class="absolute top-2.5 right-3 text-gray-400">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Apartment -->
+                            <div class="mb-4">
+                                <input type="text" name="apartment"
+                                    class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Apartment, suite, etc. (optional)" />
+                            </div>
+
+                            <!-- City, State, ZIP -->
+                            <div class="grid grid-cols-3 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">City</label>
+                                    <input type="text" name="city"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">State</label>
+                                    <select name="state"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="AL" selected>Alabama</option>
+                                        <option value="CA">California</option>
+                                        <option value="NY">New York</option>
+                                        <!-- Add more states -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">ZIP code</label>
+                                    <input type="text" name="zip"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="mb-4 relative">
+                                <label class="block text-sm font-medium mb-1">Phone</label>
+                                <input type="text" name="phone"
+                                    class="w-full border-gray-300 rounded px-4 py-2 pr-10 focus:ring-blue-500 focus:border-blue-500" />
+                                <span class="absolute top-2.5 right-3 text-gray-400">
+                                    <i class="fas fa-question-circle"></i>
+                                </span>
+                            </div>
+
+                            <!-- Checkbox -->
+                            <div class="flex items-center space-x-2 mt-2">
+                                <input type="checkbox" id="sms_opt_in" name="sms_opt_in"
+                                    class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                                <label for="sms_opt_in" class="text-sm text-gray-700">Text me with news and offers</label>
                             </div>
                         </div>
 
-                        <!-- Billing -->
-                        <h3 class="text-lg font-semibold mt-6">Billing address</h3>
-                        <input type="text" placeholder="Address" class="border-gray-200 px-4 py-2 rounded w-full" />
-                        <div class="grid grid-cols-2 gap-4 mt-4">
-                            <input type="text" placeholder="City" class="border-gray-200 px-4 py-2 rounded w-full" />
-                            <input type="text" placeholder="Postal code"
-                                class="border-gray-200 px-4 py-2 rounded w-full" />
+                        <!-- SHIPPING METHOD -->
+                        <div class="bg-gray-100 p-4 rounded border text-sm text-gray-700">
+                            <strong>Shipping method</strong>
+                            <p class="text-gray-500 mt-2">Enter your shipping address to view available shipping methods.
+                            </p>
                         </div>
+
 
                         <button class="mt-6 w-full bg-[#105989] text-white py-3 rounded hover:bg-[#105989] transition">
                             Pay now
@@ -92,7 +217,7 @@
             <!-- Right: Order Summary (Sticky) -->
             <div
                 class="w-full sticky top-0 bg-gray-100 p-6 h-[100vh] border-l border-gray-300 flex justify-start font-arial">
-                <div class="w-full max-w-[600px] bg-gray h-[100vh] self-start">
+                <div class="w-full max-w-[500px] bg-gray h-[100vh] self-start">
                     <div class="space-y-4 max-h-96 overflow-y-auto">
                         @foreach ($cartItems as $item)
                             <div class="flex items-start gap-4 pt-4">
