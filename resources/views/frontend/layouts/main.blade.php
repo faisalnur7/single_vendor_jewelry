@@ -11,9 +11,8 @@
     @include('frontend.partials._header')
 
     @yield('contents')
-
-
-@include('frontend.partials._footer')
+    @include('frontend.partials._login')
+    @include('frontend.partials._footer')
     @include('frontend.partials._script')
     @yield('scripts')
 </body>

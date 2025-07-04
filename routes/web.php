@@ -5,8 +5,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KycController;
-use App\Http\Controllers\PrimeRequestController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -88,11 +88,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('finish_payment',[KycController::class,'finish_payment'])->name('finish_payment');
 
     });
-
-    Route::get('/prime_requests', [PrimeRequestController::class, 'prime_requests'])->name('prime_requests');
-    Route::post('/prime-request', [PrimeRequestController::class, 'store'])->name('prime.request');
-    Route::post('/prime-request-cancel', [PrimeRequestController::class, 'cancel_request'])->name('prime.cancel_request');
-    Route::post('/prime-request/{id}/respond', [PrimeRequestController::class, 'respond'])->name('prime.respond');
 });
 
 // AJAX calls

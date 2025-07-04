@@ -78,4 +78,27 @@
             }
         });
     });
+
+    $('.delete-cart-item-form').on('submit', function(e) {
+        e.preventDefault();
+
+        const $form = $(this);
+        const productId = $form.data('product-id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to undo this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, remove it!',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $form.off('submit').submit(); // prevent recursion
+            }
+        });
+    });
+
 </script>

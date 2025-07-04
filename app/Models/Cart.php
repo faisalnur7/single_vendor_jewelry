@@ -9,7 +9,7 @@ class Cart extends Model
     protected $fillable = ['user_id'];
 
     public function items(){
-        return $this->hasMany(PrimeCartItem::class);
+        return $this->hasMany(CartItem::class);
     }
 
     public function user(){

@@ -11,6 +11,9 @@
     integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<!-- sweet alert 2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- toastr -->
 <link rel="stylesheet" href="{{ asset('assets/plugins/toastr/toastr.min.css') }}">
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
@@ -57,5 +60,48 @@
         border: none;
 
     }
+
+    .toast {
+        background-color: #1f2937 !important;
+        color: #f9fafb !important;
+        font-size: 14px;
+        border-left: 4px solid #10b981;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        flex-direction: row-reverse !important;
+        justify-content: space-between !important;
+    }
+
+    /* Title (if used) */
+    .toast-title {
+        font-weight: 600;
+    }
+
+    /* Progress bar color */
+    #toast-container>.toast.toast-success .toast-progress {
+        background-color: #10b981 !important;
+    }
+
+    #toast-container>.toast.toast-error .toast-progress {
+        background-color: #ef4444 !important;
+    }
+
+    #toast-container>.toast.toast-info .toast-progress {
+        background-color: #3b82f6 !important;
+    }
+
+    #toast-container>.toast.toast-warning .toast-progress {
+        background-color: #f59e0b !important;
+    }
+
+    /* Close button hover */
+    .toast-close-button {
+        color: #fff !important;
+    }
+
+    .toast-close-button:hover {
+        color: #f87171 !important;
+        /* red-400 */
+    }
 </style>
+
 @vite('resources/css/app.css')

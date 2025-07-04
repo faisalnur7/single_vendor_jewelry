@@ -62,18 +62,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'phone',
         'password',
-        'is_active',
-        'phone_verified_at',
-        'user_type',
-        'user_affiliate_type',
-        'reference_id',
-        'reference_user_id',
-        'district_id',
-        'police_station_id',
-        'post_office_id',
-        'postal_code'
+        'is_active'
     ];
 
     /**
@@ -119,27 +109,8 @@ class User extends Authenticatable
         return $this->belongsTo(PostOffice::class,'post_office_id');
     }
 
-    public function nominee(){
-        return $this->hasOne(NomineeInfo::class,'user_id');
-    }
-
-    public function packages(){
-        return $this->belongsToMany(
-            SubscriptionPackage::class,
-            'package_users',              // correct pivot table
-            'user_id',                    // foreign key on pivot pointing to users
-            'subscription_package_id'     // foreign key on pivot pointing to subscription_packages
-        )->withPivot([
-            'id',
-            'payment_option_id',
-            'transaction_number',
-            'transaction_mobile_number',
-            'amount',
-            'assigned_at',
-            'expires_at',
-            'status',
-            'is_verified',
-        ]);
+    public function cart(){
+        return $this->hasOne(Cart::class);
     }
     
 
