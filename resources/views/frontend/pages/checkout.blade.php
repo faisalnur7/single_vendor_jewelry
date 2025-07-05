@@ -14,6 +14,19 @@
             display: none;
             /* Chrome, Safari, Opera */
         }
+
+        /* For single select */
+        .select2-container--default .select2-selection--single {
+            height: auto;
+            padding: 10px 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 0.5rem;
+        }
+
+        .select2-selection__arrow {
+            top: 10px !important;
+            right: 10px !important;
+        }
     </style>
 @endsection
 @section('contents')
@@ -48,7 +61,11 @@
                         <!-- Account -->
                         <div>
                             <label class="block text-gray-700 text-sm font-medium mb-1">Account</label>
-                            <p class="text-gray-800">@if(!empty(auth()->user())){{ auth()->user()->email }}@endif</p>
+                            <p class="text-gray-800">
+                                @if (!empty(auth()->user()))
+                                    {{ auth()->user()->email }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="flex items-start space-x-3 mt-4">
@@ -70,57 +87,12 @@
 
                             <div class="mb-4">
                                 <label for="country" class="block text-sm font-medium mb-1">Country/Region</label>
-                                <select id="country" name="country" required autocomplete="shipping country"
+                                <select id="country" class="select2 w-full" name="country" required
+                                    autocomplete="shipping country"
                                     class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">---</option>
-                                    <option value="US">United States</option>
-                                    <option value="GB">United Kingdom</option>
-                                    <option value="GR">Greece</option>
-                                    <option value="AU">Australia</option>
-                                    <option value="CA">Canada</option>
-                                    <option value="BD">Bangladesh</option>
-                                    <option value="AT">Austria</option>
-                                    <option value="BE">Belgium</option>
-                                    <option value="BR">Brazil</option>
-                                    <option value="BG">Bulgaria</option>
-                                    <option value="CL">Chile</option>
-                                    <option value="CO">Colombia</option>
-                                    <option value="HR">Croatia</option>
-                                    <option value="CY">Cyprus</option>
-                                    <option value="CZ">Czechia</option>
-                                    <option value="DK">Denmark</option>
-                                    <option value="EE">Estonia</option>
-                                    <option value="FI">Finland</option>
-                                    <option value="FR">France</option>
-                                    <option value="DE">Germany</option>
-                                    <option value="HU">Hungary</option>
-                                    <option value="IE">Ireland</option>
-                                    <option value="IL">Israel</option>
-                                    <option value="IT">Italy</option>
-                                    <option value="LV">Latvia</option>
-                                    <option value="LT">Lithuania</option>
-                                    <option value="LU">Luxembourg</option>
-                                    <option value="MY">Malaysia</option>
-                                    <option value="MT">Malta</option>
-                                    <option value="MX">Mexico</option>
-                                    <option value="NL">Netherlands</option>
-                                    <option value="NZ">New Zealand</option>
-                                    <option value="NO">Norway</option>
-                                    <option value="PL">Poland</option>
-                                    <option value="PT">Portugal</option>
-                                    <option value="QA">Qatar</option>
-                                    <option value="RO">Romania</option>
-                                    <option value="SA">Saudi Arabia</option>
-                                    <option value="SG">Singapore</option>
-                                    <option value="SK">Slovakia</option>
-                                    <option value="SI">Slovenia</option>
-                                    <option value="ZA">South Africa</option>
-                                    <option value="ES">Spain</option>
-                                    <option value="SE">Sweden</option>
-                                    <option value="CH">Switzerland</option>
-                                    <option value="TH">Thailand</option>
-                                    <option value="TR">Türkiye</option>
-                                    <option value="AE">United Arab Emirates</option>
+                                    @foreach ($countries as $country)
+                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -161,17 +133,14 @@
                             <div class="grid grid-cols-3 gap-4 mb-4">
                                 <div>
                                     <label class="block text-sm font-medium mb-1">City</label>
-                                    <input type="text" name="city"
-                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                    <select name="city" id="city"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                    </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium mb-1">State</label>
-                                    <select name="state"
+                                    <select name="state" id="state"
                                         class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="AL" selected>Alabama</option>
-                                        <option value="CA">California</option>
-                                        <option value="NY">New York</option>
-                                        <!-- Add more states -->
                                     </select>
                                 </div>
                                 <div>
@@ -189,13 +158,6 @@
                                 <span class="absolute top-2.5 right-3 text-gray-400">
                                     <i class="fas fa-question-circle"></i>
                                 </span>
-                            </div>
-
-                            <!-- Checkbox -->
-                            <div class="flex items-center space-x-2 mt-2">
-                                <input type="checkbox" id="sms_opt_in" name="sms_opt_in"
-                                    class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                                <label for="sms_opt_in" class="text-sm text-gray-700">Text me with news and offers</label>
                             </div>
                         </div>
 
@@ -245,10 +207,6 @@
 
 
                     <div class="pt-6 mt-6 border-t">
-                        <div class="flex justify-between text-sm">
-                            <span>Subtotal</span>
-                            <span>${{ number_format($subtotal, 2) }}</span>
-                        </div>
                         <div class="flex justify-between text-sm font-bold text-gray-900 mt-2">
                             <span>Total</span>
                             <span>${{ number_format($total, 2) }}</span>
@@ -258,4 +216,58 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('scripts')
+    <script>
+        $(function() {
+            $('.select2').select2({
+                placeholder: 'Select an option'
+            });
+
+            $('#country').on('change', function() {
+                const countryId = $(this).val();
+
+                $('#state').html('<option value="">Loading...</option>').trigger('change');
+                $('#city').html('<option value="">Select City</option>').trigger('change');
+
+                if (countryId) {
+                    $.ajax({
+                        url: '/get-states/' + countryId,
+                        type: 'GET',
+                        success: function(states) {
+                            let options = '<option value="">Select State</option>';
+                            states.forEach(state => {
+                                options +=
+                                    `<option value="${state.id}">${state.name}</option>`;
+                            });
+                            $('#state').html(options).trigger('change');
+                        }
+                    });
+                }
+            });
+
+            // On state change => fetch cities
+            $('#state').on('change', function() {
+                const stateId = $(this).val();
+
+                $('#city').html('<option value="">Loading...</option>').trigger('change');
+
+                if (stateId) {
+                    $.ajax({
+                        url: '/get-cities/' + stateId,
+                        type: 'GET',
+                        success: function(cities) {
+                            let options = '<option value="">Select City</option>';
+                            cities.forEach(city => {
+                                options +=
+                                    `<option value="${city.id}">${city.name}</option>`;
+                            });
+                            $('#city').html(options).trigger('change');
+                        }
+                    });
+                }
+            });
+        })
+    </script>
 @endsection

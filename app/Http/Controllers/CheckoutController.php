@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
-
-
     public function checkout()
     {
         $cartItems = [];
@@ -33,7 +34,6 @@ class CheckoutController extends Controller
                     ];
                 }
             }
-
         } elseif (session()->has('guest_cart')) {
             foreach (session('guest_cart') as $item) {
                 $price = $item['price'] ?? 0;
@@ -50,10 +50,15 @@ class CheckoutController extends Controller
                 ];
             }
         }
+        
+        $data['subtotal'] = $subtotal;
+        $data['cartItems'] = $cartItems;
+        $data['total'] = $subtotal;
+        $data['countries'] = Country::all();
+        $data['states'] = State::all();
+        $data['cities'] = City::all();
 
-        $total = $subtotal - $discount;
-
-        return view('frontend.pages.checkout', compact('cartItems', 'subtotal', 'total'));
+        return view('frontend.pages.checkout', $data);
     }
 
 }

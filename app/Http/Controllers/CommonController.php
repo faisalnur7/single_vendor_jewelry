@@ -7,6 +7,8 @@ use App\Models\Division;
 use App\Models\PoliceStation;
 use App\Models\PostOffice;
 use App\Models\User;
+use App\Models\State;
+use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -37,5 +39,17 @@ class CommonController extends Controller
     {
         $data['post_offices'] = PostOffice::query()->where('police_station_id',$request->police_station_id)->get();
         return $data;
+    }
+
+    public function getStates($country_id)
+    {
+        $states = State::where('country_id', $country_id)->get();
+        return response()->json($states);
+    }
+
+    public function getCities($state_id)
+    {
+        $cities = City::where('state_id', $state_id)->get();
+        return response()->json($cities);
     }
 }

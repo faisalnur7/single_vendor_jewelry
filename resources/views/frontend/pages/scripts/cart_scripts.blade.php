@@ -11,33 +11,30 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        // Find the specific quantity input
                         const input = $(`.quantity-input[data-id="${productId}"]`);
-                        // Find the price inside the same cart item block
-                        const price = parseFloat(
-                            input.closest('.relative').find('[data-price]').data('price')
-                        );
-                        const newSubtotal = (price * quantity).toFixed(2);
+                        const price = parseFloat($(`[data-price][data-id="${productId}"]`).data(
+                            'price'));
 
-                        // Update the item's subtotal
-                        $(`.subtotal[data-id="${productId}"]`).text('Subtotal: $' + newSubtotal);
+                        if (!isNaN(price) && !isNaN(quantity)) {
+                            const newSubtotal = (price * quantity).toFixed(2);
+                            $(`.subtotal[data-id="${productId}"]`).text('$' + newSubtotal);
+                        }
 
-                        // Recalculate and update the cart total
+                        // Recalculate total
                         let total = 0;
                         $('.quantity-input').each(function() {
                             const qty = parseInt($(this).val());
-                            const price = parseFloat(
-                                $(this).closest('.relative').find('[data-price]').data(
-                                    'price')
-                            );
+                            const id = $(this).data('id');
+                            const price = parseFloat($(`[data-price][data-id="${id}"]`)
+                                .data('price'));
+
                             if (!isNaN(qty) && !isNaN(price)) {
                                 total += price * qty;
                             }
                         });
-
                         $('.cart-total').text('Total: $' + total.toFixed(2));
 
-                        toastr.success("Cart updated.")
+                        toastr.success("Cart updated.");
                     }
                 },
                 error: function(xhr) {
@@ -45,6 +42,7 @@
                 }
             });
         }
+
 
         $('.increase-qty').on('click', function() {
             var id = $(this).data('id');
@@ -81,7 +79,7 @@
 
     $('.delete-cart-item-btn').on('click', function() {
         const productId = $(this).data('id');
-        const $cartItem = $(this).closest('.relative');
+        const $cartItem = $(`[data-id="${productId}"]`);
 
         Swal.fire({
             title: 'Are you sure?',
@@ -109,16 +107,17 @@
                             let total = 0;
                             $('.quantity-input').each(function() {
                                 const qty = parseInt($(this).val());
-                                const price = parseFloat(
-                                    $(this).closest('.relative').find(
-                                        '[data-price]').data('price')
-                                );
+                                const id = $(this).data('id');
+                                const price = parseFloat($(
+                                    `[data-price][data-id="${id}"]`).data(
+                                    'price'));
+
                                 if (!isNaN(qty) && !isNaN(price)) {
                                     total += price * qty;
                                 }
                             });
-
                             $('.cart-total').text('Total: $' + total.toFixed(2));
+
 
                             // If cart is now empty
                             if ($('.quantity-input').length === 0) {

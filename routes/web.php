@@ -48,7 +48,6 @@ Route::post('/login/verify', [AuthenticatedSessionController::class, 'verifyLogi
 // Cart Operations routes
 Route::post('/add_to_cart', [CartController::class, 'add_to_cart'])->name('add_to_cart');
 Route::get('/cart', [CartController::class, 'cart'])->name('cart');
-Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.page');
 Route::delete('/cart/remove/{product_id}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update_item_qty'])->name('cart.update');
 
@@ -88,6 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('finish_payment',[KycController::class,'finish_payment'])->name('finish_payment');
 
     });
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.page');
 });
 
 // AJAX calls
@@ -96,6 +96,8 @@ Route::get('load_districts', [CommonController::class,'load_districts'])->name('
 Route::get('load_police_stations',[CommonController::class,'load_police_stations'])->name('load_police_stations');
 Route::get('load_post_offices',[CommonController::class,'load_post_offices'])->name('load_post_offices');
 
+Route::get('/get-states/{country_id}', [CommonController::class, 'getStates'])->name('getStates');
+Route::get('/get-cities/{state_id}', [CommonController::class, 'getCities'])->name('getCities');
 
 require __DIR__.'/admin-auth.php';
 require __DIR__.'/admin-routes.php';
