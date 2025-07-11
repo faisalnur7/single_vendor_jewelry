@@ -51,6 +51,14 @@
                         </button>
                     </div>
 
+                    <form id="payment-form" method="post" action="{{ route('payment.process') }}">
+                        @csrf
+                        <div id="dropin-container"></div>
+                        <button type="submit">Pay Now</button>
+                    </form>
+
+
+
                     <div class="flex items-center my-3">
                         <div class="flex-grow border-t border-gray-300"></div>
                         <span class="mx-4 text-sm text-gray-500 font-semibold">OR</span>
@@ -269,5 +277,27 @@
                 }
             });
         })
+    </script>
+    <script src="https://js.braintreegateway.com/web/dropin/1.33.6/js/dropin.min.js"></script>
+    <script>
+        braintree.dropin.create({
+            authorization: "{{ $clientToken }}",
+            container: '#dropin-container'
+        }, function(createErr, instance) {
+            const form = document.getElementById('payment-form');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                instance.requestPaymentMethod(function(err, payload) {
+                    if (!err) {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'payment_method_nonce';
+                        hiddenInput.value = payload.nonce;
+                        form.appendChild(hiddenInput);
+                        form.submit();
+                    }
+                });
+            });
+        });
     </script>
 @endsection

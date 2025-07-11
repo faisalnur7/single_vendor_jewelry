@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.page');
+    Route::post('/payment/process', [CheckoutController::class, 'processPayment'])->name('payment.process');
 });
 
 // AJAX calls

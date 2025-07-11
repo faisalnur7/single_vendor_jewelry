@@ -7,6 +7,7 @@ use App\Models\State;
 use App\Models\City;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Services\BraintreeGateway;
 
 class CheckoutController extends Controller
 {
@@ -15,6 +16,8 @@ class CheckoutController extends Controller
         $cartItems = [];
         $subtotal = 0;
         $discount = 0;
+
+
 
         if (Auth::check()) {
             $user = Auth::user();
@@ -58,7 +61,32 @@ class CheckoutController extends Controller
         $data['states'] = State::all();
         $data['cities'] = City::all();
 
+        $gateway = BraintreeGateway::getGateway();
+        $data['clientToken'] = $clientToken = $gateway->clientToken()->generate();
+
         return view('frontend.pages.checkout', $data);
+    }
+
+    public function processPayment(Request $request)
+    {
+        $gateway = BraintreeGateway::getGateway();
+
+        $amount = 100.00; // dynamically set from cart total
+        $nonce = $request->input('payment_method_nonce');
+
+        $result = $gateway->transaction()->sale([
+            'amount' => $amount,
+            'paymentMethodNonce' => $nonce,
+            'options' => [
+                'submitForSettlement' => true
+            ]
+        ]);
+
+        if ($result->success) {
+            return redirect()->route('payment.success')->with('success', 'Payment successful!');
+        } else {
+            return back()->with('error', 'Payment failed: ' . $result->message);
+        }
     }
 
 }

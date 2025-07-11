@@ -3,17 +3,17 @@
         [
             'name' => 'Faux Fur Bags',
             'image_url' =>
-                '//factorypricejewelry.com/cdn/shop/files/Pericardium-Heart-Bag-Heart-Bag-1_4e2a1480-195a-4a75-b395-add1e6f54f33.webp?v=1734460272&width=900',
+                '//factorypricejewelry.com/cdn/shop/files/1595291264578883584.jpg?v=1751370007&width=1000',
         ],
         [
             'name' => 'Party Necessities',
             'image_url' =>
-                '//factorypricejewelry.com/cdn/shop/files/Glam-Shiny-Pin-Butterfly-Alloy-Plating-Inlay-Artificial-Pearls-Rhinestones-Unisex-Brooches_42139bdf-d12f-4214-b80c-f5a634c2922d.webp?v=1734489213&width=900',
+                '//factorypricejewelry.com/cdn/shop/files/1600425526919565312.jpg?v=1751104386&width=700',
         ],
         [
             'name' => 'Clear Lens Glasses',
             'image_url' =>
-                '//factorypricejewelry.com/cdn/shop/files/Fashion-Solid-Color-Ac-Square-Full-Frame-Optical-Glasses_93e888f0-3238-47e3-9416-09549ac8bfdc.webp?v=1734488388&width=900',
+                '//factorypricejewelry.com/cdn/shop/files/1768895884470525952.jpg?v=1751103762&width=800',
         ],
         [
             'name' => 'Bow Necklaces',
@@ -62,7 +62,7 @@
         [
             'name' => 'Invitations',
             'image_url' =>
-                '//factorypricejewelry.com/cdn/shop/files/1-piece-304-stainless-steel-18k-gold-plated-cross-heart-shape-sandblasted-polished-pendant_1ae67fa2-eed4-4c24-a81d-d53bdddf701e.webp?v=1729006192&width=900',
+                '//factorypricejewelry.com/cdn/shop/files/1767225151294021632.jpg?v=1751368453&width=1200',
         ],
         [
             'name' => 'Colorful Enamel Earrings',
