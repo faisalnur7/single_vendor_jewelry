@@ -218,6 +218,7 @@
                         <div class="flex justify-between text-sm font-bold text-gray-900 mt-2">
                             <span>Total</span>
                             <span>${{ number_format($total, 2) }}</span>
+                            <input type="hidden" name="amount" value="{{ $total }}">
                         </div>
                     </div>
                 </div>
@@ -280,22 +281,63 @@
     </script>
     <script src="https://js.braintreegateway.com/web/dropin/1.33.6/js/dropin.min.js"></script>
     <script>
-        braintree.dropin.create({
-            authorization: "{{ $clientToken }}",
-            container: '#dropin-container'
-        }, function(createErr, instance) {
-            const form = document.getElementById('payment-form');
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                instance.requestPaymentMethod(function(err, payload) {
-                    if (!err) {
-                        const hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = 'payment_method_nonce';
-                        hiddenInput.value = payload.nonce;
-                        form.appendChild(hiddenInput);
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalAmount = {{ $total ?? 10.0 }}; // Fallback to 10.00 if $total not set
+
+            braintree.dropin.create({
+                authorization: "{{ $clientToken }}",
+                container: '#dropin-container',
+
+                paypal: {
+                    flow: 'checkout',
+                    amount: totalAmount,
+                    currency: 'USD'
+                },
+
+                googlePay: {
+                    googlePayVersion: 2,
+                    merchantId: '{{ env('BRAINTREE_MERCHANT_ID') }}', // This can be dummy in sandbox
+                    transactionInfo: {
+                        totalPriceStatus: 'FINAL',
+                        totalPrice: totalAmount.toString(),
+                        currencyCode: 'USD'
+                    },
+                    allowedPaymentMethods: [{
+                        type: 'CARD',
+                        parameters: {
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['VISA', 'MASTERCARD']
+                        },
+                        tokenizationSpecification: {
+                            type: 'PAYMENT_GATEWAY',
+                            parameters: {
+                                gateway: 'braintree',
+                                gatewayMerchantId: '{{ env('BRAINTREE_MERCHANT_ID') }}'
+                            }
+                        }
+                    }]
+                }
+            }, function(createErr, instance) {
+                if (createErr) {
+                    console.error('Braintree Drop-in Error:', createErr);
+                    return;
+                }
+
+                const form = document.getElementById('payment-form');
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    instance.requestPaymentMethod(function(err, payload) {
+                        if (err) {
+                            console.error('Payment method error:', err);
+                            return;
+                        }
+                        const nonceInput = document.createElement('input');
+                        nonceInput.type = 'hidden';
+                        nonceInput.name = 'payment_method_nonce';
+                        nonceInput.value = payload.nonce;
+                        form.appendChild(nonceInput);
                         form.submit();
-                    }
+                    });
                 });
             });
         });

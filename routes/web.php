@@ -12,6 +12,18 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('/reboot', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('clear-compiled');
+    Artisan::call('config:cache');
+    Artisan::call('route:cache');
+    Artisan::call('view:cache');
+    return 'rebooted & caches cleared!';
+});
 Route::get('/', [DashboardController::class, 'index'])->name('homepage');
 Route::get('/collections', [DashboardController::class, 'product_list_page'])->name('collections');
 Route::get('/collections/{category:slug}', [DashboardController::class, 'show_categorywise'])->name('category.show');
@@ -87,8 +99,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('finish_payment',[KycController::class,'finish_payment'])->name('finish_payment');
 
     });
+
+    // Checkout routes
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.page');
     Route::post('/payment/process', [CheckoutController::class, 'processPayment'])->name('payment.process');
+    Route::get('/payment/success', [CheckoutController::class, 'success'])->name('payment.success');
+    Route::get('/payment/failed', [CheckoutController::class, 'failed'])->name('payment.failed');
 });
 
 // AJAX calls

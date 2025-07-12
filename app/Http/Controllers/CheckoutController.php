@@ -67,26 +67,78 @@ class CheckoutController extends Controller
         return view('frontend.pages.checkout', $data);
     }
 
-    public function processPayment(Request $request)
-    {
+    public function processPayment(Request $request){
+        $request->validate([
+            'amount' => 'required|numeric|min:0.01',
+            'payment_method_nonce' => 'required|string',
+        ]);
+
         $gateway = BraintreeGateway::getGateway();
 
-        $amount = 100.00; // dynamically set from cart total
-        $nonce = $request->input('payment_method_nonce');
-
         $result = $gateway->transaction()->sale([
-            'amount' => $amount,
-            'paymentMethodNonce' => $nonce,
-            'options' => [
-                'submitForSettlement' => true
-            ]
+            'amount' => $request->input('amount'),
+            'paymentMethodNonce' => $request->input('payment_method_nonce'),
+            'options' => ['submitForSettlement' => true],
         ]);
 
         if ($result->success) {
-            return redirect()->route('payment.success')->with('success', 'Payment successful!');
-        } else {
-            return back()->with('error', 'Payment failed: ' . $result->message);
+            $transactionId = $result->transaction->id;
+            $paymentMethod = $result->transaction->paymentInstrumentType;
+
+            // Save Order
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'billing_address' => $request->input('address'),
+                'shipping_address' => $request->input('address'),
+                'payment_option_name' => $paymentMethod,
+                'payment_account_number' => '', // not available from Braintree
+                'transaction_id' => $transactionId,
+                'sender_phone_number' => $request->input('phone'),
+                'status' => 'pending',
+                'subtotal' => $request->input('amount'),
+                'shipping_charge' => 0,
+                'total' => $request->input('amount'),
+                'order_tracking_number' => strtoupper(Str::random(10))
+            ]);
+
+            // Save Order Items
+            $cartItems = Auth::check() ? Auth::user()->cart->items : session('guest_cart', []);
+            foreach ($cartItems as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['product_id'] ?? $item->product_id,
+                    'product_name' => $item['product_name'] ?? $item->product->name,
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['price'] * $item['quantity'],
+                ]);
+            }
+
+            // Clear cart
+            if (Auth::check()) {
+                Auth::user()->cart->items()->delete();
+            } else {
+                session()->forget('guest_cart');
+            }
+
+            return redirect()->route('payment.success')->with('success', 'Payment completed!');
         }
+
+        return redirect()->route('payment.failed')->with('error', 'Payment failed: ' . $result->message);
     }
+
+
+    public function success(Request $request)
+    {
+        $message = session('success') ?? 'Payment was successful!';
+        return view('payment.success', compact('message'));
+    }
+
+    public function failed(Request $request)
+    {
+        $message = session('error') ?? 'Payment failed. Please try again.';
+        return view('payment.failed', compact('message'));
+    }
+
 
 }

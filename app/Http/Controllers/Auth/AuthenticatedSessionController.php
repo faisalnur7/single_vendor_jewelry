@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Http\Controllers\Traits\MergesGuestCart;
+use Illuminate\Http\JsonResponse;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,12 +25,20 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse|JsonResponse
     {
         $request->authenticate();
         $request->session()->regenerate();
-        $this->mergeGuestCartIntoUserCart();
-        return redirect()->intended(route('homepage', absolute: false));
+
+        // If AJAX, return JSON response
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => 'Login successful',
+                'redirect' => route('homepage'),
+            ]);
+        }
+
+        return redirect()->intended(route('homepage'));
     }
 
     /**
