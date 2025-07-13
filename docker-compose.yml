@@ -23,6 +23,9 @@ services:
             - sail
         depends_on:
             - mysql
+        dns:
+            - 8.8.8.8
+            - 8.8.4.4
 
     mysql:
         image: 'mysql/mysql-server:8.0'

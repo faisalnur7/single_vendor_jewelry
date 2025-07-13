@@ -71,6 +71,8 @@ class CheckoutController extends Controller
         $request->validate([
             'amount' => 'required|numeric|min:0.01',
             'payment_method_nonce' => 'required|string',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
         ]);
 
         $gateway = BraintreeGateway::getGateway();

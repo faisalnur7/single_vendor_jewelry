@@ -51,12 +51,6 @@
                         </button>
                     </div>
 
-                    <form id="payment-form" method="post" action="{{ route('payment.process') }}">
-                        @csrf
-                        <div id="dropin-container"></div>
-                        <button type="submit">Pay Now</button>
-                    </form>
-
 
 
                     <div class="flex items-center my-3">
@@ -90,83 +84,84 @@
                         <!-- DELIVERY SECTION -->
                         <div class="bg-white rounded shadow-sm mb-6">
                             <h2 class="text-lg font-semibold mb-4">Delivery</h2>
+                            <form id="payment-form" method="POST" action="{{ route('payment.process') }}">
 
-                            <!-- Country -->
+                                <!-- Country -->
 
-                            <div class="mb-4">
-                                <label for="country" class="block text-sm font-medium mb-1">Country/Region</label>
-                                <select id="country" class="select2 w-full" name="country" required
-                                    autocomplete="shipping country"
-                                    class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                    @foreach ($countries as $country)
-                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Name -->
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">First name (optional)</label>
-                                    <input type="text" name="first_name"
-                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                <div class="mb-4">
+                                    <label for="country" class="block text-sm font-medium mb-1">Country/Region</label>
+                                    <select id="country" class="select2 w-full" name="country" required
+                                        autocomplete="shipping country"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        @foreach ($countries as $country)
+                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">Last name</label>
-                                    <input type="text" name="last_name"
-                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
-                                </div>
-                            </div>
 
-                            <!-- Address -->
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium mb-1">Address</label>
-                                <div class="relative">
-                                    <input type="text" name="address"
+                                <!-- Name -->
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">First name (optional)</label>
+                                        <input type="text" name="first_name"
+                                            class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Last name</label>
+                                        <input type="text" name="last_name"
+                                            class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium mb-1">Address</label>
+                                    <div class="relative">
+                                        <input type="text" name="address"
+                                            class="w-full border-gray-300 rounded px-4 py-2 pr-10 focus:ring-blue-500 focus:border-blue-500" />
+                                        <span class="absolute top-2.5 right-3 text-gray-400">
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Apartment -->
+                                <div class="mb-4">
+                                    <input type="text" name="apartment"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Apartment, suite, etc. (optional)" />
+                                </div>
+
+                                <!-- City, State, ZIP -->
+                                <div class="grid grid-cols-3 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">City</label>
+                                        <select name="city" id="city"
+                                            class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">State</label>
+                                        <select name="state" id="state"
+                                            class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">ZIP code</label>
+                                        <input type="text" name="zip"
+                                            class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="mb-4 relative">
+                                    <label class="block text-sm font-medium mb-1">Phone</label>
+                                    <input type="text" name="phone"
                                         class="w-full border-gray-300 rounded px-4 py-2 pr-10 focus:ring-blue-500 focus:border-blue-500" />
                                     <span class="absolute top-2.5 right-3 text-gray-400">
-                                        <i class="fas fa-search"></i>
+                                        <i class="fas fa-question-circle"></i>
                                     </span>
                                 </div>
-                            </div>
-
-                            <!-- Apartment -->
-                            <div class="mb-4">
-                                <input type="text" name="apartment"
-                                    class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Apartment, suite, etc. (optional)" />
-                            </div>
-
-                            <!-- City, State, ZIP -->
-                            <div class="grid grid-cols-3 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">City</label>
-                                    <select name="city" id="city"
-                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">State</label>
-                                    <select name="state" id="state"
-                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1">ZIP code</label>
-                                    <input type="text" name="zip"
-                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500" />
-                                </div>
-                            </div>
-
-                            <!-- Phone -->
-                            <div class="mb-4 relative">
-                                <label class="block text-sm font-medium mb-1">Phone</label>
-                                <input type="text" name="phone"
-                                    class="w-full border-gray-300 rounded px-4 py-2 pr-10 focus:ring-blue-500 focus:border-blue-500" />
-                                <span class="absolute top-2.5 right-3 text-gray-400">
-                                    <i class="fas fa-question-circle"></i>
-                                </span>
-                            </div>
                         </div>
 
                         <!-- SHIPPING METHOD -->
@@ -176,10 +171,24 @@
                             </p>
                         </div>
 
+                        @csrf
 
-                        <button class="mt-6 w-full bg-[#105989] text-white py-3 rounded hover:bg-[#105989] transition">
-                            Pay now
-                        </button>
+                        {{-- Delivery Section --}}
+                        <div class="py-4 space-y-4">
+                            {{-- Total & Hidden Amount --}}
+                            <input type="hidden" name="amount" value="{{ $total }}">
+
+                            {{-- Braintree Drop-In --}}
+                            <div id="dropin-container"></div>
+
+                            <button type="submit"
+                                class="mt-6 w-full bg-[#105989] text-white py-3 rounded hover:bg-[#105989] transition">
+                                Pay now
+                            </button>
+                        </div>
+                        </form>
+
+
                     </div>
                 </div>
             </div>
@@ -218,7 +227,6 @@
                         <div class="flex justify-between text-sm font-bold text-gray-900 mt-2">
                             <span>Total</span>
                             <span>${{ number_format($total, 2) }}</span>
-                            <input type="hidden" name="amount" value="{{ $total }}">
                         </div>
                     </div>
                 </div>

@@ -8,12 +8,13 @@ class BraintreeGateway
 {
     public static function getGateway()
     {
-        return new Gateway([
-            'environment' => env('BRAINTREE_ENVIRONMENT'),
-            'merchantId' => env('BRAINTREE_MERCHANT_ID'),
-            'publicKey' => env('BRAINTREE_PUBLIC_KEY'),
-            'privateKey' => env('BRAINTREE_PRIVATE_KEY'),
-        ]);
+        $variables = [
+            'environment' => config('braintree.environment'),
+            'merchantId' => config('braintree.merchantId'),
+            'publicKey' => config('braintree.publicKey'),
+            'privateKey' => config('braintree.privateKey'),
+        ];
+        return new Gateway($variables);
     }
     
 }

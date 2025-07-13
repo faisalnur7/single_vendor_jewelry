@@ -67,23 +67,18 @@
 </nav>
 
 
-@section('scripts')
-    <script>
-        $(function() {
-            const $rightContents = $('.right-content');
+<script>
+    $(function() {
+        const $rightContents = $('.right-content');
 
-            $('.left_panel').on('mouseover', function() {
-                const id = $(this).data('id');
-                $rightContents.addClass('hidden');
-                $rightContents.filter(`[data-id="${id}"]`).removeClass('hidden');
-            });
-
-            // Trigger the first category on load and allow repeat
-            $('.left_panel').first().trigger('mouseover');
-
-            $('.left_panel').on('mouseout', function() {
-                $('.left_panel').first().trigger('mouseover');
-            })
+        $('.left_panel').on('mouseover', function() {
+            const id = $(this).data('id');
+            console.log(id);
+            $rightContents.addClass('hidden');
+            $rightContents.filter(`[data-id="${id}"]`).removeClass('hidden');
         });
-    </script>
-@endsection
+
+        // Trigger the first category on load
+        $('.left_panel').first().trigger('mouseover');
+    });
+</script>
