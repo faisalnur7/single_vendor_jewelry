@@ -29,8 +29,7 @@ class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      */
-    public function store(Request $request): RedirectResponse
-    {
+    public function store(Request $request){
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -48,6 +47,13 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         $this->mergeGuestCartIntoUserCart();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Registration successful',
+                'user' => $user,
+            ]);
+        }
 
         return redirect()->intended(route('homepage', absolute: false));
     }

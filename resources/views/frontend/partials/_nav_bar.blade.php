@@ -73,7 +73,6 @@
 
         $('.left_panel').on('mouseover', function() {
             const id = $(this).data('id');
-            console.log(id);
             $rightContents.addClass('hidden');
             $rightContents.filter(`[data-id="${id}"]`).removeClass('hidden');
         });

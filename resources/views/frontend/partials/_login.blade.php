@@ -138,3 +138,51 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function () {
+        $('#registerForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const form = $(this);
+            const url = form.attr('action');
+            const data = form.serialize();
+
+            // Clear previous error messages
+            form.find('.text-red-500').remove();
+            $('#registerForm button[type="submit"]').prop('disabled', true).text('Registering...');
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    console.log('Registration successful:', response);
+                    location.reload(); // Stay on the same page after registration and login
+                },
+                error: function (xhr) {
+                    const res = xhr.responseJSON;
+                    const errors = res?.errors || {};
+                    const message = res?.message || "Registration failed.";
+
+                    if (!$.isEmptyObject(errors)) {
+                        for (const [field, messages] of Object.entries(errors)) {
+                            const input = form.find(`[name="${field}"]`);
+                            if (input.length) {
+                                input.after(`<p class="text-red-500 text-sm mt-1">${messages[0]}</p>`);
+                            }
+                        }
+                    } else {
+                        alert(message);
+                    }
+
+                    $('#registerForm button[type="submit"]').prop('disabled', false).text('Register');
+                }
+            });
+        });
+    });
+</script>
