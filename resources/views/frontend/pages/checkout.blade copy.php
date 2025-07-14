@@ -1,28 +1,35 @@
 @extends('frontend.layouts.checkout_template')
 @section('title', 'Checkout')
-@section('head_scripts')
-    {{-- ✅ PayPal SDK (must come first before paypal.Buttons) --}}
-    <script src="https://www.paypal.com/sdk/js?client-id={{ config('paypal.clientId') }}&currency=USD&intent=capture">
-    </script>
+@section('styles')
+    <style>
+        /* Hide scrollbar but allow scroll */
+        .scroll-hidden {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* Internet Explorer 10+ */
+        }
 
-    {{-- ✅ Braintree Core SDK --}}
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/client.min.js"></script>
+        .scroll-hidden::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
+        }
 
-    {{-- ✅ Braintree Component SDKs --}}
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/hosted-fields.min.js"></script>
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/paypal-checkout.min.js"></script>
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/apple-pay.min.js"></script>
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/google-payment.min.js"></script>
+        /* For single select */
+        .select2-container--default .select2-selection--single {
+            height: auto;
+            padding: 10px 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 0.5rem;
+        }
 
-    {{-- ⚠️ Slightly older version for UnionPay --}}
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/unionpay.min.js"></script>
-
-    <script async src="https://pay.google.com/gp/p/js/pay.js"></script>
-
+        .select2-selection__arrow {
+            top: 10px !important;
+            right: 10px !important;
+        }
+    </style>
 @endsection
-
 @section('contents')
-
     <section class="bg-transparent font-arial">
         <div class="w-full mx-auto flex justify-center">
             <!-- Left: Checkout Form (Scrollable) -->
@@ -32,17 +39,19 @@
                     <!-- Express Checkout -->
                     <h2 class="text-md font-semibold text-center mb-4">Express checkout</h2>
                     <div class="flex gap-4 mb-6 justify-between">
-                        <div id="paypal-button-container"
-                            class="flex w-full justify-center items-center gap-2 h-9  rounded font-semibold">
-                            {{-- <img src="{{ asset('assets/img/payment_icons/paypal.png') }}" alt="PayPal"
-                                class="w-auto h-11 flex justify-center items-center p-3"> --}}
-                        </div>
-                        <div id="google-pay-button-container"
+                        <button
+                            class="flex w-full justify-center items-center gap-2 bg-yellow-400 hover:bg-yellow-300 rounded font-semibold">
+                            <img src="{{ asset('assets/img/payment_icons/paypal.png') }}" alt="PayPal"
+                                class="w-auto h-11 flex justify-center items-center p-3">
+                        </button>
+                        <button
                             class="flex w-full justify-center items-center gap-2 bg-black text-white hover:bg-gray-800 rounded font-semibold">
                             <img src="{{ asset('assets/img/payment_icons/gpay.png') }}" alt="GPay"
-                                class="w-auto h-9 flex justify-center items-center p-2">
-                        </div>
+                                class="w-auto h-11 flex justify-center items-center p-3">
+                        </button>
                     </div>
+
+
 
                     <div class="flex items-center my-3">
                         <div class="flex-grow border-t border-gray-300"></div>
@@ -76,7 +85,6 @@
                         <div class="bg-white rounded shadow-sm mb-6">
                             <h2 class="text-lg font-semibold mb-4">Delivery</h2>
                             <form id="payment-form" method="POST" action="{{ route('payment.process') }}">
-                                @csrf
 
                                 <!-- Country -->
 
@@ -156,37 +164,40 @@
                                 </div>
                         </div>
 
+                        <!-- SHIPPING METHOD -->
+                        <div class="bg-gray-100 p-4 rounded border text-sm text-gray-700">
+                            <strong>Shipping method</strong>
+                            <p class="text-gray-500 mt-2">Enter your shipping address to view available shipping methods.
+                            </p>
+                        </div>
+
+                        @csrf
+
                         {{-- Delivery Section --}}
-                        <div class="py-4 space-y-4 border border-gray-300 p-4 rounded-md">
+                        <div class="py-4 space-y-4">
                             {{-- Total & Hidden Amount --}}
                             <input type="hidden" name="amount" value="{{ $total }}">
 
+                            {{-- Braintree Drop-In --}}
                             <div id="card-container" class="space-y-4">
-                                <div class="space-y-1">
-                                    <label for="card-number" class="text-sm font-medium text-gray-700">Card Number</label>
-                                    <div id="card-number"
-                                        class="h-10 p-0 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm"></div>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="space-y-1">
-                                        <label for="expiration-date" class="text-sm font-medium text-gray-700">Expiration Date</label>
-                                        <div id="expiration-date"
-                                            class="h-10 px-3 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm"></div>
-                                    </div>
-
-                                    <div class="space-y-1">
-                                        <label for="cvv" class="text-sm font-medium text-gray-700">CVV</label>
-                                        <div id="cvv"
-                                            class="h-10 px-3 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm"></div>
-                                    </div>
-                                </div>
+                                <label class="block">
+                                    <span class="text-sm font-medium">Card Number</span>
+                                    <div id="card-number" class="border px-3 py-2 rounded"></div>
+                                </label>
+                                <label class="block">
+                                    <span class="text-sm font-medium">Expiration Date</span>
+                                    <div id="expiration-date" class="border px-3 py-2 rounded"></div>
+                                </label>
+                                <label class="block">
+                                    <span class="text-sm font-medium">CVV</span>
+                                    <div id="cvv" class="border px-3 py-2 rounded"></div>
+                                </label>
                             </div>
-
                             <div id="card-errors" class="text-red-500 text-sm mt-2"></div>
 
+
                             <button type="submit"
-                                    class="mt-4 w-full bg-[#105989] text-white py-2.5 rounded-md hover:bg-[#0d4e7a] transition-colors text-sm font-semibold">
+                                class="mt-6 w-full bg-[#105989] text-white py-3 rounded hover:bg-[#105989] transition">
                                 Pay now
                             </button>
                         </div>
@@ -305,13 +316,13 @@
                     return;
                 }
 
-                // 1️⃣ Hosted Fields (Card)
+                // 1️⃣ Hosted Fields
                 braintree.hostedFields.create({
                     client: clientInstance,
                     styles: {
                         'input': {
                             'font-size': '16px',
-                            'color': '#333',
+                            'color': '#333'
                         }
                     },
                     fields: {
@@ -351,7 +362,7 @@
                     });
                 });
 
-                // 2️⃣ PayPal
+                // 2️⃣ PayPal Integration (Optional)
                 braintree.paypalCheckout.create({
                     client: clientInstance
                 }, function(paypalErr, paypalCheckoutInstance) {
@@ -378,136 +389,100 @@
                                     form.submit();
                                 });
                         }
-                    }).render('#paypal-button-container');
+                    }).render('#paypal-button-container'); // Add this div manually
                 });
 
-                // 3️⃣ Google Pay
-                braintree.googlePayment.create({
-                    client: clientInstance,
-                    googlePayVersion: 2,
-                    googleMerchantId: 'BraintreeMerchant' // Replace in production
-                }, function(googleErr, googlePaymentInstance) {
-                    if (googleErr) {
-                        console.error('Google Pay Error:', googleErr);
-                        return;
-                    }
-
-                    const paymentsClient = new google.payments.api.PaymentsClient({
-                        environment: 'TEST' // Use 'PRODUCTION' for live
-                    });
-
-                    const paymentDataRequest = googlePaymentInstance.createPaymentDataRequest({
-                        transactionInfo: {
-                            currencyCode: 'USD',
-                            totalPriceStatus: 'FINAL',
-                            totalPrice: totalAmount
-                        }
-                    });
-
-                    paymentsClient.isReadyToPay({
-                        apiVersion: 2,
-                        apiVersionMinor: 0,
-                        allowedPaymentMethods: paymentDataRequest.allowedPaymentMethods
-                    }).then(function(response) {
-                        if (response.result) {
-                            const googlePayButton = paymentsClient.createButton({
-                                onClick: function() {
-                                    paymentsClient.loadPaymentData(
-                                        paymentDataRequest).then(function(
-                                        paymentData) {
-                                        googlePaymentInstance
-                                            .parseResponse(paymentData,
-                                                function(err, payload) {
-                                                    if (err) {
-                                                        console.error(
-                                                            'GPay Tokenize Error:',
-                                                            err);
-                                                        return;
-                                                    }
-
-                                                    const nonceInput = document.createElement('input');
-                                                    nonceInput.type ='hidden';
-                                                    nonceInput.name ='payment_method_nonce';
-                                                    nonceInput.value =payload.nonce;
-                                                    form.appendChild(nonceInput);
-                                                    form.submit();
-                                                });
-                                    });
-                                }
-                            });
-
-                            const container = document.getElementById('google-pay-button-container');
-                            container.innerHTML = '';
-                            container.appendChild(googlePayButton);
-                        }
-                    }).catch(function(err) {
-                        console.error('Google Pay Availability Error:', err);
-                    });
-                });
-
-                // 4️⃣ Apple Pay
-                braintree.applePay.create({
-                    client: clientInstance
-                }, function(applePayErr, applePayInstance) {
-                    if (applePayErr) {
-                        console.error('Apple Pay Error:', applePayErr);
-                        return;
-                    }
-
-                    if (!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
-                        console.warn('Apple Pay not supported on this device/browser');
-                        return;
-                    }
-
-                    const paymentRequest = applePayInstance.createPaymentRequest({
-                        total: {
-                            label: 'Your Store',
-                            amount: totalAmount
-                        },
-                        requiredBillingContactFields: ['postalAddress']
-                    });
-
-                    const session = new ApplePaySession(3, paymentRequest);
-
-                    session.onvalidatemerchant = function(event) {
-                        applePayInstance.performValidation({
-                            validationURL: event.validationURL,
-                            displayName: 'Your Store'
-                        }, function(validationErr, merchantSession) {
-                            if (validationErr) {
-                                session.abort();
-                                return;
-                            }
-                            session.completeMerchantValidation(merchantSession);
-                        });
-                    };
-
-                    session.onpaymentauthorized = function(event) {
-                        applePayInstance.tokenize({
-                            token: event.payment.token
-                        }, function(tokenizeErr, payload) {
-                            if (tokenizeErr) {
-                                session.completePayment(ApplePaySession.STATUS_FAILURE);
-                                return;
-                            }
-
-                            const nonceInput = document.createElement('input');
-                            nonceInput.type = 'hidden';
-                            nonceInput.name = 'payment_method_nonce';
-                            nonceInput.value = payload.nonce;
-                            form.appendChild(nonceInput);
-                            form.submit();
-
-                            session.completePayment(ApplePaySession.STATUS_SUCCESS);
-                        });
-                    };
-
-                    document.getElementById('apple-pay-button').addEventListener('click',
-                        function() {
-                            session.begin();
-                        });
-                });
+                // 3️⃣ Apple Pay & Google Pay: Optional
+                // You can add similar logic for `braintree.applePay.create()` and `braintree.googlePayment.create()` here
             });
         });
     </script>
+
+
+    {{-- <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalAmount = parseFloat('{{ $total ?? 10.0 }}'); // Safer fallback
+
+            braintree.dropin.create({
+                authorization: "{{ $clientToken }}",
+                container: '#dropin-container',
+
+                // Enable PayPal
+                paypal: {
+                    flow: 'checkout',
+                    amount: totalAmount,
+                    currency: 'USD',
+                    requestBillingAgreement: true, // Optional
+                    shippingAddressEditable: true,
+                    shippingAddressOverride: {
+                        recipientName: '{{ auth()->user()->name }}',
+                        line1: '{{ old('address') }}',
+                        city: '{{ old('city') }}',
+                        countryCode: 'US', // Or pull from your selected country
+                        postalCode: '{{ old('zip') }}',
+                        state: '{{ old('state') }}'
+                    }
+                },
+                // Enable Google Pay
+                googlePay: {
+                    googlePayVersion: 2,
+                    environment: 'TEST',
+                    merchantId: '{{ env('BRAINTREE_MERCHANT_ID') }}', // Use 'dummy_merchant_id' in sandbox
+                    transactionInfo: {
+                        totalPriceStatus: 'FINAL',
+                        totalPrice: totalAmount.toFixed(2),
+                        currencyCode: 'USD'
+                    },
+                    allowedPaymentMethods: [{
+                        type: 'CARD',
+                        parameters: {
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['VISA', 'MASTERCARD']
+                        },
+                        tokenizationSpecification: {
+                            type: 'PAYMENT_GATEWAY',
+                            parameters: {
+                                gateway: 'braintree',
+                                gatewayMerchantId: '{{ env('BRAINTREE_MERCHANT_ID') }}'
+                            }
+                        }
+                    }]
+                },
+
+                // Enable Cardholder name input
+                card: {
+                    cardholderName: {
+                        required: true
+                    }
+                }
+
+            }, function(createErr, instance) {
+                if (createErr) {
+                    console.error('Braintree Drop-in Error:', createErr);
+                    return;
+                }
+
+                const form = document.getElementById('payment-form');
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    instance.requestPaymentMethod(function(err, payload) {
+                        if (err) {
+                            console.error('Payment method error:', err);
+                            return;
+                        }
+
+                        // Append nonce to the form
+                        const nonceInput = document.createElement('input');
+                        nonceInput.type = 'hidden';
+                        nonceInput.name = 'payment_method_nonce';
+                        nonceInput.value = payload.nonce;
+                        form.appendChild(nonceInput);
+
+                        form.submit();
+                    });
+                });
+            });
+        });
+    </script> --}}
 @endsection

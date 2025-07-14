@@ -101,7 +101,7 @@
                             Total: ${{ number_format($total, 2) }}
                         </h3>
 
-                        <a href="{{ route('checkout.page') }}"
+                        <a href="{{ route('checkout') }}"
                             class="inline-block bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition checkout-trigger">
                             Proceed to Checkout
                         </a>

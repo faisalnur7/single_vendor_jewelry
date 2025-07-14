@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\State;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\City;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Services\BraintreeGateway;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -68,24 +71,31 @@ class CheckoutController extends Controller
     }
 
     public function processPayment(Request $request){
-        $request->validate([
-            'amount' => 'required|numeric|min:0.01',
-            'payment_method_nonce' => 'required|string',
-            'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-        ]);
+        // dd($request->all());
+        // $request->validate([
+        //     'amount' => 'required|numeric|min:0.01',
+        //     'payment_method_nonce' => 'required|string',
+        //     'address' => 'required|string|max:255',
+        //     'phone' => 'required|string|max:20',
+        // ]);
 
         $gateway = BraintreeGateway::getGateway();
 
-        $result = $gateway->transaction()->sale([
-            'amount' => $request->input('amount'),
-            'paymentMethodNonce' => $request->input('payment_method_nonce'),
-            'options' => ['submitForSettlement' => true],
-        ]);
+        try {
+            $result = $gateway->transaction()->sale([
+                'amount' => $request->input('amount'),
+                'paymentMethodNonce' => $request->input('payment_method_nonce'),
+                'options' => ['submitForSettlement' => true],
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('payment.failed')->with('error', 'Payment error: ' . $e->getMessage());
+        }
 
         if ($result->success) {
-            $transactionId = $result->transaction->id;
-            $paymentMethod = $result->transaction->paymentInstrumentType;
+            $transaction = $result->transaction;
+            $transactionId = $transaction->id;
+            $paymentMethod = $transaction->paymentInstrumentType;
+            $status = $transaction->status;
 
             // Save Order
             $order = Order::create([
@@ -93,53 +103,60 @@ class CheckoutController extends Controller
                 'billing_address' => $request->input('address'),
                 'shipping_address' => $request->input('address'),
                 'payment_option_name' => $paymentMethod,
-                'payment_account_number' => '', // not available from Braintree
+                'payment_account_number' => '', // Not provided by Braintree
                 'transaction_id' => $transactionId,
                 'sender_phone_number' => $request->input('phone'),
-                'status' => 'pending',
+                'status' => $status, // Use real status like 'submitted_for_settlement'
                 'subtotal' => $request->input('amount'),
                 'shipping_charge' => 0,
                 'total' => $request->input('amount'),
-                'order_tracking_number' => strtoupper(Str::random(10))
+                'order_tracking_number' => strtoupper(Str::random(10)),
+                'braintree_response' => json_encode($transaction), // Optional logging
             ]);
 
             // Save Order Items
-            $cartItems = Auth::check() ? Auth::user()->cart->items : session('guest_cart', []);
+            $cartItems = auth()->check() ? auth()->user()->cart->items : session('guest_cart', []);
             foreach ($cartItems as $item) {
+                $productId = is_array($item) ? $item['product_id'] : $item->product_id;
+                $productName = is_array($item) ? $item['product_name'] : $item->product->name;
+                $quantity = is_array($item) ? $item['quantity'] : $item->quantity;
+                $price = is_array($item) ? $item['price'] : $item->price;
+
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $item['product_id'] ?? $item->product_id,
-                    'product_name' => $item['product_name'] ?? $item->product->name,
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['price'] * $item['quantity'],
+                    'product_id' => $productId,
+                    'product_name' => $productName,
+                    'quantity' => $quantity,
+                    'price' => $price,
+                    'subtotal' => $price * $quantity,
                 ]);
             }
 
             // Clear cart
-            if (Auth::check()) {
-                Auth::user()->cart->items()->delete();
+            if (auth()->check()) {
+                auth()->user()->cart->items()->delete();
             } else {
                 session()->forget('guest_cart');
             }
 
-            return redirect()->route('payment.success')->with('success', 'Payment completed!');
+            return redirect()->route('payment.success')->with('success', 'Payment completed successfully!');
         }
 
         return redirect()->route('payment.failed')->with('error', 'Payment failed: ' . $result->message);
     }
 
 
+
     public function success(Request $request)
     {
         $message = session('success') ?? 'Payment was successful!';
-        return view('payment.success', compact('message'));
+        return view('frontend.pages.success', compact('message'));
     }
 
     public function failed(Request $request)
     {
         $message = session('error') ?? 'Payment failed. Please try again.';
-        return view('payment.failed', compact('message'));
+        return view('frontend.pages.failed', compact('message'));
     }
 
 
