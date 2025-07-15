@@ -128,21 +128,27 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     });
 
+    // Order Management
     Route::prefix('order-management')->group(function () {
         // Order Routes
         Route::prefix('orders')->group(function () {
             Route::get('/list', [OrderController::class, 'index'])->name('orders');
-            Route::get('/pending', [OrderController::class, 'pending'])->name('order.pending');
             Route::get('/completed', [OrderController::class, 'completed'])->name('order.completed');
             Route::get('/cancelled', [OrderController::class, 'cancelled'])->name('order.cancelled');
-            Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');
-            Route::get('/create', [OrderController::class, 'create'])->name('order.create');
-            Route::post('/store', [OrderController::class, 'store'])->name('order.store');
+            Route::get('/pending_list', [OrderController::class, 'pending_list'])->name('order.pending');
+            Route::get('/confirmed_list', [OrderController::class, 'confirmed_list'])->name('order.confirmed');
+            Route::get('/rejected_list', [OrderController::class, 'rejected_list'])->name('order.rejected');
+            Route::get('/processing_list', [OrderController::class, 'processing_list'])->name('order.processing');
+            Route::get('/shipped_list', [OrderController::class, 'shipped_list'])->name('order.shipped');
+            Route::get('/completed_list', [OrderController::class, 'completed_list'])->name('order.completed');
+            Route::get('/print_invoice/{id}', [OrderController::class, 'print_invoice'])->name('order.print_invoice');
+
+            Route::get('/show', [OrderController::class, 'show'])->name('order.show');
+            // Route::post('/store', [OrderController::class, 'store'])->name('order.store');
             Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
-            Route::post('/update/{id}', [OrderController::class, 'update'])->name('order.update');
+            Route::post('/update', [OrderController::class, 'update_status'])->name('order.update.status');
             Route::delete('/delete/{id}', [OrderController::class, 'destroy'])->name('order.delete');
         });
-
     });
 
     Route::prefix('customer-management')->group(function () {

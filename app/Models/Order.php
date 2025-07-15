@@ -24,6 +24,22 @@ class Order extends Model
         'completed_at'
     ];
 
+    const PENDING = 1;
+    const CONFIRMED = 2;
+    const REJECTED = 3;
+    const PROCESSING = 4;
+    const SHIPPED = 5;
+    const COMPLETED = 6;
+
+    const ORDER_STATUS = [
+        self::PENDING => "Pending",
+        self::CONFIRMED => "Confirmed",
+        self::REJECTED => "Rejected",
+        self::PROCESSING => "Packed",
+        self::SHIPPED => "Shipped",
+        self::COMPLETED => "Delivered",
+    ];
+
     public function user(){
         return $this->belongsTo(User::class,'user_id');
     }
