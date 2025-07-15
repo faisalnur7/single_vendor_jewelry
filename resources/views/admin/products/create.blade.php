@@ -27,7 +27,7 @@
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label>Category</label>
-                            <select name="category_id" class="form-control" id="category_id" required>
+                            <select name="category_id" class="form-control select2" id="category_id" required>
                                 <option value="">Select Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
@@ -40,7 +40,7 @@
 
                         <div class="col-md-4 form-group">
                             <label>Sub Category</label>
-                            <select name="sub_category_id" class="form-control" id="subcategory_id">
+                            <select name="sub_category_id" class="form-control select2" id="subcategory_id">
                                 <option value="">Select Subcategory</option>
                                 @foreach ($subcategories as $subcategory)
                                     <option value="{{ $subcategory->id }}"
@@ -53,12 +53,25 @@
 
                         <div class="col-md-4 form-group">
                             <label>Child Sub Category</label>
-                            <select name="child_sub_category_id" class="form-control" id="childsubcategory_id">
+                            <select name="child_sub_category_id" class="form-control select2" id="childsubcategory_id">
                                 <option value="">Select Child Subcategory</option>
                                 @foreach ($childsubcategories as $childsubcategory)
                                     <option value="{{ $childsubcategory->id }}"
                                         {{ old('child_sub_category_id') == $childsubcategory->id ? 'selected' : '' }}>
                                         {{ $childsubcategory->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4 form-group">
+                            <label>Supplier</label>
+                            <select name="supplier_id" class="form-control select2" id="supplier_id" required>
+                                <option value="">Select Supplier</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}"
+                                        {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                        {{ $supplier->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -260,6 +273,9 @@
         }
 
         $(document).ready(function() {
+
+            $('.select2').select2();
+
             $('.summernote').summernote({
                 height: 100
             });

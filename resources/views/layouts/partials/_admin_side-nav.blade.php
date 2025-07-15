@@ -45,6 +45,25 @@
             <li class="nav-item"><a href="{{ route('childsubcategory.list') }}" class="nav-link {{ request()->routeIs('childsubcategory.*') ? 'active' : '' }}"><i class="far fa-circle nav-icon"></i><p>Child Sub Categories</p></a></li>
           </ul>
         </li>
+        <!-- Supplier Management -->
+        <li class="nav-item {{ menuOpen(['supplier.*']) ? 'menu-is-opening menu-open' : '' }}">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-truck"></i>
+            <p>
+              Suppliers
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('supplier.list') }}" class="nav-link {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Suppliers</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
 
         <!-- Orders -->
         <li class="nav-item {{ menuOpen(['order.*']) ? 'menu-is-opening menu-open' : '' }}">

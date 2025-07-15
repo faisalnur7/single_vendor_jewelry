@@ -11,6 +11,7 @@ class Product extends Model
         'sub_category_id',
         'child_sub_category_id',
         'brand_id',
+        'supplier_id',
         'name',
         'slug',
         'sku',
@@ -62,6 +63,10 @@ class Product extends Model
 
     public function childSubCategory() {
         return $this->belongsTo(ChildSubCategory::class);
+    }
+
+    public function suppliers() {
+        return $this->belongsTo(Supplier::class);
     }
 
     public function attributes() {

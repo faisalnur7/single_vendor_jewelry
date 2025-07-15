@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Supplier;
 use App\Models\SubCategory;
 use App\Models\ChildSubCategory;
 use Illuminate\Http\Request;
@@ -76,7 +77,8 @@ class ProductController extends Controller
         $categories = Category::all();
         $subcategories = SubCategory::all();
         $childsubcategories = ChildSubCategory::all();
-        return view('admin.products.create', compact('categories', 'subcategories','childsubcategories'));
+        $suppliers = Supplier::all();
+        return view('admin.products.create', compact('categories', 'subcategories','childsubcategories','suppliers'));
     }
 
     public function store(Request $request)
