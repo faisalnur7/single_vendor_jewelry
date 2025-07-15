@@ -83,8 +83,8 @@
     }
 
     $(document).ready(function () {
-        // Bind click event on checkout triggers
-        $('.checkout-trigger').on('click', function (e) {
+        // Bind click event on checkout triggers 
+        $(document).on('click','.checkout-trigger, .header-user-icon', function (e) {
             @if (!auth()->check())
                 e.preventDefault();
                 openLogin();

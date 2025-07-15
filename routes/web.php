@@ -65,6 +65,11 @@ Route::post('/cart/update', [CartController::class, 'update_item_qty'])->name('c
 
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/user_dashboard', [UserController::class, 'user_dashboard'])->name('user_dashboard');
+    Route::get('/user_profile', [UserController::class, 'user_profile'])->name('user_profile');
+    Route::get('/user_order', [UserController::class, 'user_order'])->name('user_order');
+    Route::get('/user_wishlist', [UserController::class, 'user_wishlist'])->name('user_wishlist');
+    Route::get('/user_address', [UserController::class, 'user_address'])->name('user_address');
     Route::get('/user/list', [UserController::class, 'index'])->name('user.list');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
     Route::get('/user/store', [UserController::class, 'store'])->name('user.store');

@@ -2,7 +2,7 @@
 @section('title', 'Checkout')
 @section('head_scripts')
     {{-- ✅ PayPal SDK (must come first before paypal.Buttons) --}}
-    <script src="https://www.paypal.com/sdk/js?client-id={{ config('paypal.clientId') }}&currency=USD&intent=capture">
+    <script src="https://www.paypal.com/sdk/js?client-id={{ config('paypal.clientId') }}&currency=USD&intent=authorize">
     </script>
 
     {{-- ✅ Braintree Core SDK --}}

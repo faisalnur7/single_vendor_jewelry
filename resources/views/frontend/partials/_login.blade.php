@@ -9,7 +9,7 @@
         id="loginPanel">
         <!-- Header -->
         <div class="flex items-center justify-between p-4 border-b">
-            <h2 id="drawerTitle" class="text-lg font-semibold">Login</h2>
+            <h2 id="drawerTitle" class="text-lg font-semibold">LOGIN</h2>
             <button onclick="closeLogin()"
                 class="text-gray-900 hover:text-gray-950 text-md font-extralight transition-transform duration-300 ease-in-out hover:rotate-180">
                 <i class="fa-solid fa-xmark"></i>
