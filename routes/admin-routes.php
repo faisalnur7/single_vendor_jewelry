@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymentOptionController;
 use App\Http\Controllers\SubscriptionRequestController;
 use App\Http\Controllers\ChildSubCategoryController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ShippingMethodController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -155,6 +156,12 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/list', [CustomerController::class, 'index'])->name('customer.list');
         Route::get('/groups', [CustomerController::class, 'groups'])->name('customer.group');
     });
+
+    Route::prefix('shipping-management')->group(function () {
+        Route::resource('shipping-methods', ShippingMethodController::class)->except(['create', 'edit', 'show']);
+        Route::post('shipping-methods/{shippingMethod}/toggle-status', [ShippingMethodController::class, 'toggleStatus']);
+    });
+
 
     Route::prefix('promotion-management')->group(function () {
         Route::get('/coupons', [CouponController::class, 'index'])->name('coupon.list');
