@@ -235,7 +235,7 @@
                                 <div id="card-errors" class="text-red-500 text-sm mt-2"></div>
 
                                 <button type="submit"
-                                    class="mt-4 w-full bg-[#105989] text-white py-2.5 rounded-md hover:bg-[#0d4e7a] transition-colors text-sm font-semibold">
+                                    class="mt-4 w-full bg-[#1773b0] text-white py-2.5 rounded-md hover:bg-[#105989] transition-colors text-sm font-semibold">
                                     Pay now
                                 </button>
                             </div>
