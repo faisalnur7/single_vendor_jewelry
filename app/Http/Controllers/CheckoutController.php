@@ -7,6 +7,7 @@ use App\Models\State;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\City;
+use App\Models\ShippingMethod;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Services\BraintreeGateway;
@@ -21,7 +22,7 @@ class CheckoutController extends Controller
         $discount = 0;
 
 
-
+        $data['shippingMethods'] = ShippingMethod::all();
         if (Auth::check()) {
             $user = Auth::user();
             $cart = $user->cart;

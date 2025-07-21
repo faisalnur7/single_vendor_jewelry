@@ -24,11 +24,11 @@
 @section('contents')
 
     <section class="bg-transparent font-arial">
-        <div class="w-full mx-auto flex justify-center">
+        <div class="w-full mx-auto flex justify-center flex-col-reverse md:flex-row">
             <!-- Left: Checkout Form (Scrollable) -->
 
-            <div class="w-full bg-white p-6 flex justify-end">
-                <div class="w-full max-w-[500px] bg-white p-6 ">
+            <div class="w-full bg-white p-6 flex justify-center md:justify-end">
+                <div class="w-full max-w-[500px] bg-white p-0 md:p-6 ">
                     <!-- Express Checkout -->
                     <h2 class="text-md font-semibold text-center mb-4">Express checkout</h2>
                     <div class="flex gap-4 mb-6 justify-between">
@@ -73,7 +73,7 @@
 
                         <!-- Delivery -->
                         <!-- DELIVERY SECTION -->
-                        <div class="bg-white rounded shadow-sm mb-6">
+                        <div class="bg-gray-100 rounded-md border p-4 shadow-sm mb-6">
                             <h2 class="text-lg font-semibold mb-4">Delivery</h2>
                             <form id="payment-form" method="POST" action="{{ route('payment.process') }}">
                                 @csrf
@@ -125,7 +125,7 @@
                                 </div>
 
                                 <!-- City, State, ZIP -->
-                                <div class="grid grid-cols-3 gap-4 mb-4">
+                                <div class="grid grid-rows-1 md:grid-cols-3 gap-4 mb-4">
                                     <div>
                                         <label class="block text-sm font-medium mb-1">City</label>
                                         <select name="city" id="city"
@@ -156,39 +156,89 @@
                                 </div>
                         </div>
 
-                        {{-- Delivery Section --}}
-                        <div class="py-4 space-y-4 border border-gray-300 p-4 rounded-md">
-                            {{-- Total & Hidden Amount --}}
-                            <input type="hidden" name="amount" value="{{ $total }}">
+                        <div>
+                            <h3 class="font-bold text-lg mb-4">Select Shipping Method</h3>
+                            <div class="flex gap-2 flex-col md:flex-row w-full p-2 border rounded-md" id="shipping-methods">
+                                @foreach ($shippingMethods as $method)
+                                    <label
+                                        class="shipping-option group flex flex-col items-center gap-2 p-4 border rounded-lg cursor-pointer transition hover:bg-gray-200 relative w-full md:w-40 text-center">
+                                        <input type="radio" class="hidden peer" name="shipping_method_id"
+                                            value="{{ $method->id }}" required>
+                                        <img src="{{ $method->logo }}"
+                                            class="h-8 max-w-40 md:w-auto object-contain p-[3px]" />
 
-                            <div id="card-container" class="space-y-4">
-                                <div class="space-y-1">
-                                    <label for="card-number" class="text-sm font-medium text-gray-700">Card Number</label>
-                                    <div id="card-number"
-                                        class="h-10 p-0 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm"></div>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="space-y-1">
-                                        <label for="expiration-date" class="text-sm font-medium text-gray-700">Expiration Date</label>
-                                        <div id="expiration-date"
-                                            class="h-10 px-3 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm"></div>
-                                    </div>
-
-                                    <div class="space-y-1">
-                                        <label for="cvv" class="text-sm font-medium text-gray-700">CVV</label>
-                                        <div id="cvv"
-                                            class="h-10 px-3 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm"></div>
-                                    </div>
-                                </div>
+                                        <!-- Background on selected -->
+                                        <div
+                                            class="absolute inset-0 bg-gray-200 opacity-0 peer-checked:opacity-100 rounded-lg transition-all duration-200 -z-10">
+                                        </div>
+                                    </label>
+                                @endforeach
                             </div>
+                        </div>
 
-                            <div id="card-errors" class="text-red-500 text-sm mt-2"></div>
 
-                            <button type="submit"
+
+                        {{-- Delivery Section --}}
+                        <div>
+                            <h3 class="font-bold text-lg mb-4">Checkout with Cards</h3>
+                            <div class="py-4 border border-gray-100 bg-gray-100 p-4 rounded-md">
+                                {{-- Total & Hidden Amount --}}
+                                <input type="hidden" name="amount" value="{{ $total }}">
+
+                                <div id="card-container" class="mt-0">
+                                    @php
+                                        $paymentIcons = [
+                                            'visa',
+                                            'master',
+                                            'american_express',
+                                            'discover',
+                                            'jcb',
+                                            'maestro',
+                                        ];
+
+                                        $payment_image_class =
+                                            'w-12 h-8 object-contain border border-gray-300 rounded-md';
+                                    @endphp
+
+                                    <div
+                                        class="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center pb-4 gap-2 md:gap-0">
+                                        <span class="font-bold text-md">Pay with</span>
+                                        <div class="flex items-center justify-start flex-wrap gap-1">
+                                            @foreach ($paymentIcons as $icon)
+                                                <img src="{{ asset('assets/img/payment_icons/' . $icon . '.svg') }}"
+                                                    title="{{ ucwords(str_replace('_', ' ', $icon)) }}"
+                                                    class="{{ $payment_image_class }}" />
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="pb-4">
+                                        <div id="card-number"
+                                            class="h-12 px-0 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="">
+                                            <div id="expiration-date"
+                                                class="h-12 px-2 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
+                                            </div>
+                                        </div>
+
+                                        <div class="">
+                                            <div id="cvv"
+                                                class="h-12 px-2 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="card-errors" class="text-red-500 text-sm mt-2"></div>
+
+                                <button type="submit"
                                     class="mt-4 w-full bg-[#105989] text-white py-2.5 rounded-md hover:bg-[#0d4e7a] transition-colors text-sm font-semibold">
-                                Pay now
-                            </button>
+                                    Pay now
+                                </button>
+                            </div>
                         </div>
                         </form>
 
@@ -199,8 +249,8 @@
 
             <!-- Right: Order Summary (Sticky) -->
             <div
-                class="w-full sticky top-0 bg-gray-100 p-6 h-[100vh] border-l border-gray-300 flex justify-start font-arial">
-                <div class="w-full max-w-[500px] bg-gray h-[100vh] self-start">
+                class="w-full static md:sticky top-0 bg-gray-100 p-6 h-min md:h-[100vh] border-l border-gray-300 flex justify-center md:justify-start font-arial">
+                <div class="w-full max-w-[500px] bg-gray h-min md:h-[100vh] self-start">
                     <div class="space-y-4 max-h-96 overflow-y-auto">
                         @foreach ($cartItems as $item)
                             <div class="flex items-start gap-4 pt-4">
@@ -244,6 +294,11 @@
         $(function() {
             $('.select2').select2({
                 placeholder: 'Select an option'
+            });
+
+            $('#shipping-methods input[type=radio]').on('change', function() {
+                $('.shipping-option').removeClass('bg-gray-200');
+                $(this).closest('.shipping-option').addClass('bg-gray-200');
             });
 
             $('#country').on('change', function() {
@@ -316,13 +371,16 @@
                     },
                     fields: {
                         number: {
-                            selector: '#card-number'
+                            selector: '#card-number',
+                            placeholder: 'Card Number'
                         },
                         cvv: {
-                            selector: '#cvv'
+                            selector: '#cvv',
+                            placeholder: 'CVV'
                         },
                         expirationDate: {
-                            selector: '#expiration-date'
+                            selector: '#expiration-date',
+                            placeholder: 'MM/YY'
                         }
                     }
                 }, function(hostedFieldsErr, hostedFieldsInstance) {
@@ -425,18 +483,26 @@
                                                         return;
                                                     }
 
-                                                    const nonceInput = document.createElement('input');
-                                                    nonceInput.type ='hidden';
-                                                    nonceInput.name ='payment_method_nonce';
-                                                    nonceInput.value =payload.nonce;
-                                                    form.appendChild(nonceInput);
+                                                    const nonceInput =
+                                                        document
+                                                        .createElement(
+                                                            'input');
+                                                    nonceInput.type =
+                                                        'hidden';
+                                                    nonceInput.name =
+                                                        'payment_method_nonce';
+                                                    nonceInput.value =
+                                                        payload.nonce;
+                                                    form.appendChild(
+                                                        nonceInput);
                                                     form.submit();
                                                 });
                                     });
                                 }
                             });
 
-                            const container = document.getElementById('google-pay-button-container');
+                            const container = document.getElementById(
+                                'google-pay-button-container');
                             container.innerHTML = '';
                             container.appendChild(googlePayButton);
                         }

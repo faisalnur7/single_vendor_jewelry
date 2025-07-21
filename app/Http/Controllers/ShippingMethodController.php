@@ -25,7 +25,10 @@ class ShippingMethodController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('shipping_logos', 'public');
+            $file = $request->file('logo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/shipping_logos'), $filename);
+            $data['logo'] = 'uploads/shipping_logos/' . $filename;
         }
 
         $data['status'] = true;
@@ -34,6 +37,12 @@ class ShippingMethodController extends Controller
 
         return response()->json(['status' => 'success', 'shipping' => $shippingMethod]);
     }
+
+    public function edit(ShippingMethod $shippingMethod){
+        return response()->json($shippingMethod);
+    }
+
+
 
     public function update(Request $request, ShippingMethod $shippingMethod)
     {
@@ -46,16 +55,23 @@ class ShippingMethodController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            if ($shippingMethod->logo) {
-                Storage::disk('public')->delete($shippingMethod->logo);
+            // Delete old logo if exists
+            if ($shippingMethod->logo && file_exists(public_path($shippingMethod->logo))) {
+                unlink(public_path($shippingMethod->logo));
             }
-            $data['logo'] = $request->file('logo')->store('shipping_logos', 'public');
+
+            // Move uploaded file manually
+            $file = $request->file('logo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/shipping_logos'), $filename);
+            $data['logo'] = 'uploads/shipping_logos/' . $filename;
         }
 
         $shippingMethod->update($data);
 
         return response()->json(['status' => 'success']);
     }
+
 
     public function destroy(ShippingMethod $shippingMethod)
     {

@@ -158,9 +158,14 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('shipping-management')->group(function () {
-        Route::resource('shipping-methods', ShippingMethodController::class)->except(['create', 'edit', 'show']);
-        Route::post('shipping-methods/{shippingMethod}/toggle-status', [ShippingMethodController::class, 'toggleStatus']);
+        Route::get('shipping-methods', [ShippingMethodController::class, 'index'])->name('shipping-methods.index');
+        Route::post('shipping-methods', [ShippingMethodController::class, 'store'])->name('shipping-methods.store');
+        Route::get('shipping-methods/{shippingMethod}/edit', [ShippingMethodController::class, 'edit'])->name('shipping-methods.edit');
+        Route::post('shipping-methods/{shippingMethod}', [ShippingMethodController::class, 'update'])->name('shipping-methods.update');
+        Route::delete('shipping-methods/{shippingMethod}', [ShippingMethodController::class, 'destroy'])->name('shipping-methods.destroy');
+        Route::post('shipping-methods/{shippingMethod}/toggle-status', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle-status');
     });
+
 
 
     Route::prefix('promotion-management')->group(function () {

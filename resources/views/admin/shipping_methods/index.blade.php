@@ -30,7 +30,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if($shipping->logo)
-                                        <img src="{{ asset('storage/'.$shipping->logo) }}" alt="logo" class="rounded" height="30">
+                                        <img src="{{ asset($shipping->logo) }}" alt="logo" class="rounded" height="30">
                                     @endif
                                 </td>
                                 <td>{{ $shipping->name }}</td>
@@ -109,6 +109,15 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    const routes = {
+        store: "{{ route('shipping-methods.store') }}",
+        update: "{{ route('shipping-methods.update', ['shippingMethod' => 'SHIPPING_ID']) }}",
+        toggleStatus: "{{ route('shipping-methods.toggle-status', ['shippingMethod' => 'SHIPPING_ID']) }}",
+        edit: "{{ route('shipping-methods.edit', ['shippingMethod' => 'SHIPPING_ID']) }}",
+        delete: "{{ route('shipping-methods.destroy', ['shippingMethod' => 'SHIPPING_ID']) }}"
+    };
+</script>
 
 <script>
 $(function () {
@@ -121,17 +130,18 @@ $(function () {
         $('#shippingModalLabel').text('Add Shipping Method');
         $('#statusField').addClass('d-none');
         $('#previewLogo').html('');
+        form.find('input[name="_method"]').val('POST');
         modal.show();
     });
 
     form.on('submit', function (e) {
         e.preventDefault();
         let id = $('#shipping_id').val();
-        let method = id ? 'POST' : 'POST';
-        let url = id ? `/shipping-methods/${id}` : `/shipping-methods`;
+
+        let url = id ? routes.update.replace('SHIPPING_ID', id) : routes.store;
+        let method = 'POST';
 
         let formData = new FormData(this);
-        if (id) formData.append('_method', 'PUT');
 
         $.ajax({
             url: url,
@@ -149,12 +159,15 @@ $(function () {
         });
     });
 
+
     // Edit
     $(document).on('click', '.editBtn', function () {
         let row = $(this).closest('tr');
         let id = row.data('id');
 
-        $.get(`/shipping-methods/${id}/edit`, function (res) {
+        let url = routes.edit.replace('SHIPPING_ID', id);
+
+        $.get(url, function (res) {
             $('#shipping_id').val(res.id);
             $('#shippingModalLabel').text('Edit Shipping Method');
             form.find('input[name="name"]').val(res.name);
@@ -162,7 +175,8 @@ $(function () {
             form.find('input[name="cost"]').val(res.cost);
             form.find('select[name="status"]').val(res.status);
             $('#statusField').removeClass('d-none');
-            $('#previewLogo').html(res.logo ? `<img src="/storage/${res.logo}" height="40">` : '');
+            $('#previewLogo').html(res.logo ? `<img src="/${res.logo}" height="40">` : '');
+            
             modal.show();
         });
     });
@@ -172,31 +186,42 @@ $(function () {
         if (!confirm('Are you sure?')) return;
         let id = $(this).closest('tr').data('id');
 
+        let url = routes.delete.replace('SHIPPING_ID', id);
+
         $.ajax({
-            url: `/shipping-methods/${id}`,
+            url: url,
             type: 'POST',
             data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
             success() {
                 toastr.success('Deleted successfully');
                 location.reload();
+            },
+            error() {
+                toastr.error('Failed to delete');
             }
         });
     });
+
 
     // Toggle status
     $(document).on('click', '.toggleStatus', function () {
         let btn = $(this);
         let id = btn.closest('tr').data('id');
 
-        $.post(`/shipping-methods/${id}/toggle-status`, {_token: '{{ csrf_token() }}'}, function (res) {
+        let url = routes.toggleStatus.replace('SHIPPING_ID', id);
+
+        $.post(url, {_token: '{{ csrf_token() }}'}, function (res) {
             if (res.new_status) {
                 btn.removeClass('btn-danger').addClass('btn-success').text('Active');
             } else {
                 btn.removeClass('btn-success').addClass('btn-danger').text('Inactive');
             }
             toastr.success('Status updated');
+        }).fail(() => {
+            toastr.error('Failed to update status');
         });
     });
+
 });
 </script>
 @endsection
