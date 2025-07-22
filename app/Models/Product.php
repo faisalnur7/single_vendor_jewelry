@@ -29,7 +29,8 @@ class Product extends Model
         'weight',
         'unit',
         'meta',
-        'has_variants'
+        'has_variants',
+        'purchase_price'
     ];
 
     protected $casts = [

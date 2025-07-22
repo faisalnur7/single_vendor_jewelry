@@ -137,6 +137,7 @@ class ProductController extends Controller
                 $vProduct->name = $product->name.'-'.($key+1);
                 $vProduct->color = $variant['color'];
                 $vProduct->price = $variant['price'];
+                $vProduct->purchase_price = $variant['purchase_price'];
                 $vProduct->stock = $variant['stock'];
                 $vProduct->description = $variant['description'];
                 $vProduct->stock = $variant['stock'];
@@ -215,6 +216,7 @@ class ProductController extends Controller
                     $vProduct = Product::query()->findOrFail($variant['id']);
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
+                    $vProduct->purchase_price = $variant['purchase_price'];
                     $vProduct->stock = $variant['stock'];
                     $vProduct->description = $variant['description'];
 
@@ -235,6 +237,7 @@ class ProductController extends Controller
                     $vProduct->name = $product->name.'-'.($key+1);
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
+                    $vProduct->purchase_price = $variant['purchase_price'];
                     $vProduct->description = $variant['description'];
                     $vProduct->parent_id = $product->id;
                     $vProduct->sku = $product->sku . ($key + 1);

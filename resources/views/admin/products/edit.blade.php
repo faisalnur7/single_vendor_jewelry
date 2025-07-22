@@ -211,6 +211,12 @@
                                                     <input type="text" name="variants[{{ $index }}][price]"
                                                         class="form-control" placeholder="Price"
                                                         value="{{ $variant['price'] }}">
+                                                </div>                                                
+                                                
+                                                <div class="col-md-2">
+                                                    <input type="text" name="variants[{{ $index }}][purchase_price]"
+                                                        class="form-control" placeholder="Purchase price"
+                                                        value="{{ $variant['purchase_price'] }}">
                                                 </div>
                                                 <div class="col-md-2">
                                                     <input type="text" name="variants[{{ $index }}][stock]"
@@ -241,6 +247,10 @@
                                             <div class="col-md-2">
                                                 <input type="text" name="variants[0][price]" class="form-control"
                                                     placeholder="Price">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" name="variants[0][purchase_price]" class="form-control"
+                                                    placeholder="Purchase price">
                                             </div>
                                             <div class="col-md-2">
                                                 <input type="number" name="variants[0][stock]" class="form-control"
@@ -318,6 +328,9 @@
                 </div>
                 <div class="col-md-2">
                     <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
                 </div>
                 <div class="col-md-2">
                     <input type="text" name="variants[${variantIndex}][stock]" class="form-control" placeholder="Stock">

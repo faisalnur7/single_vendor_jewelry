@@ -99,7 +99,7 @@
 
                                 <p class="mt-3">
                                     <strong>Description:</strong><br>
-                                    {!! nl2br(e($product->description ?? 'No description provided.')) !!}
+                                    {!! $product->description ?? 'No description provided.' !!}
                                 </p>
 
                                 <div class="mt-4">
@@ -142,6 +142,7 @@
                                             <th>Sub Category</th>
                                             <th>Child Sub Category</th>
                                             <th>SKU</th>
+                                            <th>Purchase price</th>
                                             <th>Price</th>
                                             <th>Stock</th>
                                             <th>Status</th>
@@ -161,11 +162,12 @@
                                                         <span class="badge badge-secondary">No Image</span>
                                                     @endif
                                                 </td>
-                                                <td class="font-weight-bold">{{ $product->name }}</td>
+                                                <td class="font-weight-bold">{{ $product->color }}</td>
                                                 <td>{{ $product->category->name ?? 'N/A' }}</td>
                                                 <td>{{ $product->subCategory->name ?? 'N/A' }}</td>
                                                 <td>{{ $product->childSubCategory->name ?? 'N/A' }}</td>
                                                 <td>{{ $product->sku }}</td>
+                                                <td>${{ number_format($product->purchase_price, 2) }}</td>
                                                 <td>${{ number_format($product->price, 2) }}</td>
                                                 <td>{{ $product->stock }}</td>
                                                 <td>
