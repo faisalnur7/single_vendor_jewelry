@@ -50,8 +50,9 @@ class PurchaseController extends Controller
         $products = Product::all();
         $categories = Category::all();
         $subCategories = SubCategory::all();
+        $brands = [];
 
-        return view('admin.purchases.create', compact('suppliers', 'products', 'categories', 'subCategories'));
+        return view('admin.purchases.create', compact('suppliers', 'products', 'categories', 'subCategories','brands'));
     }
 
     public function store(Request $request)

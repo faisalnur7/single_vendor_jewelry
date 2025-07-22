@@ -72,7 +72,6 @@ class CheckoutController extends Controller
     }
 
     public function processPayment(Request $request){
-        // dd($request->all());
         // $request->validate([
         //     'amount' => 'required|numeric|min:0.01',
         //     'payment_method_nonce' => 'required|string',
@@ -113,6 +112,7 @@ class CheckoutController extends Controller
                 'total' => $request->input('amount'),
                 'order_tracking_number' => strtoupper(Str::random(10)),
                 'braintree_response' => json_encode($transaction), // Optional logging
+                'shipping_method_id' => $request->shipping_method_id
             ]);
 
             // Save Order Items

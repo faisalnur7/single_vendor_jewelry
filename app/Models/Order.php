@@ -21,7 +21,8 @@ class Order extends Model
         'start_processing_at',
         'packaged_at',
         'shipped_at',
-        'completed_at'
+        'completed_at',
+        'shipping_method_id'
     ];
 
     const PENDING = 1;

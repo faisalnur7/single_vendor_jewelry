@@ -64,25 +64,40 @@
                             </a></li>
                     </ul>
                 </li>
-                <!-- Supplier Management -->
-                <li class="nav-item {{ menuOpen(['supplier.*']) ? 'menu-is-opening menu-open' : '' }}">
+                <!-- Purchase Management -->
+                <li class="nav-item {{ menuOpen(['supplier.*', 'purchase.*']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-truck"></i>
+                        <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>
-                            Suppliers
+                            Purchase Management
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ route('purchase.create') }}"
+                                class="nav-link {{ request()->routeIs('purchase.create') ? 'active' : '' }}">
+                                <i class="fas fa-plus-square nav-icon"></i>
+                                <p>Purchase Product</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('purchase.list') }}"
+                                class="nav-link {{ request()->routeIs('purchase.list') ? 'active' : '' }}">
+                                <i class="fas fa-history nav-icon"></i>
+                                <p>Purchase History</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('supplier.list') }}"
                                 class="nav-link {{ request()->routeIs('supplier.*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-industry nav-icon"></i>
                                 <p>Suppliers</p>
                             </a>
                         </li>
                     </ul>
                 </li>
+
 
 
                 <!-- Orders -->
