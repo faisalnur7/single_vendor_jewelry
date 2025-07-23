@@ -67,7 +67,7 @@
                                 @if($product->has_variants)
                                     <div class="row">
                                         <h4 class="text-primary mb-3">
-                                            ${{ number_format($product->min_price, 2) }}-${{ number_format($product->max_price, 2) }}
+                                            ${{ number_format($product->variants->min('price'), 2) }}-${{ number_format($product->variants->max('price'), 2) }}
                                         </h4>
                                     </div>
                                 @else
@@ -169,7 +169,7 @@
                                                 <td>{{ $product->sku }}</td>
                                                 <td>${{ number_format($product->purchase_price, 2) }}</td>
                                                 <td>${{ number_format($product->price, 2) }}</td>
-                                                <td>{{ $product->stock }}</td>
+                                                <td>{{ $product->current_stock }}</td>
                                                 <td>
                                                     @if ($product->status)
                                                         <span class="badge badge-success">Active</span>
@@ -183,11 +183,12 @@
                                                         class="btn btn-outline-info btn-sm rounded" title="View">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-
+                                                    {{--
                                                     <a href="{{ route('product.edit', $product->id) }}"
                                                         class="btn btn-outline-dark btn-sm rounded" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
+                                                    --}}
 
                                                     <form action="{{ route('product.delete', $product->id) }}"
                                                         method="POST" class="d-inline"

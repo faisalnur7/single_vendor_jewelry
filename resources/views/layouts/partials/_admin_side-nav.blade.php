@@ -33,7 +33,7 @@
 
                 <!-- Product Management -->
                 <li
-                    class="nav-item {{ menuOpen(['product.*', 'category.*', 'subcategory.*', 'childsubcategory.*', 'brand.*', 'attribute.*']) ? 'menu-is-opening menu-open' : '' }}">
+                    class="nav-item {{ menuOpen(['product.*','stock', 'category.*', 'subcategory.*', 'childsubcategory.*', 'brand.*', 'attribute.*']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
                         <p>
@@ -62,6 +62,14 @@
                                     class="far fa-circle nav-icon"></i>
                                 <p>Child Sub Categories</p>
                             </a></li>
+                        <li class="nav-item">
+                            <a href="{{ route('stock') }}" 
+                            class="nav-link {{ request()->routeIs('stock') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Stock</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
                 <!-- Purchase Management -->

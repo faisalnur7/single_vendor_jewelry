@@ -1,7 +1,7 @@
 @extends('layouts.admin_master')
 
-@section('title', 'Product List')
-@section('page_title', 'Product List')
+@section('title', 'Product Stock')
+@section('page_title', 'Product Stock')
 
 @section('contents')
     <div class="container-fluid">
@@ -26,17 +26,6 @@
 
         {{-- Product Table --}}
         <div class="card border-0 shadow-sm rounded">
-            <div
-                class="card-header bg-gradient-dark text-white d-flex justify-content-between align-items-center rounded-top">
-                <h4 class="mb-0">All Products</h4>
-                <div class="ml-auto">
-                    <a href="{{ route('product.create') }}" class="btn btn-primary shadow-sm">
-                        <i class="fas fa-plus"></i> Add New Product
-                    </a>
-                </div>
-            </div>
-
-
             <div class="card-body px-0 pb-4 pt-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
@@ -70,7 +59,7 @@
                                             <span class="badge badge-secondary">No Image</span>
                                         @endif
                                     </td>
-                                    <td class="font-weight-bold">{{ $product->name }}</td>
+                                    <td class="">{{ $product->name }} - <span class="font-bold">{{ $product->color }}</span></td>
                                     <td>{{ $product->category->name ?? 'N/A' }}</td>
                                     <td>{{ $product->subCategory->name ?? 'N/A' }}</td>
                                     <td>{{ $product->childSubCategory->name ?? 'N/A' }}</td>

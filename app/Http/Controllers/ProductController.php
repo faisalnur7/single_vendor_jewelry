@@ -288,7 +288,7 @@ class ProductController extends Controller
 
     public function getProducts(Request $request)
     {
-        $query = Product::query();
+        $query = Product::query()->where('has_variants','0');
 
         if ($request->has('category_id') && $request->category_id !== null) {
             $query->where('category_id', $request->category_id);
@@ -319,5 +319,11 @@ class ProductController extends Controller
         return response()->json(['product_id' => $nextId]);
     }
 
-    
+    public function stock(){
+        $data['categories'] = Category::all();
+        $data['subCategories'] = SubCategory::all();
+        $data['childSubCategories'] = ChildSubCategory::all();
+        $data['products'] = Product::with(['purchaseItems', 'orderItems'])->where('has_variants','0')->paginate(10);
+        return view('admin.products.stock', $data);   
+    }
 }

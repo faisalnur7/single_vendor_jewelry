@@ -89,4 +89,23 @@ class Product extends Model
         return $this->belongsTo(Product::class, 'parent_id');
     }
 
+    public function purchaseItems()
+    {
+        return $this->hasMany(PurchaseItem::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function getCurrentStockAttribute()
+    {
+        $purchased = $this->purchaseItems()->sum('quantity');
+        $sold = $this->orderItems()->sum('quantity');
+
+        return $purchased - $sold;
+    }
+
+
 }

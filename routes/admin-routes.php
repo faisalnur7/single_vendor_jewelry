@@ -75,6 +75,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
             Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
             Route::post('/update/{id}', [ProductController::class, 'update'])->name('product.update');
             Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+            Route::get('/stock', [ProductController::class, 'stock'])->name('stock');
         });
 
         // Category Routes

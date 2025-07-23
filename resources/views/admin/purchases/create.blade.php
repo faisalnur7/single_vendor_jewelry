@@ -81,12 +81,10 @@
                             <div class="col-md-12 form-group">
                                 <label>Products</label>
                                 <table class="table table-bordered table-striped" id="product-table">
-                                    <thead class="table-dark bg-gradient-dark">
+                                    <thead class="table-dark bg-gradient-dark text-white">
                                         <tr>
                                             <th>Product Name</th>
-                                            <th>Unit Price</th>
-                                            <th>MRP</th>
-                                            <th>Affiliate Price</th>
+                                            <th>Price</th>
                                             <th>Quantity</th>
                                             <th>Total</th>
                                             <th>Action</th>
@@ -245,14 +243,16 @@
                                                 style="width: 100px; height: 100px; object-fit: contain;">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-1 text-bold">${product.name}</h6>
-                                            <p class="mb-2">Unit Price: ${product.purchase_price}</p>
-                                            <button class="btn btn-sm btn-primary add-to-cart text-bold" 
+                                            <h6 class="mb-1 text-bold">${product.name} - ${product.color}</h6>
+                                            <p class="mb-2">Price: $${product.purchase_price}</p>
+                                            <button class="btn btn-sm btn-primary disabled:text-black add-to-cart text-bold" 
                                                 data-id="${product.id}" 
-                                                data-name="${product.name}" 
+                                                data-name="${product.name}"
+                                                data-color="${product.color}"
                                                 data-price="${product.purchase_price}"
                                                 data-mrp="${product.price}"
-                                                data-affiliate_price="${product.affiliate_price}">
+                                                data-affiliate_price="${product.affiliate_price}"
+                                                data-purchase_price="${product.purchase_price}">
                                                 Add to Cart
                                             </button>
                                         </div>
@@ -326,10 +326,8 @@
         $('#product-panel').on('click', '.add-to-cart', function() {
             let button = $(this);
             let productId = button.data('id');
-            let productName = button.data('name');
-            let unitPrice = button.data('price');
-            let mrp = button.data('mrp');
-            let affiliate_price = button.data('affiliate_price');
+            let productName = button.data('color');
+            let purchase_price = unitPrice = button.data('purchase_price'); 
 
             // Prevent adding the same product twice
             if ($('#product-body').find('tr[data-id="' + productId + '"]').length > 0) {
@@ -344,13 +342,7 @@
                         <input type="text" class="form-control-plaintext" readonly value="${productName}">
                     </td>
                     <td>
-                        <input type="number" name="products[${productId}][unit_price]" class="form-control unit-price" value="${unitPrice}" min="0" step="0.01" required>
-                    </td>
-                    <td>
-                        <input type="number" name="products[${productId}][mrp]" class="form-control mrp-price" value="${mrp}" min="0" step="0.01">
-                    </td>
-                    <td>
-                        <input type="number" name="products[${productId}][affiliate_price]" class="form-control affiliate-price" value="${affiliate_price}" min="0" step="0.01">
+                        <input type="number" name="products[${productId}][purchase_price]" class="form-control purchase-price" value="${purchase_price}" min="0" step="0.01">
                     </td>
                     <td>
                         <input type="number" name="products[${productId}][quantity]" class="form-control quantity" value="1" min="1" required>
@@ -376,12 +368,10 @@
         });
 
         // Calculate totals with MRP and Affiliate Price
-        $('#purchase-form').on('change', '.unit-price, .mrp-price, .affiliate-price, .quantity', function() {
+        $('#purchase-form').on('change', '.purchase-price, .quantity', function() {
             var row = $(this).closest('tr');
-            var unitPrice = parseFloat(row.find('.unit-price').val()) || 0;
+            var unitPrice = parseFloat(row.find('.purchase-price').val()) || 0;
             var quantity = parseInt(row.find('.quantity').val()) || 0;
-            var mrpPrice = parseFloat(row.find('.mrp-price').val()) || 0;
-            var affiliatePrice = parseFloat(row.find('.affiliate-price').val()) || 0;
             
             var total = unitPrice * quantity;
             row.find('.total').val(total.toFixed(2));

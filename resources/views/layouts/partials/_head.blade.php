@@ -38,6 +38,9 @@
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <link rel="stylesheet" href="{{ asset('assets/css/backend_style.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @yield('head')
+    {{-- @vite(['resources/css/app.css']) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
 
         /* Match the box of Bootstrap's select */

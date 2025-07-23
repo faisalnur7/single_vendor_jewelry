@@ -69,7 +69,7 @@ class PurchaseController extends Controller
             'products'          => 'required|array',
             'products.*.id' => 'required|exists:products,id',
             'products.*.quantity'   => 'required|integer',
-            'products.*.unit_price' => 'required|numeric'
+            'products.*.purchase_price' => 'required|numeric'
         ]);
 
         // Prepare data for purchase creation
@@ -93,13 +93,11 @@ class PurchaseController extends Controller
                 'purchase_id'  => $purchase->id,
                 'product_id'   => $item['id'],
                 'quantity'     => $item['quantity'],
-                'unit_price'   => $item['unit_price'],
+                'unit_price'   => $item['purchase_price'],
             ]);
 
             $product = Product::query()->findOrFail($item['id']);
-            $product->purchase_price = $item['unit_price'];
-            $product->price = $item['mrp'];
-            $product->affiliate_price = $item['affiliate_price'];
+            $product->purchase_price = $item['purchase_price'];
             $product->save();
         }
 
