@@ -63,7 +63,7 @@ class OrderController extends Controller
     }
 
     public function print_invoice($id){
-        $order = Order::with(['user', 'paymentOption'])->findOrFail($id);
+        $order = Order::with(['user'])->findOrFail($id);
 
         $groupedItems = $order->items->groupBy('product_id')
                                 ->map(function ($group) {
@@ -71,7 +71,7 @@ class OrderController extends Controller
                                     return (object)[
                                         'product'     => $first->product,
                                         'quantity'    => $group->sum('quantity'),
-                                        'unit_price'  => $first->unit_price, // assuming unit price is same
+                                        'price'  => $first->price, // assuming unit price is same
                                         'total_price' => $group->sum(function ($item) {
                                             return $item->unit_price * $item->quantity;
                                         }),

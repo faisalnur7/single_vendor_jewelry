@@ -43,6 +43,8 @@ class Product extends Model
         'has_variant' => 'integer',
     ];
 
+    protected $appends = ['current_stock'];
+
     const MAIN_PRODUCT_ONLY = 1;
     const VARIANTS_ONLY = 2;
     const BOTH = 3;

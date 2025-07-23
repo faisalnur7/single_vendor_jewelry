@@ -71,5 +71,10 @@
         $('.select2').select2({
             placeholder: "Please select"
         });
+
+        $(document).on('click','.btn-close, .modal-backdrop', function(){
+            $('.modal').modal('hide');
+            $('.modal').css('visibility','hidden');
+        })
     })
 </script>

@@ -38,7 +38,7 @@
                 <h3 class="text-lg font-semibold mb-1 text-gray-800">Customer Information</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <p><span class="font-medium">Name:</span> {{ $order->user->name ?? '-' }}</p>
-                    <p><span class="font-medium">Payment Method:</span> {{ $order->paymentOption->name }}</p>
+                    <p><span class="font-medium">Payment Method:</span> {{ ucwords(str_replace('_', ' ', $order->payment_option_name)) }}</p>
                 </div>
             </div>
 
@@ -49,7 +49,7 @@
                         <tr>
                             <th class="px-4 py-2 border-b">Product</th>
                             <th class="px-4 py-2 border-b">Qty</th>
-                            <th class="px-4 py-2 border-b">Unit Price</th>
+                            <th class="px-4 py-2 border-b">Price</th>
                             <th class="px-4 py-2 border-b">Total</th>
                         </tr>
                     </thead>
@@ -58,8 +58,8 @@
                             <tr class="border-b">
                                 <td class="px-4 py-2">{{ $item->product->name ?? 'N/A' }}</td>
                                 <td class="px-4 py-2">{{ $item->quantity }}</td>
-                                <td class="px-4 py-2">৳{{ number_format($item->unit_price, 2) }}</td>
-                                <td class="px-4 py-2">৳{{ number_format($item->unit_price * $item->quantity, 2) }}</td>
+                                <td class="px-4 py-2">৳{{ number_format($item->price, 2) }}</td>
+                                <td class="px-4 py-2">৳{{ number_format($item->price * $item->quantity, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>

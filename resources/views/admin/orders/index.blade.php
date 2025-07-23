@@ -56,7 +56,7 @@
                                     <td>৳{{ number_format($order->subtotal, 2) }}</td>
                                     <td>৳{{ number_format($order->shipping_charge, 2) }}</td>
                                     <td>৳{{ number_format($order->total, 2) }}</td>
-                                    <td>{{ $order->payment_option_name }}</td>
+                                    <td>{{ ucwords(str_replace('_', ' ', $order->payment_option_name)) }}</td>
                                     <td>{{ $order->created_at->format('d M, Y') }}</td>
                                     <td class="text-center">
                                         <a href="javascript:void(0);"
@@ -117,6 +117,9 @@
             $(document).on('click', '.view-order-btn', function() {
                 let orderId = $(this).data('id');
                 $('#orderDetailsModal').modal('show');
+                $('#orderDetailsModal').css('visibility','visible');
+                $('#orderDetailsModal').css('z-index','99999');
+                $('.modal-backdrop').css('z-index','1040');
 
                 $('#orderDetailsContent').html(`
                     <div class="text-center p-5">
@@ -133,7 +136,6 @@
                         order_id: orderId
                     },
                     success: function(response) {
-                        console.log(response.html)
                         $('#orderDetailsContent').html(response);
                     },
                     error: function() {
@@ -156,6 +158,7 @@
                     },
                     success: function() {
                         $('#orderDetailsModal').modal('hide');
+                        $('#orderDetailsModal').css('visibility','hidden');
                         toastr.success('Order status updated.');
                         location.reload();
                     },

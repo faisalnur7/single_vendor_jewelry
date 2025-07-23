@@ -196,7 +196,7 @@
         function loadProducts() {
             let categoryId = $('#category').val();
             let subCategoryId = $('#sub_category').val();
-            let brandId = $('#brand').val();
+            let childSubCategoryId = $('#child_sub_category').val();
 
             if (!categoryId) {
                 $('#product-panel').html('<p class="text-muted">Please select at least a Category to load products.</p>');
@@ -210,7 +210,7 @@
                 data: {
                     category_id: categoryId,
                     sub_category_id: subCategoryId,
-                    brand_id: brandId
+                    child_sub_category_id: childSubCategoryId
                 },
                 success: function(response) {
                     let panel = $('#product-panel');
@@ -242,7 +242,8 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="mb-1 font-bold">${product.name} - ${product.color}</h6>
-                                            <p class="mb-2">Price: $${product.purchase_price}</p>
+                                            <p class="mb-1 font-bold">Price: $${product.purchase_price}</p>
+                                            <p class="mb-2 font-bold">${product.current_stock} Pcs left</p>
                                             <div class="flex gap-2">
                                                 <button class="btn btn-sm btn-primary font-bold add-to-cart disabled:text-gray-700" 
                                                     data-id="${product.id}" 
@@ -274,7 +275,7 @@
         }
 
         // Triggers
-        $('#category, #sub_category, #brand').change(function() {
+        $('#category, #sub_category, #child_sub_category').change(function() {
             loadProducts();
         });
 

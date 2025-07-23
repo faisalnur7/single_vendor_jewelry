@@ -288,24 +288,47 @@ class ProductController extends Controller
 
     public function getProducts(Request $request)
     {
-        $query = Product::query()->where('has_variants','0');
+        $query = Product::query()
+            ->where('has_variants', '0')
+            ->with(['purchaseItems', 'orderItems']); // eager load for performance
 
-        if ($request->has('category_id') && $request->category_id !== null) {
+        if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
-        if ($request->has('sub_category_id') && $request->sub_category_id !== null) {
+
+        if ($request->filled('sub_category_id')) {
             $query->where('sub_category_id', $request->sub_category_id);
         }
-        if ($request->has('brand_id') && $request->brand_id !== null) {
-            $query->where('brand_id', $request->brand_id);
+
+        if ($request->filled('child_sub_category_id')) {
+            $query->where('child_sub_category_id', $request->child_sub_category_id);
         }
 
         $products = $query->get();
 
+        // Format response with current_stock
+        $productsFormatted = $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'color' => $product->color,
+                'price' => $product->price,
+                'affiliate_price' => $product->affiliate_price,
+                'purchase_price' => $product->purchase_price,
+                'category_id' => $product->category_id,
+                'sub_category_id' => $product->sub_category_id,
+                'child_sub_category_id' => $product->child_sub_category_id,
+                'brand_id' => $product->brand_id,
+                'image' => $product->image,
+                'current_stock' => $product->current_stock,
+            ];
+        });
+
         return response()->json([
-            'products' => $products
+            'products' => $productsFormatted
         ]);
     }
+
 
     public function show($id)
     {
