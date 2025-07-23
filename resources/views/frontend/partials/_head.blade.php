@@ -105,6 +105,17 @@
         color: #f87171 !important;
         /* red-400 */
     }
+
+    .why_choose_us_list li{
+        line-height: 2.5;
+        font-size: 18px;
+        font-family: 'arial';
+    }
+
+    .why_choose_us_list li::before{
+        content: '🤎';
+        margin-right: 10px;
+    }
 </style>
 
 @vite('resources/css/app.css')

@@ -52,6 +52,9 @@
     $(function(){
         $('.summernote').summernote({
             height: 500,
+            fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '32', '36', '48', '64', '72', '96'],
+            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Playfair Display', 'Serif'],
+            fontNamesIgnoreCheck: ['Playfair Display'],
             toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'italic', 'underline', 'clear']],

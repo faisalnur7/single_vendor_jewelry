@@ -8,12 +8,14 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\ChildSubCategory;
 use App\Models\Product;
+use App\Models\HomePageSetting;
 
 class DashboardController extends Controller
 {
     public function index(){
         $data['title'] = $data['page_title'] = "Dashboard";
         $data['products'] = Product::query()->with('variants')->where('parent_id',0)->get();
+        $data['homepage_setting'] = HomePageSetting::first(); 
         return view('frontend.homepage', $data);
     }
 
