@@ -39,8 +39,11 @@
                                 <th>#</th>
                                 <th>Invoice</th>
                                 <th>Customer</th>
+                                <th>Phone</th>
                                 <th>Subtotal</th>
                                 <th>Shipping Charge</th>
+                                <th>Shipping Method</th>
+                                <th>Shipping Url</th>
                                 <th>Total</th>
                                 <th>Payment Method</th>
                                 <th>Date</th>
@@ -53,9 +56,12 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="font-weight-bold">{{ $order->order_tracking_number }}</td>
                                     <td>{{ $order->user->name ?? '-' }}</td>
-                                    <td>৳{{ number_format($order->subtotal, 2) }}</td>
-                                    <td>৳{{ number_format($order->shipping_charge, 2) }}</td>
-                                    <td>৳{{ number_format($order->total, 2) }}</td>
+                                    <td>{{ $order->billing_address ?? '-' }}</td>
+                                    <td>${{ number_format($order->subtotal, 2) }}</td>
+                                    <td>${{ number_format($order->shipping_charge, 2) }}</td>
+                                    <td class="w-[200px]"><a class="text-wrap" target="_blank" href="{{ $order->shipping_url ?? '' }}">{{ $order->shipping_url ?? '' }}</a></td>
+                                    <td>{{ $order->shipping_method->name ?? 'Not added' }}</td>
+                                    <td>${{ number_format($order->total, 2) }}</td>
                                     <td>{{ ucwords(str_replace('_', ' ', $order->payment_option_name)) }}</td>
                                     <td>{{ $order->created_at->format('d M, Y') }}</td>
                                     <td class="text-center">

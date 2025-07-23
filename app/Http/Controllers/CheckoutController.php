@@ -140,7 +140,7 @@ class CheckoutController extends Controller
                 session()->forget('guest_cart');
             }
 
-            return redirect()->route('payment.success')->with('success', 'Payment completed successfully!');
+            return redirect()->route('payment.success', ['order_id' => $order->id])->with('success', 'Payment completed successfully!');
         }
 
         return redirect()->route('payment.failed')->with('error', 'Payment failed: ' . $result->message);
@@ -150,8 +150,9 @@ class CheckoutController extends Controller
 
     public function success(Request $request)
     {
+        $order = Order::findOrFail($request->order_id);
         $message = session('success') ?? 'Payment was successful!';
-        return view('frontend.pages.success', compact('message'));
+        return view('frontend.pages.success', compact('message', 'order'));
     }
 
     public function failed(Request $request)

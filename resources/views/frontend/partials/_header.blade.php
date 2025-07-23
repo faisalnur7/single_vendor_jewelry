@@ -11,7 +11,7 @@
     {{-- Logo --}}
     <div class="flex max-w-44">
         <a href="{{ route('homepage') }}">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" class="h-10 object-contain" />
+            <img src="{{ asset($general_settings->site_logo ?? 'assets/img/logo.png') }}" alt="{{$general_settings->site_title}}" class="h-10 object-contain" />
         </a>
     </div>
 

@@ -15,6 +15,10 @@ use App\Http\Controllers\SubscriptionRequestController;
 use App\Http\Controllers\ChildSubCategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShippingMethodController;
+use App\Http\Controllers\GeneralSettingController;
+use App\Http\Controllers\ContactSettingController;
+use App\Http\Controllers\SocialMediaSettingController;
+use App\Http\Controllers\HomePageSettingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -183,6 +187,19 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
 
     Route::prefix('settings')->group(function () {
+
+        Route::get('/general-settings', [GeneralSettingController::class, 'edit'])->name('admin.general-settings.edit');
+        Route::post('/general-settings', [GeneralSettingController::class, 'update'])->name('admin.general-settings.update');
+
+        Route::get('/contact', [ContactSettingController::class, 'edit'])->name('contact-settings.edit');
+        Route::post('/contact', [ContactSettingController::class, 'update'])->name('contact-settings.update');
+
+        Route::get('/social/edit', [SocialMediaSettingController::class, 'edit'])->name('social.edit');
+        Route::post('/social/update', [SocialMediaSettingController::class, 'update'])->name('social.update');
+
+        Route::get('/homepage/edit', [HomePageSettingController::class, 'edit'])->name('homepage.edit');
+        Route::post('/homepage/update', [HomePageSettingController::class, 'update'])->name('homepage.update');
+
         Route::get('/general', [SettingController::class, 'general'])->name('settings.general');
         Route::get('/branding', [SettingController::class, 'branding'])->name('settings.branding');
         Route::get('/email', [SettingController::class, 'email'])->name('settings.email');

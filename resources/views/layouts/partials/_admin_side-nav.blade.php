@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('homepage') }}" class="brand-link">
-        <span class="brand-text font-weight-light">Stainless Steel Jewelry</span>
+        <span class="brand-text font-weight-light">{{$general_settings->site_name}}</span>
     </a>
 
     <!-- Sidebar -->
@@ -109,7 +109,7 @@
 
 
                 <!-- Orders -->
-                <li class="nav-item {{ menuOpen(['order.*']) ? 'menu-is-opening menu-open' : '' }}">
+                <li class="nav-item {{ menuOpen(['orders']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>
@@ -118,21 +118,9 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"><a href="{{ route('orders') }}" class="nav-link"><i
+                        <li class="nav-item"><a href="{{ route('orders') }}" class="nav-link {{ request()->routeIs('orders') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>All Orders</p>
-                            </a></li>
-                        <li class="nav-item"><a href="{{ route('order.pending') }}" class="nav-link"><i
-                                    class="far fa-circle nav-icon"></i>
-                                <p>Pending</p>
-                            </a></li>
-                        <li class="nav-item"><a href="{{ route('order.completed') }}" class="nav-link"><i
-                                    class="far fa-circle nav-icon"></i>
-                                <p>Completed</p>
-                            </a></li>
-                        <li class="nav-item"><a href="{{ route('order.cancelled') }}" class="nav-link"><i
-                                    class="far fa-circle nav-icon"></i>
-                                <p>Cancelled</p>
                             </a></li>
                     </ul>
                 </li>
@@ -265,7 +253,7 @@
                 </li>
 
                 <!-- Settings -->
-                <li class="nav-item {{ menuOpen(['settings.*']) ? 'menu-is-opening menu-open' : '' }}">
+                <li class="nav-item {{ menuOpen(['settings.*','admin.general-settings.*','contact-settings.edit','social.edit','homepage.edit']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
@@ -274,9 +262,22 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"><a href="{{ route('settings.general') }}" class="nav-link"><i
+                        <li class="nav-item"><a href="{{ route('admin.general-settings.edit') }}" class="nav-link {{ request()->routeIs('admin.general-settings.edit') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>General</p>
+                            </a></li>
+                        <li class="nav-item"><a href="{{ route('contact-settings.edit') }}" class="nav-link {{ request()->routeIs('contact-settings.edit') ? 'active' : '' }}"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Contact & Company Info</p>
+                            </a></li>
+                        <li class="nav-item"><a href="{{ route('social.edit') }}" class="nav-link {{ request()->routeIs('social.edit') ? 'active' : '' }}"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Social Links</p>
+                            </a></li>
+
+                        <li class="nav-item"><a href="{{ route('homepage.edit') }}" class="nav-link {{ request()->routeIs('homepage.edit') ? 'active' : '' }}"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Homepage Section</p>
                             </a></li>
                         <li class="nav-item"><a href="{{ route('settings.branding') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>

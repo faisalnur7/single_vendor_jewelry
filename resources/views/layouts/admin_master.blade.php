@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+@php
+    $general_settings = App\Models\GeneralSetting::first();
+@endphp
 @include('layouts.partials._head')
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">

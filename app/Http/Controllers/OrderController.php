@@ -58,6 +58,7 @@ class OrderController extends Controller
 
         }
 
+        $order->shipping_url = $request->shipping_url;
         $order->save();
         return response()->json(['message' => 'Status updated']);
     }

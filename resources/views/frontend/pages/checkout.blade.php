@@ -150,7 +150,7 @@
                                 <!-- Phone -->
                                 <div class="mb-4 relative">
                                     <label class="block text-sm font-medium mb-1">Phone</label>
-                                    <input type="text" name="phone"
+                                    <input type="text" name="phone" id="phone" required
                                         class="w-full border-gray-300 rounded px-4 py-2 pr-10 focus:ring-blue-500 focus:border-blue-500" />
                                     <span class="absolute top-2.5 right-3 text-gray-400">
                                         <i class="fas fa-question-circle"></i>
@@ -354,6 +354,16 @@
             const clientToken = "{{ $clientToken }}";
             const totalAmount = '{{ $total ?? 10.0 }}';
 
+            function isPhoneValid() {
+                const phone = document.getElementById('phone').value.trim();
+                if (phone === '') {
+                    toastr.warning('Please enter your phone number before proceeding with payment.');
+                    return false;
+                }
+                return true;
+            }
+
+
             braintree.client.create({
                 authorization: clientToken
             }, function(clientErr, clientInstance) {
@@ -393,6 +403,8 @@
 
                     form.addEventListener('submit', function(event) {
                         event.preventDefault();
+
+                        if (!isPhoneValid()) return;
 
                         hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
                             if (tokenizeErr) {
@@ -434,6 +446,9 @@
                                     nonceInput.type = 'hidden';
                                     nonceInput.name = 'payment_method_nonce';
                                     nonceInput.value = payload.nonce;
+                                    
+                                    if (!isPhoneValid()) return;
+
                                     form.appendChild(nonceInput);
                                     form.submit();
                                 });
@@ -472,6 +487,9 @@
                         if (response.result) {
                             const googlePayButton = paymentsClient.createButton({
                                 onClick: function() {
+                                    
+                                    if (!isPhoneValid()) return;
+
                                     paymentsClient.loadPaymentData(
                                         paymentDataRequest).then(function(
                                         paymentData) {
@@ -555,6 +573,11 @@
                             token: event.payment.token
                         }, function(tokenizeErr, payload) {
                             if (tokenizeErr) {
+                                session.completePayment(ApplePaySession.STATUS_FAILURE);
+                                return;
+                            }
+
+                            if (!isPhoneValid()) {
                                 session.completePayment(ApplePaySession.STATUS_FAILURE);
                                 return;
                             }

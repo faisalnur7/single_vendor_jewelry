@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
+@php
+    $general_settings = App\Models\GeneralSetting::first();
+@endphp
 <head>
     @include('frontend.partials._head')
     @yield('styles')

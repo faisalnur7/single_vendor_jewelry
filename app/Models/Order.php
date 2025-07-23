@@ -22,7 +22,9 @@ class Order extends Model
         'packaged_at',
         'shipped_at',
         'completed_at',
-        'shipping_method_id'
+        'shipping_method_id',
+        'shipping_url',
+        'phone',
     ];
 
     const PENDING = 1;
@@ -47,6 +49,10 @@ class Order extends Model
 
     public function items(){
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function shipping_method(){
+        return $this->belongsTo(ShippingMethod::class,'shipping_method_id');
     }
 
 

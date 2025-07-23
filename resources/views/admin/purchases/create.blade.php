@@ -336,7 +336,7 @@
 
             // Prevent adding the same product twice
             if ($('#product-body').find('tr[data-id="' + productId + '"]').length > 0) {
-                alert('This product is already in the cart.');
+                toastr.warning('This product is already in the cart.');
                 return;
             }
 
