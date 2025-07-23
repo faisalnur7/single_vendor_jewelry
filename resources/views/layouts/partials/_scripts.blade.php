@@ -67,5 +67,9 @@
                 $('.slug_text').val(slug);
             }
         });
+
+        $('.select2').select2({
+            placeholder: "Please select"
+        });
     })
 </script>

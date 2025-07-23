@@ -50,8 +50,6 @@
                                 <th>Child Sub Category</th>
                                 <th>SKU</th>
                                 <th>Price</th>
-                                <th>Price(Max)</th>
-                                <th>Price(Min)</th>
                                 <th>Stock</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
@@ -70,14 +68,12 @@
                                             <span class="badge badge-secondary">No Image</span>
                                         @endif
                                     </td>
-                                    <td class="font-weight-bold">{{ $product->name }}</td>
+                                    <td>{{ $product->name }} @if($product->color)<span class="font-bold">- {{$product->color}}</span>@endif</td>
                                     <td>{{ $product->category->name ?? 'N/A' }}</td>
                                     <td>{{ $product->subCategory->name ?? 'N/A' }}</td>
                                     <td>{{ $product->childSubCategory->name ?? 'N/A' }}</td>
                                     <td>{{ $product->sku }}</td>
                                     <td>@if($product->parent_id != 0)${{ number_format($product->price, 2) }} @else - @endif</td>
-                                    <td>@if($product->parent_id == 0)${{ number_format($product->max_price, 2) }} @else - @endif</td>
-                                    <td>@if($product->parent_id == 0)${{ number_format($product->min_price, 2) }} @else - @endif</td>
                                     <td>{{ $product->current_stock }}</td>
                                     <td>
                                         @if ($product->status)

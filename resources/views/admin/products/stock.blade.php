@@ -20,12 +20,16 @@
                 <h4 class="mb-0">Filter Products</h4>
             </div>
             <div class="card-body">
-                @include('admin.products._filter_form')
+                @include('admin.products._stock_filter_form')
             </div>
         </div>
 
         {{-- Product Table --}}
         <div class="card border-0 shadow-sm rounded">
+            <div
+                class="card-header bg-gradient-dark text-white d-flex justify-content-between align-items-center rounded-top">
+                <h4 class="mb-0">Products</h4>
+            </div>
             <div class="card-body px-0 pb-4 pt-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
@@ -39,8 +43,6 @@
                                 <th>Child Sub Category</th>
                                 <th>SKU</th>
                                 <th>Price</th>
-                                <th>Price(Max)</th>
-                                <th>Price(Min)</th>
                                 <th>Stock</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
@@ -59,14 +61,12 @@
                                             <span class="badge badge-secondary">No Image</span>
                                         @endif
                                     </td>
-                                    <td class="">{{ $product->name }} - <span class="font-bold">{{ $product->color }}</span></td>
+                                    <td>{{ $product->name }} @if($product->color)<span class="font-bold">- {{$product->color}}</span>@endif</td>
                                     <td>{{ $product->category->name ?? 'N/A' }}</td>
                                     <td>{{ $product->subCategory->name ?? 'N/A' }}</td>
                                     <td>{{ $product->childSubCategory->name ?? 'N/A' }}</td>
                                     <td>{{ $product->sku }}</td>
                                     <td>@if($product->parent_id != 0)${{ number_format($product->price, 2) }} @else - @endif</td>
-                                    <td>@if($product->parent_id == 0)${{ number_format($product->max_price, 2) }} @else - @endif</td>
-                                    <td>@if($product->parent_id == 0)${{ number_format($product->min_price, 2) }} @else - @endif</td>
                                     <td>{{ $product->current_stock }}</td>
                                     <td>
                                         @if ($product->status)

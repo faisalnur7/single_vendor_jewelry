@@ -1,5 +1,5 @@
-<form method="GET" action="{{ route('product.list') }}">
-    <div class="row g-3">
+<form method="GET" action="{{ route('stock') }}">
+    <div class="row">
 
         <!-- Name -->
         <div class="col-md-3 col-lg-2">
@@ -21,8 +21,7 @@
             <select name="category" id="category" class="form-control select2">
                 <option value="">Select Category</option>
                 @foreach ($categories as $category)
-                    <option value="{{ $category->id }}"
-                        {{ request()->get('category') == $category->id ? 'selected' : '' }}>
+                    <option value="{{ $category->id }}" {{ request()->get('category') == $category->id ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
                 @endforeach
@@ -43,7 +42,7 @@
             </select>
         </div>
 
-         <!-- Sub Category -->
+         <!-- Child Sub Category -->
         <div class="col-md-3 col-lg-2">
             <label for="child_sub_category" class="form-label">Sub Category</label>
             <select name="child_sub_category" id="child_sub_category" class="form-control select2">
@@ -52,19 +51,6 @@
                     <option value="{{ $childSubCategory->id }}"
                         {{ request()->get('child_sub_category') == $childSubCategory->id ? 'selected' : '' }}>
                         {{ $childSubCategory->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <!-- View Option -->
-        <div class="col-md-3 col-lg-2">
-            <label for="view_options" class="form-label">View Options</label>
-            <select name="view_options" id="view_options" class="form-control">
-                @foreach (App\Models\Product::VIEW_OPTIONS as $key =>  $option)
-                    <option value="{{ $key }}"
-                        {{ request()->get('view_options') == $key ? 'selected' : '' }}>
-                        {{ $option }}
                     </option>
                 @endforeach
             </select>
@@ -134,3 +120,5 @@
         }
     });
 </script>
+
+

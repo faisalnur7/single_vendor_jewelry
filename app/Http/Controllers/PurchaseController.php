@@ -6,6 +6,7 @@ use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\ChildSubCategory;
 use App\Models\Brand;
 use App\Models\Purchase;
 use App\Models\PurchaseItem;
@@ -50,9 +51,10 @@ class PurchaseController extends Controller
         $products = Product::all();
         $categories = Category::all();
         $subCategories = SubCategory::all();
+        $childSubCategories = ChildSubCategory::all();
         $brands = [];
 
-        return view('admin.purchases.create', compact('suppliers', 'products', 'categories', 'subCategories','brands'));
+        return view('admin.purchases.create', compact('suppliers', 'products', 'categories', 'subCategories','brands','childSubCategories'));
     }
 
     public function store(Request $request)

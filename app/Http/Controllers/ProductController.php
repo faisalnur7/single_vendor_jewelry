@@ -319,11 +319,43 @@ class ProductController extends Controller
         return response()->json(['product_id' => $nextId]);
     }
 
-    public function stock(){
+    public function stock(Request $request){
         $data['categories'] = Category::all();
         $data['subCategories'] = SubCategory::all();
         $data['childSubCategories'] = ChildSubCategory::all();
-        $data['products'] = Product::with(['purchaseItems', 'orderItems'])->where('has_variants','0')->paginate(10);
+        
+        $data['products'] = Product::with(['category', 'subCategory', 'childsubcategory','purchaseItems', 'orderItems'])
+            ->where('has_variants','0')
+            // Filtering SKU
+            ->when($request->has('sku') && $request->sku != '', function ($query) use ($request) {
+                return $query->where('sku', 'like', '%' . $request->sku . '%');
+            })
+            // Filtering Product Name
+            ->when($request->has('name') && $request->name != '', function ($query) use ($request) {
+                return $query->where('name', 'like', '%' . $request->name . '%');
+            })
+            // Filtering Price Range
+            ->when($request->has('price_min') && $request->price_min != '', function ($query) use ($request) {
+                return $query->where('price', '>=', $request->price_min);
+            })
+            ->when($request->has('price_max') && $request->price_max != '', function ($query) use ($request) {
+                return $query->where('price', '<=', $request->price_max);
+            })
+            // Filtering by Category
+            ->when($request->has('category') && $request->category != '', function ($query) use ($request) {
+                return $query->where('category_id', $request->category);
+            })
+            // Filtering by Sub Category
+            ->when($request->has('sub_category') && $request->sub_category != '', function ($query) use ($request) {
+                return $query->where('sub_category_id', $request->sub_category);
+            })
+            // Filtering by Child Sub Category
+            ->when($request->has('child_sub_category') && $request->child_sub_category != '', function ($query) use ($request) {
+                return $query->where('child_sub_category_id', $request->child_sub_category);
+            })
+            // Paginate the results
+            ->paginate(10)
+            ->appends($request->all());
         return view('admin.products.stock', $data);   
     }
 }

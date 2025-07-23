@@ -64,6 +64,17 @@
                                 </select>
                             </div>
 
+                            <!-- Child Sub category -->
+                            <div class="col-md-6 form-group">
+                                <label>Child Sub Category</label>
+                                <select name="child_sub_category_id" class="form-control select2" id="child_sub_category">
+                                    <option value="">Select Child Sub Category</option>
+                                    @foreach ($childSubCategories as $childSubCategory)
+                                        <option value="{{$childSubCategory->id}}">{{$childSubCategory->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <!-- Brand -->
                             <div class="col-md-6 form-group">
                                 <label>Brand</label>
@@ -193,11 +204,6 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-
-        $('.select2').select2({
-            placeholder: "Please select"
-        });
-
         function loadProducts() {
             let categoryId = $('#category').val();
             let subCategoryId = $('#sub_category').val();
@@ -380,6 +386,60 @@
             // For now, these values won't affect the grand total unless you want them to.
 
             calculateSubtotal();
+        });
+
+
+        const subCategories = @json($subCategories);
+        const childSubCategories = @json($childSubCategories);
+
+        $(document).ready(function () {
+            const selectedSubCategory = "{{ request()->get('sub_category') }}";
+            const selectedChildSubCategory = "{{ request()->get('child_sub_category') }}";
+
+            function populateSubCategories(categoryId) {
+                const filteredSubCategories = subCategories.filter(item => item.category_id == categoryId);
+                $('#sub_category').empty().append('<option value="">Select Sub Category</option>');
+
+                filteredSubCategories.forEach(item => {
+                    $('#sub_category').append(
+                        `<option value="${item.id}" ${item.id == selectedSubCategory ? 'selected' : ''}>${item.name}</option>`
+                    );
+                });
+
+                $('#sub_category').trigger('change'); // trigger next level
+            }
+
+            function populateChildSubCategories(subCategoryId) {
+                const filteredChildSubCategories = childSubCategories.filter(item => item.subcategory_id == subCategoryId);
+                $('#child_sub_category').empty().append('<option value="">Select Child Sub Category</option>');
+
+                filteredChildSubCategories.forEach(item => {
+                    $('#child_sub_category').append(
+                        `<option value="${item.id}" ${item.id == selectedChildSubCategory ? 'selected' : ''}>${item.name}</option>`
+                    );
+                });
+            }
+
+            // On Category change
+            $('#category').change(function () {
+                const categoryId = $(this).val();
+                populateSubCategories(categoryId);
+            });
+
+            // On SubCategory change
+            $('#sub_category').change(function () {
+                const subCategoryId = $(this).val();
+                populateChildSubCategories(subCategoryId);
+            });
+
+            // Trigger pre-selection if form submitted with values
+            if ($('#category').val()) {
+                populateSubCategories($('#category').val());
+            }
+
+            if ($('#sub_category').val()) {
+                populateChildSubCategories($('#sub_category').val());
+            }
         });
 
     });

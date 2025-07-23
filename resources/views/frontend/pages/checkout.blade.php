@@ -80,16 +80,7 @@
 
                                 <!-- Country -->
 
-                                <div class="mb-4">
-                                    <label for="country" class="block text-sm font-medium mb-1">Country/Region</label>
-                                    <select id="country" class="select2 w-full" name="country" required
-                                        autocomplete="shipping country"
-                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                        @foreach ($countries as $country)
-                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+
 
                                 <!-- Name -->
                                 <div class="grid grid-cols-2 gap-4 mb-4">
@@ -124,17 +115,28 @@
                                         placeholder="Apartment, suite, etc. (optional)" />
                                 </div>
 
+                                <div class="mb-4">
+                                    <label for="country" class="block text-sm font-medium mb-1">Country/Region</label>
+                                    <select id="country" class="select2 w-full" name="country" required
+                                        autocomplete="shipping country"
+                                        class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        @foreach ($countries as $country)
+                                            <option value="{{ $country->id }}">{{$country->emoji}} {{ $country->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <!-- City, State, ZIP -->
                                 <div class="grid grid-rows-1 md:grid-cols-3 gap-4 mb-4">
+                                    
                                     <div>
-                                        <label class="block text-sm font-medium mb-1">City</label>
-                                        <select name="city" id="city"
+                                        <label class="block text-sm font-medium mb-1">State</label>
+                                        <select name="state" id="state"
                                             class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium mb-1">State</label>
-                                        <select name="state" id="state"
+                                        <label class="block text-sm font-medium mb-1">City</label>
+                                        <select name="city" id="city"
                                             class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
                                         </select>
                                     </div>
