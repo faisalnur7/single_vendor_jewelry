@@ -278,7 +278,7 @@
                             <input type="text" class="form-control" placeholder="Enter Emergency Contact Number" name="emergency_contact" value="{{$emergency_contact}}">
                         </div>
 
-                        <button type="button" class="btn btn-secondary prev-step">Previous</button>
+                        <button type="button" class="btn btn-neutral prev-step">Previous</button>
                         <button type="button" class="btn btn-primary next-step second_step">Next</button>
                     </div>
 
@@ -311,7 +311,7 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-secondary prev-step">Previous</button>
+                        <button type="button" class="btn btn-neutral prev-step">Previous</button>
                         <button type="button" class="btn btn-success final_step">Submit</button>
                     </div>
 

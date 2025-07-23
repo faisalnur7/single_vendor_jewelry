@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary btn-close"
+                                    <button type="button" class="btn btn-neutral btn-close"
                                         data-bs-dismiss="modal">Close</button>
                                     <button type="button" id="updateOrderStatusBtn" class="btn btn-success">
                                         <i class="fas fa-save"></i> Update Status

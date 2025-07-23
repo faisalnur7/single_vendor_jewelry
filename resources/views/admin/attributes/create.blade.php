@@ -38,7 +38,7 @@
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Save Attribute</button>
-                    <a href="{{ route('attribute.list') }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('attribute.list') }}" class="btn btn-neutral">Cancel</a>
                 </div>
             </form>
         </div>

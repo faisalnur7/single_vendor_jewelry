@@ -275,7 +275,7 @@
                         {{-- Submit --}}
                         <div class="col-12">
                             <button type="submit" class="btn btn-success">Save Product</button>
-                            <a href="{{ route('product.list') }}" class="btn btn-secondary">Cancel</a>
+                            <a href="{{ route('product.list') }}" class="btn btn-neutral">Cancel</a>
                         </div>
                     </div>
                 </form>

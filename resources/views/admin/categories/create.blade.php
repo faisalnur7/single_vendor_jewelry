@@ -42,7 +42,7 @@
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Save Category</button>
-                    <a href="{{ route('category.list') }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('category.list') }}" class="btn btn-neutral">Cancel</a>
                 </div>
             </form>
         </div>

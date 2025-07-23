@@ -39,7 +39,7 @@
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Update Brand</button>
-                    <a href="{{ route('brand.list') }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('brand.list') }}" class="btn btn-neutral">Cancel</a>
                 </div>
             </form>
         </div>

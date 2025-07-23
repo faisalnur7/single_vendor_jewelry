@@ -49,7 +49,7 @@
 
                 <div class="form-group mt-3">
                     <button class="btn btn-primary" type="submit">Update</button>
-                    <a href="{{ route('payment_option.list') }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('payment_option.list') }}" class="btn btn-neutral">Cancel</a>
                 </div>
             </form>
         </div>

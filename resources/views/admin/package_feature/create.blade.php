@@ -36,7 +36,7 @@
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Save Feature</button>
-                    <a href="{{ route('package_feature.list') }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('package_feature.list') }}" class="btn btn-neutral">Cancel</a>
                 </div>
             </form>
         </div>

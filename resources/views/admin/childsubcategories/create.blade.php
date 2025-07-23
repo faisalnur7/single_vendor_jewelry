@@ -78,7 +78,7 @@
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Save Child SubCategory</button>
-                    <a href="{{ route('childsubcategory.list') }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('childsubcategory.list') }}" class="btn btn-neutral">Cancel</a>
                 </div>
 
             </form>

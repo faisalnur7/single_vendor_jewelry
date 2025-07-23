@@ -89,7 +89,7 @@
 
                 <div class="form-group mt-3">
                     <button type="submit" class="btn btn-primary">Update Package</button>
-                    <a href="{{ route('subscription_package.list') }}" class="btn btn-secondary">Cancel</a>
+                    <a href="{{ route('subscription_package.list') }}" class="btn btn-neutral">Cancel</a>
                 </div>
             </form>
         </div>

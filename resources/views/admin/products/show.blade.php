@@ -106,7 +106,7 @@
                                     <a href="{{ route('product.edit', $product->id) }}" class="btn btn-dark">
                                         <i class="fas fa-edit"></i> Edit Product
                                     </a>
-                                    <a href="{{ route('product.list') }}" class="btn btn-secondary">
+                                    <a href="{{ route('product.list') }}" class="btn btn-neutral">
                                         <i class="fas fa-arrow-left"></i> Back to List
                                     </a>
                                 </div>

@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Left: Purchase Form -->
-        <div class="col-md-9">
+        <div class="col-md-7">
             <div class="card shadow-lg border-light mb-4">
                 <div class="card-header bg-gradient-dark text-white rounded-top d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Purchase Information</h3>
@@ -71,17 +71,6 @@
                                     <option value="">Select Child Sub Category</option>
                                     @foreach ($childSubCategories as $childSubCategory)
                                         <option value="{{$childSubCategory->id}}">{{$childSubCategory->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Brand -->
-                            <div class="col-md-6 form-group">
-                                <label>Brand</label>
-                                <select name="brand_id" class="form-control select2" id="brand">
-                                    <option value="">Select Brand</option>
-                                    @foreach ($brands as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -172,7 +161,7 @@
                         <div class="row">
                             <div class="col-12 text-right">
                                 <button type="submit" class="btn btn-success btn-lg shadow-sm">Save Purchase</button>
-                                <a href="{{ route('purchase.list') }}" class="btn btn-secondary btn-lg shadow-sm">Cancel</a>
+                                <a href="{{ route('purchase.list') }}" class="btn btn-neutral btn-lg shadow-sm">Cancel</a>
                             </div>
                         </div>
 
@@ -182,7 +171,7 @@
         </div>
 
         <!-- Right Panel for Product Cards -->
-        <div class="col-md-3">
+        <div class="col-md-5">
             <div class="card shadow-lg border-primary mb-4">
                 <div class="card-header bg-gradient-dark text-white rounded-top d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Available Products</h4>
@@ -240,32 +229,41 @@
                     $.each(response.products, function(index, product) {
                         let imageUrl = baseUrl + '/' + (product.image || 'default-image.png'); // Fallback image if no image
 
+                        const productShowBaseUrl = "{{ url('/admin/product-management/products/show') }}";
+                        const productUrl = `${productShowBaseUrl}/${product.id}`;
+
                         let card = `
-                            <div class="col-md-12 mb-1">
+                            <div class="col-md-12 mb-2">
                                 <div class="card h-90 shadow-xl mb-0">
-                                    <div class="d-flex align-items-center p-2">
+                                    <div class="d-flex flex items-center align-items-center p-2">
                                         <div class="flex-shrink-0">
                                             <img src="${imageUrl}" alt="${product.name}" 
-                                                style="width: 100px; height: 100px; object-fit: contain;">
+                                                style="width: 120px; height: 120px; object-fit: contain;">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-1 text-bold">${product.name} - ${product.color}</h6>
+                                            <h6 class="mb-1 font-bold">${product.name} - ${product.color}</h6>
                                             <p class="mb-2">Price: $${product.purchase_price}</p>
-                                            <button class="btn btn-sm btn-primary disabled:text-black add-to-cart text-bold" 
-                                                data-id="${product.id}" 
-                                                data-name="${product.name}"
-                                                data-color="${product.color}"
-                                                data-price="${product.purchase_price}"
-                                                data-mrp="${product.price}"
-                                                data-affiliate_price="${product.affiliate_price}"
-                                                data-purchase_price="${product.purchase_price}">
-                                                Add to Cart
-                                            </button>
+                                            <div class="flex gap-2">
+                                                <button class="btn btn-sm btn-primary font-bold add-to-cart disabled:text-gray-700" 
+                                                    data-id="${product.id}" 
+                                                    data-name="${product.name}"
+                                                    data-color="${product.color}"
+                                                    data-price="${product.purchase_price}"
+                                                    data-mrp="${product.price}"
+                                                    data-affiliate_price="${product.affiliate_price}"
+                                                    data-purchase_price="${product.purchase_price}">
+                                                    Add to Cart
+                                                </button>
+                                                <a href="${productUrl}" class="btn btn-sm btn-neutral hover:text-gray-300">
+                                                    See details
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         `;
+
 
                         row.append(card);
                     });
