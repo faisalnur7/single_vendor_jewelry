@@ -1,18 +1,35 @@
+@php
+  $contact_settings = App\Models\ContactSetting::first();
+  $social_media_settings = App\Models\SocialMediaSetting::first();
+
+  $companyEmail = $contact_settings->email ?? null;
+  $companyPhone = $contact_settings->phone ?? null;
+  $address = $contact_settings->address ?? null;
+
+  $facebook = $social_media_settings->facebook ?? null;
+  $twitter = $social_media_settings->twitter ?? null;
+  $instagram = $social_media_settings->instagram ?? null;
+  $linkedin = $social_media_settings->linkedin ?? null;
+  $youtube = $social_media_settings->youtube ?? null;
+
+@endphp
+
 <footer class="bg-white text-black px-6 md:px-20 py-10">
   <div class="grid md:grid-cols-4 gap-8 border-t pt-12">
     <!-- Get In Touch -->
     <div>
       <h2 class="text-lg font-semibold mb-4">Get In Touch</h2>
       <ul class="space-y-2 text-sm">
-        <li class="flex items-start"><span class="mr-2">✉️</span> Customer Support: <a href="mailto:helpdesk@stainlesssteeljewelry.com" class="ml-1 hover:underline">helpdesk@stainlesssteeljewelry.com</a></li>
-        <li class="flex items-start"><span class="mr-2">📧</span> General Info: <a href="mailto:info@stainlesssteeljewelry.com" class="ml-1 hover:underline">info@stainlesssteeljewelry.com</a></li>
-        <li class="flex items-center"><span class="mr-2">📞</span> +1 917 428 6625</li>
-        <li>2140 Peralta Blvd 212D, Fremont, CA 94536</li>
+        <li class="flex items-start"><span class="mr-2">📧</span> General Info: <a href="mailto:{{$companyEmail}}" class="ml-1 hover:underline">{{$companyEmail}}</a></li>
+        <li class="flex items-center"><span class="mr-2">📞</span> {{$companyPhone}}</li>
+        <li>{{$address}}</li>
       </ul>
       <div class="flex space-x-4 mt-4 text-xl">
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a target="_blank" href="{{$facebook}}"><i class="fab fa-facebook"></i></a>
+        <a target="_blank" href="{{$twitter}}"><i class="fab fa-twitter"></i></a>
+        <a target="_blank" href="{{$instagram}}"><i class="fab fa-instagram"></i></a>
+        <a target="_blank" href="{{$linkedin}}"><i class="fab fa-linkedin"></i></a>
+        <a target="_blank" href="{{$youtube}}"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
 

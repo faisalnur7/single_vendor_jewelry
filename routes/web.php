@@ -46,11 +46,6 @@ Route::post('user-reset-password', [SignInController::class, 'updatePassword'])-
 Route::get('login/{provider}', [SignInController::class, 'redirect'])->name('social.redirect');
 Route::get('login/{provider}/callback', [SignInController::class, 'callback'])->name('social.callback');
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
