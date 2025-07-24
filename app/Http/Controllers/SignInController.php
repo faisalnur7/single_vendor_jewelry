@@ -107,7 +107,7 @@ class SignInController extends Controller
             );
 
             Auth::login($user);
-            return redirect()->intended('/dashboard');
+            return redirect()->route('homepage');
 
         } catch (\Exception $e) {
             return redirect('/login')->withErrors([
