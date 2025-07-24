@@ -40,7 +40,7 @@ class SignInController extends Controller
         );
 
         if ($status === Password::RESET_LINK_SENT) {
-            return redirect()->route('signin')->with('status', __($status));
+            return redirect()->route('signin')->with('status', __("We've sent you an email with a link to update your password. A password reset email has been sent to the email address on file for your account, but may take several minutes to show up in your inbox. Please wait at least 10 minutes before attempting another reset."));
         }
 
         return back()

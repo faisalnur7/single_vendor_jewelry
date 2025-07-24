@@ -15,9 +15,9 @@
                     {{ session('status') }}
                 </div>
             @endif
-            <form id="login_form" action="{{ route('login') }}" method="POST">
+            <form id="login_form" class="w-full max-w-md" action="{{ route('login') }}" method="POST">
                 @csrf
-                <div class="w-full max-w-sm space-y-6">
+                <div class="w-full space-y-6">
 
                     <!-- Email -->
                     <div class="form-group mb-6">
