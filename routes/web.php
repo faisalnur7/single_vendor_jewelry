@@ -10,6 +10,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\SignInController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,6 +33,19 @@ Route::get('/collections/{category:slug}/{subcategory:slug}', [DashboardControll
 Route::get('/collections/{category:slug}/{subcategory:slug}/{childsubcategory:slug}', [DashboardController::class, 'show_child_subcategorywise'])->name('childsubcategory.show');
 
 Route::get('/product/{product:slug}', [DashboardController::class, 'show_product'])->name('show_product');
+
+Route::get('/signin', [SignInController::class, 'signin'])->name('signin');
+Route::get('/signup', [SignInController::class, 'signup'])->name('signup');
+Route::get('/forgot_password', [SignInController::class, 'forgot_password'])->name('forgot_password');
+
+Route::post('/send_reset_password_link', [SignInController::class, 'send_reset_password_link'])->name('send_reset_password_link');
+Route::get('user-reset-password/{token}', [SignInController::class, 'showResetForm'])->name('user.password.reset');
+Route::post('user-reset-password', [SignInController::class, 'updatePassword'])->name('user.password.update');
+
+
+Route::get('login/{provider}', [SignInController::class, 'redirect'])->name('social.redirect');
+Route::get('login/{provider}/callback', [SignInController::class, 'callback'])->name('social.callback');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

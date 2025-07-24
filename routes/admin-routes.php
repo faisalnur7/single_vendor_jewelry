@@ -139,7 +139,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         // Order Routes
         Route::prefix('orders')->group(function () {
             Route::get('/list', [OrderController::class, 'index'])->name('orders');
-            Route::get('/completed', [OrderController::class, 'completed'])->name('order.completed');
+            // Route::get('/completed', [OrderController::class, 'completed'])->name('order.completed');
             Route::get('/cancelled', [OrderController::class, 'cancelled'])->name('order.cancelled');
             Route::get('/pending_list', [OrderController::class, 'pending_list'])->name('order.pending');
             Route::get('/confirmed_list', [OrderController::class, 'confirmed_list'])->name('order.confirmed');

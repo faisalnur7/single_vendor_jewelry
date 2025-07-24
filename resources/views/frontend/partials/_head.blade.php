@@ -116,6 +116,32 @@
         content: '🤎';
         margin-right: 10px;
     }
+
+    .signin_signup_form .form-group {
+        position: relative;
+    }
+
+    .signin_signup_form .floating-label {
+        position: absolute;
+        left: 1rem;
+        top: 0.75rem;
+        background-color: white;
+        padding: 0 0.25rem;
+        color: #6b7280; /* text-gray-500 */
+        transition: all 0.2s ease;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    /* FIXED: Only sibling selector required */
+    .signin_signup_form input:focus + .floating-label,
+    .signin_signup_form input:not(:placeholder-shown) + .floating-label {
+        top: -0.6rem;
+        left: 0.75rem;
+        font-size: 0.75rem; /* text-xs */
+        color: #111827; /* text-gray-900 */
+    }
+
 </style>
 
 @vite('resources/css/app.css')

@@ -65,7 +65,11 @@
 
                     <div class="max-w-md mt-6 grid gap-4">
                         <button class="bg-black text-white py-3 text-sm tracking-widest uppercase transition duration-500 hover:bg-gray-700 hover:text-white">Learn More About Us</button>
-                        <button class="border border-black py-2 text-sm tracking-wider uppercase transition duration-500 hover:bg-black hover:text-white">Sign In</button>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="{{route('signup')}}" class="border border-black py-2 text-sm tracking-wider uppercase transition duration-500 hover:bg-black hover:text-white justify-center flex items-center">Register</a>
+                            <a href="{{route('signin')}}" class="border border-black py-2 text-sm tracking-wider uppercase transition duration-500 hover:bg-black hover:text-white justify-center flex items-center">Sign In</a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\ResetPasswordCustom;
 
 class User extends Authenticatable
 {
@@ -63,7 +64,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_active'
+        'is_active',
+        'provider',
+        'provider_id'
     ];
 
     /**
@@ -111,6 +114,10 @@ class User extends Authenticatable
 
     public function cart(){
         return $this->hasOne(Cart::class);
+    }
+
+    public function sendPasswordResetNotification($token){
+        $this->notify(new ResetPasswordCustom($token));
     }
     
 

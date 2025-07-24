@@ -38,7 +38,7 @@
             <i class="fa-solid fa-cart-shopping"></i>
 
             @php
-                $cartCount = auth()->check()
+                $cartCount = (auth()->check() && !empty(auth()->user()->cart))
                     ? (auth()->user()->cart->items->count() ?? 0)
                     : (session('guest_cart') ? count(session('guest_cart')) : 0);
             @endphp
