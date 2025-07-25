@@ -14,5 +14,8 @@ class ContactSetting extends Model
         'company_name',
         'company_description',
         'company_logo',
+        'info_email',
+        'customer_support_email',
+        'whatsapp'
     ];
 }

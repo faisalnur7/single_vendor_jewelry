@@ -8,7 +8,7 @@
         </div>
 
         <!-- Login Form Section -->
-        <div class="flex flex-col gap-6 justify-center items-center py-36 px-4 signin_signup_form">
+        <div class="flex flex-col gap-6 justify-center items-center py-36 px-4 transition_label_form">
 
             @if (session('status'))
                 <div class="text-xl text-green-600">

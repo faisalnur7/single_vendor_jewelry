@@ -17,8 +17,23 @@
                 @csrf
 
                 <div class="form-group">
-                    <label>Email</label>
+                    <label>Company Email</label>
                     <input name="email" class="form-control" value="{{ old('email', $setting->email) }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Info Email</label>
+                    <input name="info_email" class="form-control" value="{{ old('info_email', $setting->info_email) }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Customer Support Email</label>
+                    <input name="customer_support_email" class="form-control" value="{{ old('customer_support_email', $setting->customer_support_email) }}">
+                </div>
+                
+                <div class="form-group">
+                    <label>WhatsApp</label>
+                    <input name="whatsapp" class="form-control" value="{{ old('whatsapp', $setting->whatsapp) }}">
                 </div>
 
                 <div class="form-group">

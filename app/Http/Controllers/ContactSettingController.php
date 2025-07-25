@@ -11,12 +11,15 @@ class ContactSettingController extends Controller
     public function edit()
     {
         $setting = ContactSetting::firstOrCreate([]);
-        return view('admin.settings.contact.create_', compact('setting'));
+        return view('admin.settings.contact.form_create', compact('setting'));
     }
 
     public function update(Request $request)
     {
         $validated = $request->validate([
+            'info_email' => 'nullable|email',
+            'customer_support_email' => 'nullable|email',
+            'whatsapp' => 'nullable|string|max:50',
             'email' => 'nullable|email',
             'phone' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:255',

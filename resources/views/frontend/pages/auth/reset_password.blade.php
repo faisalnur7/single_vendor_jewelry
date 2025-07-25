@@ -7,7 +7,7 @@
         Reset Password
     </div>
 
-    <div class="flex justify-center items-center py-36 px-4 signin_signup_form">
+    <div class="flex justify-center items-center py-36 px-4 transition_label_form">
         <form method="POST" action="{{ route('user.password.update') }}" class="w-full max-w-sm space-y-4">
             @csrf
 

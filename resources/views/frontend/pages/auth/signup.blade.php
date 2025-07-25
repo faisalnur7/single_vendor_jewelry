@@ -8,7 +8,7 @@
         </div>
 
         <!-- Login Form Section -->
-        <div class="flex justify-center items-center py-36 px-4 signin_signup_form">
+        <div class="flex justify-center items-center py-36 px-4 transition_label_form">
             <div class="w-full max-w-xl space-y-6">
                 <!-- ✅ FORM Starts -->
                 <form id="register_form" class="w-full max-w-sm" action="{{ route('register') }}" method="POST">

@@ -117,11 +117,11 @@
         margin-right: 10px;
     }
 
-    .signin_signup_form .form-group {
+    .transition_label_form .form-group {
         position: relative;
     }
 
-    .signin_signup_form .floating-label {
+    .transition_label_form .floating-label {
         position: absolute;
         left: 1rem;
         top: 0.75rem;
@@ -134,8 +134,8 @@
     }
 
     /* FIXED: Only sibling selector required */
-    .signin_signup_form input:focus + .floating-label,
-    .signin_signup_form input:not(:placeholder-shown) + .floating-label {
+    .transition_label_form input:focus + .floating-label,
+    .transition_label_form input:not(:placeholder-shown) + .floating-label {
         top: -0.6rem;
         left: 0.75rem;
         font-size: 0.75rem; /* text-xs */

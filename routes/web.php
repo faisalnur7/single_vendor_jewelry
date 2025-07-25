@@ -11,6 +11,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\SignInController;
+use App\Http\Controllers\ContactUsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -72,6 +73,9 @@ Route::get('/cart', [CartController::class, 'cart'])->name('cart');
 Route::delete('/cart/remove/{product_id}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/update', [CartController::class, 'update_item_qty'])->name('cart.update');
 
+// Contact Us Messages Routes
+Route::get('/contact_us', [ContactUsController::class, 'contact_us'])->name('contact_us');
+Route::post('/contact_us_messages', [ContactUsController::class, 'contact_us_messages'])->name('contact_us_messages');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/user_dashboard', [UserController::class, 'user_dashboard'])->name('user_dashboard');

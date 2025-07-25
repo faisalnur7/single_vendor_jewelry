@@ -8,7 +8,7 @@
         </div>
 
         <!-- Login Form Section -->
-        <div class="flex justify-center items-center py-36 px-4 signin_signup_form">
+        <div class="flex justify-center items-center py-36 px-4 transition_label_form">
 
             <form id="register_form" action="{{ route('send_reset_password_link') }}" method="POST">
                 @csrf
