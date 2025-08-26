@@ -25,6 +25,11 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Slug</th>
+                                <th>Image</th>
+                                <th>Is Wholesale Trending</th>
+                                <th>Is Featured</th>
+                                <th>Show on main menu</th>
+                                <th>Order</th>
                                 <th style="width: 150px;">Actions</th>
                             </tr>
                         </thead>
@@ -34,6 +39,11 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
+                                    <td>@if(!empty($category->image))<img src="{{asset($category->image)}}" class="h-24" />@endif</td>
+                                    <td>{{ $category->is_trending ? 'yes' : 'no' }}</td>
+                                    <td>{{ $category->is_featured ? 'yes' : 'no'  }}</td>
+                                    <td>{{ $category->show_on_main_menu ? 'yes' : 'no'  }}</td>
+                                    <td>{{ $category->order }}</td>
                                     <td>
                                         <a href="{{ route('category.edit', $category->id) }}" 
                                            class="btn btn-outline-dark btn-sm" title="Edit">

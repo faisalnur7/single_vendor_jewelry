@@ -26,22 +26,40 @@ class CategoryController extends Controller
     // Store New Category
     public function store(Request $request)
     {
+        // Validate input
         $request->validate([
             'name' => 'required|unique:categories,name',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'slug' => 'nullable|unique:categories,slug',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        $data = $request->only('name', 'slug');
+        // Collect data except image
+        $data = $request->except('image');
 
+        // Auto-generate slug if not provided
+        $data['slug'] = $request->slug ?? \Str::slug($request->name);
+
+        // Handle checkboxes (default 0)
+        $data['is_trending'] = $request->has('is_trending') ? 1 : 0;
+        $data['is_featured'] = $request->has('is_featured') ? 1 : 0;
+        $data['show_on_main_menu'] = $request->has('show_on_main_menu') ? 1 : 0;
+
+
+        // Handle image upload
         if ($request->hasFile('image')) {
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
             $request->file('image')->move(public_path('uploads/category'), $filename);
             $data['image'] = 'uploads/category/' . $filename;
         }
 
+        // Create new category
         Category::create($data);
-        return redirect()->route('category.list')->with('success', 'Category created successfully.');
+
+        return redirect()
+            ->route('category.list')
+            ->with('success', 'Category created successfully.');
     }
+
 
     // Show Edit Form
     public function edit($id)
@@ -57,23 +75,37 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
 
+        // Validation
         $request->validate([
             'name' => 'required|unique:categories,name,' . $category->id,
             'slug' => 'required|unique:categories,slug,' . $category->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        $data = $request->only('name', 'slug');
-        
+        // Collect data
+        $data = $request->except('image');
+
+        // Handle image upload if exists
         if ($request->hasFile('image')) {
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
             $request->file('image')->move(public_path('uploads/category'), $filename);
             $data['image'] = 'uploads/category/' . $filename;
         }
 
+        // Handle checkboxes (default 0 if not checked)
+        $data['is_trending'] = $request->has('is_trending') ? 1 : 0;
+        $data['is_featured'] = $request->has('is_featured') ? 1 : 0;
+        $data['show_on_main_menu'] = $request->has('show_on_main_menu') ? 1 : 0;
+
+
+        // Update category
         $category->update($data);
 
-        return redirect()->route('category.list')->with('success', 'Category updated successfully.');
+        return redirect()
+            ->route('category.list')
+            ->with('success', 'Category updated successfully.');
     }
+
 
     // Delete Category
     public function destroy($id)

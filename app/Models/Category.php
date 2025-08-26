@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['name','slug','image'];
+    protected $fillable = ['name','slug','image','is_trending','is_featured','show_on_main_menu','order'];
 
     public function subcategories() {
         return $this->hasMany(SubCategory::class);

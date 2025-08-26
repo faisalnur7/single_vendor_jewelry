@@ -20,6 +20,12 @@ class DashboardController extends Controller
     }
 
     public function product_list_page(){
+        $data['title'] = $data['page_title'] = "Best Sellers";
+        $data['products'] = Product::query()->with('variants')->where('parent_id',0)->get();
+        return view('frontend.pages.plp', $data);
+    }
+
+    public function best_sellers(){
         $data['title'] = $data['page_title'] = "Collections";
         $data['products'] = Product::query()->with('variants')->where('parent_id',0)->get();
         return view('frontend.pages.plp', $data);

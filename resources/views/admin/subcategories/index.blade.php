@@ -27,6 +27,7 @@
                                 <th>Name</th>
                                 <th>Slug</th>
                                 <th>Category</th>
+                                <th>Image</th>
                                 <th style="width: 150px;">Actions</th>
 
                             </tr>
@@ -38,6 +39,7 @@
                                     <td>{{ $subcategory->name }}</td>
                                     <td>{{ $subcategory->slug }}</td>
                                     <td>{{ $subcategory->categories->name }}</td>
+                                    <td>@if(!empty($subcategory->image))<img src="{{asset($subcategory->image)}}" class="h-24" />@endif</td>
                                     <td>
                                         <a href="{{ route('subcategory.edit', $subcategory->id) }}"
                                             class="btn btn-outline-dark btn-sm">

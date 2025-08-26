@@ -22,29 +22,6 @@
         </div>
     </section>
 
-    <!-- Products you may like Section -->
-    <section class="py-12 px-6">
-        <h2 class="text-4xl font-bold text-center mb-8">Products You May Like</h2>
-        <div class="flex justify-center gap-6 pb-8">
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Best Sellers</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Party</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Summer</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Sunflower</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Cross Neckleaces</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Bow</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Moon</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Sun</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Heart</a>
-            <a href="#" class="flex hover:text-blue-600 text-blue-900 text-lg">Hair Accessories</a>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
-            @foreach ($products as $product)
-                @include('frontend.partials._product_card')
-            @endforeach
-        </div>
-    </section>
-    
-
     <section class="py-6 px-6 min-h-[600px] bg-cover bg-center bg-no-repeat" style="background-image: url('/assets/img/images/why_choose_us.webp')">
         <div class="flex w-full bg-transparent py-6 rounded">
             <div class="w-1/2">
@@ -93,7 +70,7 @@
     <script>
         const swiper = new Swiper('.swiper', {
             loop: true,
-            effect: 'fade',
+            effect: 'slide',
             fadeEffect: {
                 crossFade: true,
             },

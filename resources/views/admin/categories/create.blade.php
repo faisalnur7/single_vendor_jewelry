@@ -12,7 +12,7 @@
         </div>
         <div class="card-body">
             <!-- Form to create category -->
-            <form action="{{ route('category.store') }}" method="POST">
+            <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-group">
@@ -38,6 +38,27 @@
                     @error('image')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
+                </div>
+
+                <!-- New checkboxes -->
+                <div class="pb-4 flex gap-4">
+                    <div class="form-check justify-start items-start flex">
+                        <input type="checkbox" name="is_trending" id="is_trending" value="1" 
+                            class="form-check-input" {{ old('is_trending') ? 'checked' : '' }}>
+                        <label class="form-check-label text-md " for="is_trending">Trending Category</label>
+                    </div>
+
+                    <div class="form-check justify-start items-start flex">
+                        <input type="checkbox" name="is_featured" id="is_featured" value="1" 
+                            class="form-check-input" {{ old('is_featured') ? 'checked' : '' }}>
+                        <label class="form-check-label text-md " for="is_featured">Featured Category</label>
+                    </div>
+
+                    <div class="form-check justify-start items-start flex">
+                        <input type="checkbox" name="show_on_main_menu" id="show_on_main_menu" value="1" 
+                            class="form-check-input" {{ old('show_on_main_menu') ? 'checked' : '' }}>
+                        <label class="form-check-label text-md " for="show_on_main_menu">Show on Main Menu</label>
+                    </div>
                 </div>
 
                 <div class="form-group">

@@ -1,7 +1,7 @@
 @extends('layouts.admin_master')
 
-@section('title','Category list')
-@section('page_title','Category list')
+@section('title','Sub Category Edit')
+@section('page_title','Sub Category Edit')
 
 @section('contents')
 
@@ -11,7 +11,7 @@
             <h3 class="card-title">Edit SubCategory</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('subcategory.update', $subcategory->id) }}" method="POST">
+            <form action="{{ route('subcategory.update', $subcategory->id) }}" method="POST"  enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 

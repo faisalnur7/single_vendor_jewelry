@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('homepage') }}" class="brand-link">
-        <span class="brand-text font-weight-light">{{$general_settings->site_name}}</span>
+        <span class="brand-text font-weight-light">{{ $general_settings->site_name }}</span>
     </a>
 
     <!-- Sidebar -->
@@ -33,7 +33,7 @@
 
                 <!-- Product Management -->
                 <li
-                    class="nav-item {{ menuOpen(['product.*','stock', 'category.*', 'subcategory.*', 'childsubcategory.*', 'brand.*', 'attribute.*']) ? 'menu-is-opening menu-open' : '' }}">
+                    class="nav-item {{ menuOpen(['product.*', 'stock', 'category.*', 'subcategory.*', 'childsubcategory.*', 'brand.*', 'attribute.*']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
                         <p>
@@ -63,8 +63,8 @@
                                 <p>Child Sub Categories</p>
                             </a></li>
                         <li class="nav-item">
-                            <a href="{{ route('stock') }}" 
-                            class="nav-link {{ request()->routeIs('stock') ? 'active' : '' }}">
+                            <a href="{{ route('stock') }}"
+                                class="nav-link {{ request()->routeIs('stock') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Stock</p>
                             </a>
@@ -118,7 +118,8 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"><a href="{{ route('orders') }}" class="nav-link {{ request()->routeIs('orders') ? 'active' : '' }}"><i
+                        <li class="nav-item"><a href="{{ route('orders') }}"
+                                class="nav-link {{ request()->routeIs('orders') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>All Orders</p>
                             </a></li>
@@ -218,7 +219,7 @@
                     </ul>
                 </li>
 
-                <!-- User Management -->
+                {{-- <!-- User Management -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
@@ -250,10 +251,11 @@
                                 <p>Roles</p>
                             </a></li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <!-- Settings -->
-                <li class="nav-item {{ menuOpen(['settings.*','admin.general-settings.*','contact-settings.edit','social.edit','homepage.edit']) ? 'menu-is-opening menu-open' : '' }}">
+                <li
+                    class="nav-item {{ menuOpen(['homepage_banner.*','settings.*', 'admin.general-settings.*', 'contact-settings.edit', 'social.edit', 'homepage.edit']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
@@ -262,23 +264,54 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"><a href="{{ route('admin.general-settings.edit') }}" class="nav-link {{ request()->routeIs('admin.general-settings.edit') ? 'active' : '' }}"><i
+                        <li class="nav-item"><a href="{{ route('admin.general-settings.edit') }}"
+                                class="nav-link {{ request()->routeIs('admin.general-settings.edit') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>General</p>
                             </a></li>
-                        <li class="nav-item"><a href="{{ route('contact-settings.edit') }}" class="nav-link {{ request()->routeIs('contact-settings.edit') ? 'active' : '' }}"><i
+                        <li class="nav-item"><a href="{{ route('contact-settings.edit') }}"
+                                class="nav-link {{ request()->routeIs('contact-settings.edit') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Contact & Company Info</p>
                             </a></li>
-                        <li class="nav-item"><a href="{{ route('social.edit') }}" class="nav-link {{ request()->routeIs('social.edit') ? 'active' : '' }}"><i
+                        <li class="nav-item"><a href="{{ route('social.edit') }}"
+                                class="nav-link {{ request()->routeIs('social.edit') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Social Links</p>
                             </a></li>
 
-                        <li class="nav-item"><a href="{{ route('homepage.edit') }}" class="nav-link {{ request()->routeIs('homepage.edit') ? 'active' : '' }}"><i
+                        <li class="nav-item {{ menuOpen(['homepage_banner.*'])  ? 'menu-is-opening menu-open' : ''  }}"><a href="{{ route('homepage.edit') }}"
+                                class="nav-link {{ request()->routeIs(['homepage.edit','homepage_banner.*']) ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
-                                <p>Homepage Section</p>
-                            </a></li>
+                                <p>Homepage Settings</p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+                                <!-- Location Setting Parent -->
+                                <li
+                                    class="nav-item {{ menuOpen(['homepage_banner.*', 'district.*', 'police-station.*', 'post-office.*','homepage_trending.*']) ? 'menu-is-opening menu-open' : '' }}">
+                                    <a href="#"
+                                        class="nav-link {{ request()->routeIs(['homepage_banner.*', 'district.*', 'police-station.*', 'post-office.*']) ? 'bg-gray-800' : '' }}">
+                                        <i class="fas fa-map-marked-alt nav-icon"></i>
+                                        <p>
+                                            Page Section Setting
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="{{route('homepage_banner.index')}}"
+                                                class="nav-link {{ request()->routeIs('homepage_banner.*') ? 'active' : '' }}">
+                                                <i class="fas fa-map nav-icon"></i>
+                                                <p>Hero Section</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item"><a href="{{ route('settings.branding') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Branding</p>

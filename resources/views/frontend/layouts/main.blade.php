@@ -9,7 +9,7 @@
 </head>
 
 <body class="font-sans bg-white text-gray-800">
-    @include('frontend.partials._top_bar')
+    {{-- @include('frontend.partials._top_bar') --}}
     @include('frontend.partials._header')
 
     @yield('contents')

@@ -19,6 +19,8 @@ use App\Http\Controllers\GeneralSettingController;
 use App\Http\Controllers\ContactSettingController;
 use App\Http\Controllers\SocialMediaSettingController;
 use App\Http\Controllers\HomePageSettingController;
+use App\Http\Controllers\HomepageBannerController;
+use App\Http\Controllers\HomePageTrendingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -237,9 +239,22 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     });
 
+    // Homepage Banners CRUD
+    Route::prefix('homepage_banner')->group(function () {
+        Route::get('/', [HomepageBannerController::class, 'index'])->name('homepage_banner.index');
+        Route::get('/create', [HomepageBannerController::class, 'create'])->name('homepage_banner.create');
+        Route::post('/store', [HomepageBannerController::class, 'store'])->name('homepage_banner.store');
+        Route::get('/edit/{id}', [HomepageBannerController::class, 'edit'])->name('homepage_banner.edit');
+        Route::post('/update/{id}', [HomepageBannerController::class, 'update'])->name('homepage_banner.update');
+        Route::delete('/delete/{id}', [HomepageBannerController::class, 'destroy'])->name('homepage_banner.destroy');
+    });
 
     // AJAX calls
     Route::get('/getProducts', [ProductController::class, 'getProducts'])->name('getProducts');
     Route::get('/getNextProductId', [ProductController::class, 'getNextProductId'])->name('getNextProductId');
+
+    Route::get('/get-subcategories/{category_id}', [HomepageBannerController::class, 'getSubcategories'])->name('get.subcategories');
+    Route::get('/get-child-subcategories/{sub_category_id}', [HomepageBannerController::class, 'getChildSubcategories'])->name('get.childsubcategories');
+
 });
 

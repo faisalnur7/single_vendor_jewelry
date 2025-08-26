@@ -18,6 +18,10 @@ body {
     flex: 1 0 auto;
 }
 
+.navbar{
+    width: calc( 100% - 250px ) !important;
+}
+
 .main-footer {
     flex-shrink: 0;
 }

@@ -11,7 +11,7 @@
         <div class="flex justify-center items-center py-36 px-4 transition_label_form">
             <div class="w-full max-w-xl space-y-6">
                 <!-- ✅ FORM Starts -->
-                <form id="register_form" class="w-full max-w-sm" action="{{ route('register') }}" method="POST">
+                <form id="register_form" class="w-full max-w-xl mx-auto" action="{{ route('register') }}" method="POST">
                     @csrf
 
                     <!-- Name -->

@@ -1,5 +1,5 @@
 @php
-    $categories = \App\Models\Category::with('subcategories.childsubcategories')->get();
+    $categories = \App\Models\Category::with('subcategories.childsubcategories')->where('show_on_main_menu','1')->get();
 @endphp
 <nav class="hidden md:flex gap-6 items-center text-lg font-bold">
     <div class="relative group w-full">
@@ -63,8 +63,59 @@
         </div>
     </div>
 
-    <a href="#" class="hover:text-orange-500  whitespace-nowrap">Best Sellers</a>
+    <a href="{{route('best_sellers')}}" class="hover:text-orange-500  whitespace-nowrap">Best Sellers</a>
 </nav>
+
+<!-- Mobile Navbar -->
+<div class="md:hidden">
+    <!-- Slide Menu -->
+    <div id="mobileMenu" 
+         class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300">
+        <!-- Overlay -->
+        <div id="menuOverlay" class="absolute inset-0 bg-black bg-opacity-50 hidden"></div>
+
+        <!-- Drawer -->
+        <div class="relative bg-white w-80 h-full shadow-lg p-6 overflow-y-auto">
+            <!-- Close button -->
+            <button id="closeMenuBtn" class="absolute top-4 right-4 text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Menu items -->
+            <h3 class="font-bold text-xl mb-4">Categories</h3>
+            <ul>
+                @foreach ($categories as $category)
+                    <li class="mb-3">
+                        <a href="{{ route('category.show', $category->slug) }}" 
+                           class="block text-lg hover:text-orange-500">
+                           {{ $category->name }}
+                        </a>
+
+                        @if($category->subcategories->count())
+                            <ul class="ml-4 mt-2 space-y-2">
+                                @foreach ($category->subcategories as $subcategory)
+                                    <li>
+                                        <a href="{{ route('subcategory.show', [$category->slug, $subcategory->slug]) }}" 
+                                           class="text-gray-600 hover:text-orange-500">
+                                           {{ $subcategory->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+
+            <hr class="my-4">
+
+            <a href="{{ route('best_sellers') }}" 
+               class="block text-lg hover:text-orange-500">
+               Best Sellers
+            </a>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -79,5 +130,31 @@
 
         // Trigger the first category on load
         $('.left_panel').first().trigger('mouseover');
+    });
+</script>
+
+<!-- Script -->
+<script>
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.remove('-translate-x-full');
+        mobileMenu.classList.add('translate-x-0');
+        menuOverlay.classList.remove('hidden');
+    });
+
+    closeMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.remove('translate-x-0');
+        mobileMenu.classList.add('-translate-x-full');
+        menuOverlay.classList.add('hidden');
+    });
+
+    menuOverlay.addEventListener('click', () => {
+        mobileMenu.classList.remove('translate-x-0');
+        mobileMenu.classList.add('-translate-x-full');
+        menuOverlay.classList.add('hidden');
     });
 </script>

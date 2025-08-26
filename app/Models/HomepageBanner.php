@@ -8,7 +8,24 @@ class HomepageBanner extends Model
 {
     protected $fillable = [
         'category_id',
+        'sub_category_id',
+        'child_sub_category_id',
         'banner',
         'status'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
+
+    public function childSubCategory()
+    {
+        return $this->belongsTo(ChildSubCategory::class, 'child_sub_category_id');
+    }
 }

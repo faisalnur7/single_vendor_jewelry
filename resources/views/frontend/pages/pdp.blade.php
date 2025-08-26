@@ -78,12 +78,12 @@
 
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-2 mt-3">
-                        <span class="text-xs border px-2 py-1 rounded-full">Fall & Winter Jewelry</span>
+                        {{-- <span class="text-xs border px-2 py-1 rounded-full">Fall & Winter Jewelry</span>
                         <span class="text-xs border px-2 py-1 rounded-full">Gold Plated Jewelry</span>
                         <span class="text-xs border px-2 py-1 rounded-full">IHeart Collection</span>
                         <span class="text-xs border px-2 py-1 rounded-full">Luxury Jewelry</span>
                         <span class="text-xs border px-2 py-1 rounded-full">Stainless Steel Heart</span>
-                        <span class="text-xs border px-2 py-1 rounded-full">Water-Resistant Jewelry</span>
+                        <span class="text-xs border px-2 py-1 rounded-full">Water-Resistant Jewelry</span> --}}
                     </div>
 
 

@@ -45,7 +45,7 @@
 
          <!-- Sub Category -->
         <div class="col-md-3 col-lg-2">
-            <label for="child_sub_category" class="form-label">Sub Category</label>
+            <label for="child_sub_category" class="form-label">Child Sub Category</label>
             <select name="child_sub_category" id="child_sub_category" class="form-control select2">
                 <option value="">Select Child Sub Category</option>
                 @foreach ($childSubCategories as $childSubCategory)

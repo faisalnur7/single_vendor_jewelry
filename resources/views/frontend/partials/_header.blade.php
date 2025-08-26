@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white z-40">
+<header class="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white z-40 site_header">
 
     {{-- Mobile Sidebar Toggle Button --}}
     @auth
@@ -9,6 +9,15 @@
     @endauth
 
     {{-- Logo --}}
+
+    <div class="flex justify-between items-center p-4 bg-white md:hidden">
+        <button id="mobileMenuBtn" class="relative flex flex-col justify-between w-7 h-6 group">
+            <span class="block h-1 bg-gray-800 rounded w-7"></span>
+            <span class="block h-1 bg-gray-800 rounded w-5 mr-2"></span>
+            <span class="block h-1 bg-gray-800 rounded w-6 mr-1"></span>
+        </button>
+    </div>
+
     <div class="flex max-w-44">
         <a href="{{ route('homepage') }}">
             <img src="{{ asset($general_settings->site_logo ?? 'assets/img/logo.png') }}" alt="{{$general_settings->site_title}}" class="h-10 object-contain" />
@@ -20,8 +29,6 @@
 
     {{-- Right Icons --}}
     <div class="flex items-center gap-4 text-sm">
-        <a href="#" class="hover:underline">EN / USD</a>
-
         @php
             $profile_link = auth()->check() ? route('user_profile') : '#';
         @endphp

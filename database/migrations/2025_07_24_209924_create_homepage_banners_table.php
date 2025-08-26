@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('homepage_banners', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('sub_category_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('child_sub_category_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('banner')->nullable();
             $table->integer('status')->default(1)->nullable();
             $table->timestamps();

@@ -28,6 +28,7 @@ Route::get('/reboot', function () {
 });
 Route::get('/', [DashboardController::class, 'index'])->name('homepage');
 Route::get('/collections', [DashboardController::class, 'product_list_page'])->name('collections');
+Route::get('/best_sellers', [DashboardController::class, 'best_sellers'])->name('best_sellers');
 Route::get('/collections/{category:slug}', [DashboardController::class, 'show_categorywise'])->name('category.show');
 Route::get('/collections/{category:slug}/{subcategory:slug}', [DashboardController::class, 'show_subcategorywise'])->name('subcategory.show');
 
