@@ -22,6 +22,10 @@ use App\Http\Controllers\HomePageSettingController;
 use App\Http\Controllers\HomepageBannerController;
 use App\Http\Controllers\HomePageTrendingController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ReturnPolicyController;
+use App\Http\Controllers\ShippingPolicyController;
+use App\Http\Controllers\PrivacyPolicyController;
+use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -208,12 +212,45 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/email', [SettingController::class, 'email'])->name('settings.email');
         Route::get('/seo', [SettingController::class, 'seo'])->name('settings.seo');
 
+        Route::get('/subscribers', [SubscriberController::class, 'index'])->name('subscribers');
+        Route::get('/subscriber/edit/{faq}', [SubscriberController::class, 'edit'])->name('subscriber.edit');
+        Route::post('/subscriber/update/{faq}', [SubscriberController::class, 'update'])->name('subscriber.update');
+        Route::delete('/subscriber/delete/{faq}', [SubscriberController::class, 'destroy'])->name('subscriber.delete');
+
+        // FAQ Routes
         Route::get('/faq/index', [FaqController::class, 'index'])->name('faq.index');
         Route::get('/faq/create', [FaqController::class, 'create'])->name('faq.create');
         Route::post('/faq/store', [FaqController::class, 'store'])->name('faq.store');
         Route::get('/faq/edit/{faq}', [FaqController::class, 'edit'])->name('faq.edit');
         Route::post('/faq/update/{faq}', [FaqController::class, 'update'])->name('faq.update');
         Route::delete('/faq/delete/{faq}', [FaqController::class, 'destroy'])->name('faq.delete');
+
+        // Return Policy Routes
+        Route::get('/return-policy/index', [ReturnPolicyController::class, 'index'])->name('return_policy.index');
+        Route::get('/return-policy/create', [ReturnPolicyController::class, 'create'])->name('return_policy.create');
+        Route::post('/return-policy/store', [ReturnPolicyController::class, 'store'])->name('return_policy.store');
+        Route::get('/return-policy/edit/{returnPolicy}', [ReturnPolicyController::class, 'edit'])->name('return_policy.edit');
+        Route::post('/return-policy/update/{returnPolicy}', [ReturnPolicyController::class, 'update'])->name('return_policy.update');
+        Route::delete('/return-policy/delete/{returnPolicy}', [ReturnPolicyController::class, 'destroy'])->name('return_policy.delete');
+
+
+        // Shipping Policy Routes
+        Route::get('/shipping-policy/index', [ShippingPolicyController::class, 'index'])->name('shipping_policy.index');
+        Route::get('/shipping-policy/create', [ShippingPolicyController::class, 'create'])->name('shipping_policy.create');
+        Route::post('/shipping-policy/store', [ShippingPolicyController::class, 'store'])->name('shipping_policy.store');
+        Route::get('/shipping-policy/edit/{shippingPolicy}', [ShippingPolicyController::class, 'edit'])->name('shipping_policy.edit');
+        Route::post('/shipping-policy/update/{shippingPolicy}', [ShippingPolicyController::class, 'update'])->name('shipping_policy.update');
+        Route::delete('/shipping-policy/delete/{shippingPolicy}', [ShippingPolicyController::class, 'destroy'])->name('shipping_policy.delete');
+
+
+        // Privacy Policy Routes
+        Route::get('/privacy-policy/index', [PrivacyPolicyController::class, 'index'])->name('privacy_policy.index');
+        Route::get('/privacy-policy/create', [PrivacyPolicyController::class, 'create'])->name('privacy_policy.create');
+        Route::post('/privacy-policy/store', [PrivacyPolicyController::class, 'store'])->name('privacy_policy.store');
+        Route::get('/privacy-policy/edit/{privacyPolicy}', [PrivacyPolicyController::class, 'edit'])->name('privacy_policy.edit');
+        Route::post('/privacy-policy/update/{privacyPolicy}', [PrivacyPolicyController::class, 'update'])->name('privacy_policy.update');
+        Route::delete('/privacy-policy/delete/{privacyPolicy}', [PrivacyPolicyController::class, 'destroy'])->name('privacy_policy.delete');
+
 
     });
 

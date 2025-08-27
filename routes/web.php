@@ -15,6 +15,10 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ReturnPolicyController;
+use App\Http\Controllers\ShippingPolicyController;
+use App\Http\Controllers\PrivacyPolicyController;
+use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -84,9 +88,12 @@ Route::post('/contact_us_messages', [ContactUsController::class, 'contact_us_mes
 Route::get('/guest_wishlist', [WishlistController::class, 'guest_wishlist'])->name('guest_wishlist');
 Route::post('/guest/wishlist-products', [WishlistController::class, 'guestProducts'])->name('guest_wishlist_products');
 Route::post('/wishlist', [WishlistController::class, 'store'])->name('user_wishlist_store');
+Route::post('/subscriber/store', [SubscriberController::class, 'store'])->middleware('throttle:5,1')->name('subscribers.store');
 
 Route::get('/faq', [FaqController::class, 'faq'])->name('faq');
-
+Route::get('/return_policy', [ReturnPolicyController::class, 'return_policy'])->name('return_policy');
+Route::get('/shipping_policy', [ShippingPolicyController::class, 'shipping_policy'])->name('shipping_policy');
+Route::get('/privacy_policy', [PrivacyPolicyController::class, 'privacy_policy'])->name('privacy_policy');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/user_dashboard', [UserController::class, 'user_dashboard'])->name('user_dashboard');

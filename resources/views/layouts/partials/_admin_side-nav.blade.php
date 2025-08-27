@@ -255,7 +255,7 @@
 
                 <!-- Settings -->
                 <li
-                    class="nav-item {{ menuOpen(['homepage_banner.*','settings.*', 'admin.general-settings.*', 'contact-settings.edit', 'social.edit', 'homepage.edit']) ? 'menu-is-opening menu-open' : '' }}">
+                    class="nav-item {{ menuOpen(['faq.*','return_policy.*','shipping_policy.*','privacy_policy.*','homepage_banner.*','settings.*', 'admin.general-settings.*', 'contact-settings.edit', 'social.edit', 'homepage.edit']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
@@ -312,18 +312,42 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a href="{{ route('faq.index') }}" class="nav-link"><i
+                        <li class="nav-item">
+                            <a href="{{ route('faq.index') }}" class="nav-link {{ request()->routeIs(['faq.*']) ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>FAQ</p>
-                            </a></li>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('return_policy.index') }}" class="nav-link {{ request()->routeIs(['return_policy.*']) ? 'active' : '' }}"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Return Policy</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('shipping_policy.index') }}" class="nav-link {{ request()->routeIs(['shipping_policy.*']) ? 'active' : '' }}"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Shipping Policy</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('privacy_policy.index') }}" class="nav-link {{ request()->routeIs(['privacy_policy.*']) ? 'active' : '' }}"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Privacy Policy</p>
+                            </a>
+                        </li>
                         
                         <li class="nav-item"><a href="{{ route('settings.branding') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Branding</p>
                             </a></li>
-                        <li class="nav-item"><a href="{{ route('settings.email') }}" class="nav-link"><i
+                        <li class="nav-item"><a href="{{ route('subscribers') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>
-                                <p>Email</p>
+                                <p>Subscriber Emails</p>
                             </a></li>
                         <li class="nav-item"><a href="{{ route('settings.seo') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>

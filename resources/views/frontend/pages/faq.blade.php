@@ -2,9 +2,14 @@
 @section('title', 'Stainless Steel Jewelry')
 @section('contents')
 
+@php
+    $contactInformation  = App\Models\ContactSetting::first();
+@endphp
 <section class="mt-24 pt-0 pb-12 px-6">
     <div class="mx-auto max-w-6xl">
         <h2 class="text-2xl text-center font-semibold mb-6">FAQ</h2>
+
+        <p class="text-center py-8">You've got questions? We're here to help! Find answers to the most commonly asked questions below. If you have any other concerns, or if we can help you with anything, feel free to contact us at <strong>{{$contactInformation->info_email}}</strong> or at <strong>{{$contactInformation->phone}}</strong></p>
 
         <div class="space-y-4">
             @foreach($faqs as $faq)
