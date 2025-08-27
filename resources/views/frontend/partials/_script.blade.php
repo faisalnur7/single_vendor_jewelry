@@ -116,6 +116,72 @@
         $(document).on('click', '.toggle-login', function () {
             showLogin();
         });
+
+
+        $(document).on('click', '.wishlist_btn', function(e) {
+            e.preventDefault();
+            let button = $(this);
+            let productId = button.data('product_id');
+
+            $.ajax({
+                url: "{{ route('user_wishlist_store') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    product_id: productId
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.success);
+                    } else if (response.error) {
+                        toastr.warning(response.error);
+                    } else if (response.guest) {
+                        // Store in sessionStorage for guest users
+                        let wishlist = JSON.parse(sessionStorage.getItem('wishlist')) || [];
+
+                        if (wishlist.includes(productId)) {
+                            toastr.warning("Product already in wishlist (guest).");
+                        } else {
+                            wishlist.push(productId);
+                            sessionStorage.setItem('wishlist', JSON.stringify(wishlist));
+                            toastr.success("Product added to wishlist (guest).");
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    toastr.error(xhr.responseJSON?.error || "Something went wrong!");
+                }
+            });
+        });
+
+        // Only for guests (user not logged in)
+        if (!@json(auth()->check())) {
+            var wishlist = JSON.parse(sessionStorage.getItem('wishlist')) || [];
+            $(".wishlist_count").text(wishlist.length > 0 ? wishlist.length : "");
+            
+            if(wishlist.length > 0){
+                $(".wishlist_count").removeClass('bg-transparent');
+                $(".wishlist_count").addClass('bg-red-500');
+            }else{
+                $(".wishlist_count").addClass('bg-transparent');
+                $(".wishlist_count").removeClass('bg-red-500');
+            }
+        }
+
+        // Optional: Update count dynamically when adding/removing
+        $(document).on("click", ".wishlist_btn, .remove_guest_wishlist", function() {
+            var wishlist = JSON.parse(sessionStorage.getItem('wishlist')) || [];
+            $(".wishlist_count").text(wishlist.length > 0 ? wishlist.length : "");
+
+            if(wishlist.length > 0){
+                $(".wishlist_count").removeClass('bg-transparent');
+                $(".wishlist_count").addClass('bg-red-500');
+            }else{
+                $(".wishlist_count").addClass('bg-transparent');
+                $(".wishlist_count").removeClass('bg-red-500');
+            }
+        });
+
     });
 
 </script>

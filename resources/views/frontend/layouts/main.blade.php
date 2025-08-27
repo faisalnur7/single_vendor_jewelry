@@ -8,7 +8,7 @@
     @yield('styles')
 </head>
 
-<body class="font-sans bg-white text-gray-800">
+<body class="font-sans bg-white text-gray-800 overflow-x-hidden">
     {{-- @include('frontend.partials._top_bar') --}}
     @include('frontend.partials._header')
 

@@ -145,7 +145,7 @@
                             🛒 <span>ADD TO CART</span> <span id="cartTotal">(0 items - $0.00)</span>
                         </button>
                         <button class="hidden md:flex border p-3 rounded-md border-gray-800 text-black wishlist_btn" data-product_id="{{$product->id}}">
-                            <i class="fa-regular fa-heart heart_icon wishlist_btn"></i>
+                            <i class="fa-regular fa-heart heart_icon"></i>
                         </button>
                     </div>
 

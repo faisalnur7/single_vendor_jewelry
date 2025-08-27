@@ -36,9 +36,20 @@
         <a href="{{ $profile_link }}" class="text-lg header-user-icon">
             <i class="fa-regular fa-user"></i>
         </a>
+        @php
+            $wishlistCount = 0;
+            if(auth()->check()){
+                $wishlistCount = auth()->user()->wishlists()->count();
+            }
+        @endphp
 
-        <a href="{{ route('user_wishlist') }}" class="text-lg">
+        <a href="{{ auth()->check() ? route('user_wishlist') : route('guest_wishlist') }}" class="text-lg relative">
             <i class="fa-regular fa-heart"></i>
+            <span class="absolute -top-1 -right-2 @if($wishlistCount == 0) bg-transparent @else bg-red-500 @endif text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none wishlist_count">
+                @if(auth()->check() && $wishlistCount > 0)
+                    {{ $wishlistCount }}
+                @endif
+            </span>
         </a>
 
         <a href="{{ route('cart') }}" class="relative text-lg">
@@ -50,7 +61,7 @@
                     : (session('guest_cart') ? count(session('guest_cart')) : 0);
             @endphp
 
-                <span class="absolute -top-1 -right-2 bg-red-500 bg-transparent text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none cart_count">
+                <span class="absolute -top-1 -right-2 @if($cartCount == 0 ) bg-transparent @else bg-red-500 @endif  text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none cart_count">
                     @if ($cartCount > 0)
                         {{ $cartCount }}
                     @endif

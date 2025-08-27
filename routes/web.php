@@ -80,6 +80,11 @@ Route::post('/cart/update', [CartController::class, 'update_item_qty'])->name('c
 Route::get('/contact_us', [ContactUsController::class, 'contact_us'])->name('contact_us');
 Route::post('/contact_us_messages', [ContactUsController::class, 'contact_us_messages'])->name('contact_us_messages');
 
+Route::get('/guest_wishlist', [WishlistController::class, 'guest_wishlist'])->name('guest_wishlist');
+Route::post('/guest/wishlist-products', [WishlistController::class, 'guestProducts'])->name('guest_wishlist_products');
+Route::post('/wishlist', [WishlistController::class, 'store'])->name('user_wishlist_store');
+
+
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/user_dashboard', [UserController::class, 'user_dashboard'])->name('user_dashboard');
     Route::get('/user_profile', [UserController::class, 'user_profile'])->name('user_profile');
@@ -101,7 +106,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Wishlist 
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('user_wishlist');
-    Route::post('/wishlist', [WishlistController::class, 'store'])->name('user_wishlist_store');
     Route::delete('/wishlist/{wishlist}', [WishlistController::class, 'destroy'])->name('user_wishlist_delete');
 
     // Shipping Address CRUD Routes
