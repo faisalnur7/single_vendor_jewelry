@@ -12,5 +12,39 @@
     </section>
 @endsection
 @section('scripts')
-    
+<script>
+$(document).ready(function() {
+    $('.wishlist_btn').on('click', function(e) {
+        e.preventDefault();
+        let button = $(this);
+        let productId = button.data('product_id');
+
+        $.ajax({
+            url: "{{ route('user_wishlist_store') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                product_id: productId
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert(response.success);
+                } else if (response.error) {
+                    alert(response.error);
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON;
+                    alert(errors.error);
+                } else {
+                    alert('Something went wrong!');
+                }
+            }
+        });
+    });
+
+});
+</script>
 @endsection
+

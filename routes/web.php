@@ -12,6 +12,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\SignInController;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\ShippingAddressController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -81,7 +83,11 @@ Route::post('/contact_us_messages', [ContactUsController::class, 'contact_us_mes
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/user_dashboard', [UserController::class, 'user_dashboard'])->name('user_dashboard');
     Route::get('/user_profile', [UserController::class, 'user_profile'])->name('user_profile');
+    Route::get('/user_view_profile', [UserController::class, 'user_view_profile'])->name('user_view_profile');
+    Route::get('/user_edit_profile', [UserController::class, 'user_edit_profile'])->name('user_edit_profile');
+    Route::post('/user_profile_update', [UserController::class, 'user_profile_update'])->name('user_profile_update');
     Route::get('/user_order', [UserController::class, 'user_order'])->name('user_order');
+    Route::get('/user_order/show/{id}', [UserController::class, 'user_order_show'])->name('user_order_show');
     Route::get('/user_wishlist', [UserController::class, 'user_wishlist'])->name('user_wishlist');
     Route::get('/user_address', [UserController::class, 'user_address'])->name('user_address');
     Route::get('/user/list', [UserController::class, 'index'])->name('user.list');
@@ -90,6 +96,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::patch('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])->name('user_password_form');
+    Route::put('/change-password', [UserController::class, 'updatePassword'])->name('user_password_update');
+
+    // Wishlist 
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('user_wishlist');
+    Route::post('/wishlist', [WishlistController::class, 'store'])->name('user_wishlist_store');
+    Route::delete('/wishlist/{wishlist}', [WishlistController::class, 'destroy'])->name('user_wishlist_delete');
+
+    // Shipping Address CRUD Routes
+    Route::get('/user/shipping', [ShippingAddressController::class, 'index'])->name('user_shipping_index');
+    Route::get('/user/shipping/create', [ShippingAddressController::class, 'create'])->name('user_shipping_create');
+    Route::post('/user/shipping/store', [ShippingAddressController::class, 'store'])->name('user_shipping_store');
+    Route::get('/user/shipping/edit/{id}', [ShippingAddressController::class, 'edit'])->name('user_shipping_edit');
+    Route::put('/user/shipping/update/{id}', [ShippingAddressController::class, 'update'])->name('user_shipping_update');
+    Route::delete('/user/shipping/delete/{id}', [ShippingAddressController::class, 'destroy'])->name('user_shipping_delete');
 
     // Role
 

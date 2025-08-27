@@ -19,7 +19,7 @@
 
                 <!-- Heart icon -->
                 <button
-                    class="bg-white rounded-full shadow flex justify-center items-center w-12 h-12 transition-colors duration-300 hover:bg-black group/icon">
+                    class="wishlist_btn bg-white rounded-full shadow flex justify-center items-center w-12 h-12 transition-colors duration-300 hover:bg-black group/icon" data-product_id="{{$product->id}}">
                     <i class="fa-regular fa-heart text-gray-700 transition-colors duration-300 group-hover/icon:text-white"></i>
                 </button>
             </div>

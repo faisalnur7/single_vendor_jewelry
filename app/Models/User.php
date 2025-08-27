@@ -120,5 +120,13 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordCustom($token));
     }
     
+    public function shippingAddresses(){
+        return $this->hasMany(ShippingAddress::class);
+    }
+
+    public function wishlists(){
+        return $this->hasMany(Wishlist::class);
+    }
+
 
 }

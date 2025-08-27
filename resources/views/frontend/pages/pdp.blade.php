@@ -72,8 +72,8 @@
 
                 <!-- Product Details (dummy content) -->
                 <div id="productDetailsSection"
-                    class="w-full bg-white p-6 pt-0 rounded shadow-none relative transition-all duration-300">
-                    <h2 class="text-xl font-semibold">{{ $product->name }}</h2>
+                    class="w-full bg-white p-0 md:p-6 pt-0 rounded shadow-none relative transition-all duration-300">
+                    <h2 class="text-sm md:text-xl font-semibold">{{ $product->name }}</h2>
                     {{-- <p class="mt-2 text-sm text-gray-600">From collection <span class="bg-black text-white px-2 py-1 rounded">Liora</span></p> --}}
 
                     <!-- Tags -->
@@ -88,37 +88,37 @@
 
 
                     <!-- Price Range -->
-                    <p class="text-2xl font-semibold my-4 text-gray-400">${{ $product->variants->min('price') }} -
+                    <p class="text-xl md:text-2xl font-semibold my-4 text-gray-600">${{ $product->variants->min('price') }} -
                         ${{ $product->variants->max('price') }}</p>
 
                     <!-- Table -->
                     <div class="overflow-x-auto">
                         <div class="w-full border-gray-200 text-sm">
                             <!-- Header Row -->
-                            <div class="grid grid-cols-3 bg-gray-100 text-gray-700 font-bold">
+                            <div class="grid grid-cols-3 bg-gray-100 text-gray-700 font-bold text-xs sm:text-sm">
                                 <div class="p-2">Color</div>
-                                <div class="p-2">Price</div>
+                                <div class="p-2 text-center">Price</div>
                                 <div class="p-2 text-center">Qty</div>
                             </div>
 
                             <!-- Data Rows -->
-                            <div class="max-h-[500px] overflow-y-auto">
+                            <div class="max-h-[500px] overflow-y-auto overflow-x-auto">
                                 @foreach ($product->variants as $index => $variant)
                                     <div onclick="changeImage('{{ asset($variant->image) }}', this)"
                                         data-image="{{ asset($variant->image) }}"
                                         data-product_details="{{ $variant->description }}"
-                                        class="grid grid-cols-3 items-center mt-1  border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer ">
+                                        class="grid grid-cols-3 items-center mt-1 border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer text-xs sm:text-sm min-w-[320px]">
+                                        
                                         <!-- Color + Image -->
                                         <div class="p-2 flex items-center gap-2">
                                             <img src="{{ asset($variant->image) }}"
-                                                class="w-12 h-12 object-cover  rounded" />
-                                            <span>{{ $variant->color }}</span>
+                                                class="w-12 h-12 object-cover rounded" />
+                                            <span class="whitespace-normal break-words">{{ $variant->color }}</span>
                                         </div>
 
                                         <!-- Price -->
-                                        <div class="p-2 font-semibold">${{ $variant->price }}</div>
+                                        <div class="p-2 font-semibold text-center pr-6">${{ $variant->price }}</div>
 
-                                        <!-- Quantity Controls -->
                                         <!-- Quantity Controls -->
                                         <div class="p-2 flex justify-center text-center">
                                             <div class="flex items-center justify-center gap-2 pdp_quantity">
@@ -129,15 +129,13 @@
                                                 <button class="qty-increase px-2 py-1 border rounded"
                                                     data-index="{{ $index }}" data-product_id="{{ $variant->id }}"
                                                     data-price="{{ $variant->price }}">+</button>
-
                                             </div>
                                         </div>
-
                                     </div>
                                 @endforeach
-
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Add to Cart -->
@@ -146,8 +144,8 @@
                             class="flex items-center gap-2 text-white justify-center  bg-black w-full p-3 rounded-md add_to_cart_btn">
                             🛒 <span>ADD TO CART</span> <span id="cartTotal">(0 items - $0.00)</span>
                         </button>
-                        <button class="border p-3 rounded-md border-gray-800 text-black wishlist_btn">
-                            <i class="fa-regular fa-heart heart_icon"></i>
+                        <button class="hidden md:flex border p-3 rounded-md border-gray-800 text-black wishlist_btn" data-product_id="{{$product->id}}">
+                            <i class="fa-regular fa-heart heart_icon wishlist_btn"></i>
                         </button>
                     </div>
 

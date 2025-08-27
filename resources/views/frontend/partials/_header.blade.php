@@ -3,7 +3,7 @@
 
     {{-- Mobile Sidebar Toggle Button --}}
     @auth
-        <button id="sidebarToggle" class="md:hidden p-2 rounded-lg z-50">
+        <button id="sidebarToggle" class="hidden p-2 rounded-lg z-50">
             <i id="menuIcon" class="fas fa-bars text-2xl text-gray-800"></i>
         </button>
     @endauth
@@ -50,11 +50,11 @@
                     : (session('guest_cart') ? count(session('guest_cart')) : 0);
             @endphp
 
-            @if ($cartCount > 0)
-                <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none">
-                    {{ $cartCount }}
+                <span class="absolute -top-1 -right-2 bg-red-500 bg-transparent text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none cart_count">
+                    @if ($cartCount > 0)
+                        {{ $cartCount }}
+                    @endif
                 </span>
-            @endif
         </a>
     </div>
 

@@ -1,4 +1,4 @@
-<nav class="text-md text-gray-600 mt-6 ml-6" aria-label="Breadcrumb">
+<nav class="text-sm md:text-md text-gray-600 mt-6 ml-6" aria-label="Breadcrumb">
     <ol class="list-reset flex flex-wrap space-x-2">
         <li>
             <a href="{{ url('/') }}" class="hover:underline">Home</a>
