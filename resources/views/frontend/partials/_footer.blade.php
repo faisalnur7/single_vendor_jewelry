@@ -39,7 +39,7 @@
       <ul class="space-y-2 text-sm">
         <li><a href="#" class="hover:underline">About Us</a></li>
         <li><a href="{{route('contact_us')}}" class="hover:underline">Contact Us</a></li>
-        <li><a href="#" class="hover:underline">FAQ</a></li>
+        <li><a href="{{route('faq')}}" class="hover:underline">FAQ</a></li>
         <li><a href="#" class="hover:underline">Payment Method</a></li>
       </ul>
     </div>

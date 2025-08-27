@@ -21,6 +21,7 @@ use App\Http\Controllers\SocialMediaSettingController;
 use App\Http\Controllers\HomePageSettingController;
 use App\Http\Controllers\HomepageBannerController;
 use App\Http\Controllers\HomePageTrendingController;
+use App\Http\Controllers\FaqController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -206,6 +207,14 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/branding', [SettingController::class, 'branding'])->name('settings.branding');
         Route::get('/email', [SettingController::class, 'email'])->name('settings.email');
         Route::get('/seo', [SettingController::class, 'seo'])->name('settings.seo');
+
+        Route::get('/faq/index', [FaqController::class, 'index'])->name('faq.index');
+        Route::get('/faq/create', [FaqController::class, 'create'])->name('faq.create');
+        Route::post('/faq/store', [FaqController::class, 'store'])->name('faq.store');
+        Route::get('/faq/edit/{faq}', [FaqController::class, 'edit'])->name('faq.edit');
+        Route::post('/faq/update/{faq}', [FaqController::class, 'update'])->name('faq.update');
+        Route::delete('/faq/delete/{faq}', [FaqController::class, 'destroy'])->name('faq.delete');
+
     });
 
 

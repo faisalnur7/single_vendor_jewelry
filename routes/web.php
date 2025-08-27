@@ -14,6 +14,7 @@ use App\Http\Controllers\SignInController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\FaqController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -83,6 +84,8 @@ Route::post('/contact_us_messages', [ContactUsController::class, 'contact_us_mes
 Route::get('/guest_wishlist', [WishlistController::class, 'guest_wishlist'])->name('guest_wishlist');
 Route::post('/guest/wishlist-products', [WishlistController::class, 'guestProducts'])->name('guest_wishlist_products');
 Route::post('/wishlist', [WishlistController::class, 'store'])->name('user_wishlist_store');
+
+Route::get('/faq', [FaqController::class, 'faq'])->name('faq');
 
 
 Route::group(['middleware' => ['auth']], function () {

@@ -312,6 +312,11 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item"><a href="{{ route('faq.index') }}" class="nav-link"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>FAQ</p>
+                            </a></li>
+                        
                         <li class="nav-item"><a href="{{ route('settings.branding') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Branding</p>
