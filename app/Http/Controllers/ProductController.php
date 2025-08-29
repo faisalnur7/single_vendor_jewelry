@@ -11,6 +11,7 @@ use App\Models\SubCategory;
 use App\Models\ChildSubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -92,73 +93,98 @@ class ProductController extends Controller
             'gallery_images.*' => 'nullable|image',
         ]);
 
-        $data = $request->all();
-    
-        // Slug auto-generate if not provided
-        $data['slug'] = $request->slug ?: Str::slug($request->name) . '-' . uniqid();
+        DB::beginTransaction();
 
-        $data['sku'] = $request->category_id.($request->sub_category_id ?? '0');
-        // Image Upload
-        if ($request->hasFile('image')) {
-            $filename = time() . '_' . $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('uploads/products'), $filename);
-            $data['image'] = 'uploads/products/' . $filename;
-        }
-    
-        // Gallery Images Upload
-        if ($request->hasFile('gallery_images')) {
-            $gallery = [];
-            foreach ($request->file('gallery_images') as $image) {
-                $filename = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('uploads/products/gallery'), $filename);
-                $gallery[] = 'uploads/products/gallery/' . $filename;
+        try {
+            $data = $request->all();
+
+            // Slug auto-generate if not provided
+            $data['slug'] = $request->slug ?: Str::slug($request->name) . '-' . uniqid();
+
+            // SKU base
+            $data['sku'] = $request->category_id . ($request->sub_category_id ?? '0');
+
+            // Image Upload
+            if ($request->hasFile('image')) {
+                $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+                $request->file('image')->move(public_path('uploads/products'), $filename);
+                $data['image'] = 'uploads/products/' . $filename;
             }
-            $data['gallery_images'] = json_encode($gallery);
-        }
-    
-        // Create Product First
-        $product = Product::create($data);
-        $categoryFirstLetter = strtoupper(Str::substr($product->category->name, 0, 1));
 
-        $product->sku = $categoryFirstLetter 
-              . $product->category_id 
-              . ($product->sub_category_id ?? '0')
-              . ($product->child_sub_category_id ?? '0')
-              . $product->id;
-
-        $product->save();
-        if($request->has_variants){
-            foreach ($request->variants as $key => $variant) {
-                $data['slug'] = $product->slug . '-' . ($key + 1);
-                $data['sku'] = $product->sku . '.' . ($key + 1);
-
-                $vProduct = Product::create($data);
-                $vProduct->name = $product->name.'-'.($key+1);
-                $vProduct->color = $variant['color'];
-                $vProduct->price = $variant['price'];
-                $vProduct->purchase_price = $variant['purchase_price'];
-                $vProduct->stock = $variant['stock'];
-                $vProduct->description = $variant['description'];
-                $vProduct->stock = $variant['stock'];
-                $vProduct->parent_id = $product->id;
-                $vProduct->sku = $product->sku . ($key + 1);
-                $vProduct->has_variants = 0;
-
-                if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
-                    $filename = time() . '_' . $variant['image']->getClientOriginalName();
-                    $variant['image']->move(public_path('uploads/products'), $filename);
-                    $vProduct->image = 'uploads/products/' . $filename;
+            // Gallery Images Upload
+            if ($request->hasFile('gallery_images')) {
+                $gallery = [];
+                foreach ($request->file('gallery_images') as $image) {
+                    $filename = time() . '_' . $image->getClientOriginalName();
+                    $image->move(public_path('uploads/products/gallery'), $filename);
+                    $gallery[] = 'uploads/products/gallery/' . $filename;
                 }
-
-                $vProduct->save();
+                $data['gallery_images'] = json_encode($gallery);
             }
 
-        }
+            // Create Product
+            $product = Product::create($data);
+            $categoryFirstLetter = strtoupper(Str::substr($product->category->name, 0, 1));
 
-    
-        // Attach Sale Logs (if any selected)
-    
-        return redirect()->route('product.list')->with('success', 'Product created successfully.');
+            $product->sku = $categoryFirstLetter 
+                . $product->category_id 
+                . ($product->sub_category_id ?? '0')
+                . ($product->child_sub_category_id ?? '0')
+                . $product->id;
+
+            $product->save();
+
+            // Variants
+            if ($request->has_variants) {
+                foreach ($request->variants as $key => $variant) {
+                    $vData = $data; // copy main product data
+                    $vData['slug'] = $product->slug . '-' . ($key + 1);
+                    $vData['sku'] = $product->sku . '.' . ($key + 1);
+
+                    $vProduct = Product::create($vData);
+                    $vProduct->name = $product->name . '-' . ($key + 1);
+                    $vProduct->color = $variant['color'] ?? null;
+                    $vProduct->price = $variant['price'] ?? null;
+                    $vProduct->purchase_price = $variant['purchase_price'] ?? null;
+                    $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'] ?? null;
+                    $vProduct->description = $variant['description'] ?? null;
+                    $vProduct->parent_id = $product->id;
+                    $vProduct->sku = $product->sku . ($key + 1);
+                    $vProduct->has_variants = 0;
+
+                    // Variant image
+                    if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
+                        $filename = time() . '_' . $variant['image']->getClientOriginalName();
+                        $variant['image']->move(public_path('uploads/products'), $filename);
+                        $vProduct->image = 'uploads/products/' . $filename;
+                    }
+
+                    $vProduct->save();
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('product.list')->with('success', 'Product created successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Optionally delete uploaded files to avoid orphaned files
+            if (isset($filename) && file_exists(public_path($filename))) {
+                @unlink(public_path($filename));
+            }
+
+            if (isset($gallery)) {
+                foreach ($gallery as $gFile) {
+                    if (file_exists(public_path($gFile))) {
+                        @unlink(public_path($gFile));
+                    }
+                }
+            }
+
+            return redirect()->back()->withInput()->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
     }
     
 
@@ -216,7 +242,8 @@ class ProductController extends Controller
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
                     $vProduct->purchase_price = $variant['purchase_price'];
-                    $vProduct->stock = $variant['stock'];
+                    $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
+                    // $vProduct->stock = $variant['stock'];
                     $vProduct->description = $variant['description'];
 
                     if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
@@ -237,6 +264,7 @@ class ProductController extends Controller
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
                     $vProduct->purchase_price = $variant['purchase_price'];
+                    $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
                     $vProduct->description = $variant['description'];
                     $vProduct->parent_id = $product->id;
                     $vProduct->sku = $product->sku . ($key + 1);

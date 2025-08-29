@@ -31,7 +31,8 @@ class Product extends Model
         'unit',
         'meta',
         'has_variants',
-        'purchase_price'
+        'purchase_price',
+        'purchase_price_rmb'
     ];
 
     protected $casts = [

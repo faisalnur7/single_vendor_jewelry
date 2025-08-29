@@ -169,6 +169,11 @@
                                     @if (old('variants'))
                                         @foreach (old('variants') as $index => $variant)
                                             <div class="form-row variant-item mb-3 border p-3 rounded">
+                                                <div class="col-md-12 d-flex align-items-center justify-end">
+                                                    <button type="button"
+                                                        class="btn btn-outline-danger btn-sm remove-variant"><i
+                                                            class="fas fa-minus"></i></button>
+                                                </div>
                                                 <div class="col-md-3">
                                                     <input type="text" name="variants[{{ $index }}][color]"
                                                         class="form-control" placeholder="Color"
@@ -190,11 +195,11 @@
                                                         value="{{ $variant['purchase_price'] }}">
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <input type="text" name="variants[{{ $index }}][stock]"
-                                                        class="form-control" placeholder="Stock"
-                                                        value="{{ $variant['stock'] }}">
+                                                    <input type="text" name="variants[{{ $index }}][purchase_price_rmb]"
+                                                        class="form-control" placeholder="Purchase price in RMB"
+                                                        value="{{ $variant['purchase_price_rmb'] }}">
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-3 mt-2">
                                                     <input type="file" name="variants[{{ $index }}][image]"
                                                         class="form-control-file">
                                                 </div>
@@ -202,16 +207,14 @@
                                                     <label>Description</label>
                                                     <textarea name="variants[{{$index}}][description]" class="form-control summernote" rows="3"></textarea>
                                                 </div>
-                                                <div class="col-md-2 d-flex align-items-center justify-end">
-                                                    <button type="button"
-                                                        class="btn btn-outline-danger btn-sm remove-variant"><i
-                                                            class="fas fa-minus"></i></button>
-                                                </div>
                                             </div>
                                         @endforeach
                                     @else
                                         <!-- Default One -->
                                         <div class="form-row variant-item mb-3 border p-3 rounded">
+                                            <div class="col-md-12 d-flex align-items-center justify-end">
+                                                <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
+                                            </div>
                                             <div class="col-md-3">
                                                 <input type="text" name="variants[0][color]" class="form-control"
                                                     placeholder="Color">
@@ -229,21 +232,16 @@
                                                     placeholder="Purchase price">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="number" name="variants[0][stock]" class="form-control"
-                                                    placeholder="Stock">
+                                                <input type="text" name="variants[0][purchase_price_rmb]" class="form-control"
+                                                    placeholder="Purchase price in RMB">
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 mt-2">
                                                 <input type="file" name="variants[0][image]"
                                                     class="form-control-file">
                                             </div>
                                             <div class="col-md-12 mb-2">
                                                 <label>Description</label>
                                                 <textarea name="variants[0][description]" class="form-control summernote" rows="3"></textarea>
-                                            </div>
-                                            <div class="col-md-2 d-flex align-items-center justify-end">
-                                                <button type="button"
-                                                    class="btn btn-outline-danger btn-sm remove-variant"><i
-                                                        class="fas fa-minus"></i></button>
                                             </div>
                                         </div>
                                     @endif
@@ -317,6 +315,9 @@
             $('#add_variant_btn').on('click', function() {
                 let variantHtml = `
                 <div class="form-row variant-item mb-3 border p-3 rounded">
+                    <div class="col-md-12 d-flex align-items-center justify-end">
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
+                    </div>
                     <div class="col-md-3">
                         <input type="text" name="variants[${variantIndex}][color]" class="form-control" placeholder="Color">
                     </div>
@@ -330,17 +331,14 @@
                         <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
                     </div>
                     <div class="col-md-2">
-                        <input type="text" name="variants[${variantIndex}][stock]" class="form-control" placeholder="Stock">
+                        <input type="text" name="variants[${variantIndex}][purchase_price_rmb]" class="form-control" placeholder="Purchase price in RMB">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 mt-2">
                         <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
                     </div>
                     <div class="col-md-12 mb-2">
                         <label>Description</label>
                         <textarea name="variants[${variantIndex}][description]" class="form-control summernote" rows="3"></textarea>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center justify-end">
-                        <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
                     </div>
                 </div>`;
                 $('#variants_container').append(variantHtml);

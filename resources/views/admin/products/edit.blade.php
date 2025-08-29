@@ -211,19 +211,25 @@
                                                     <input type="text" name="variants[{{ $index }}][price]"
                                                         class="form-control" placeholder="Price"
                                                         value="{{ $variant['price'] }}">
-                                                </div>                                                
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="text" name="variants[{{ $index }}][price_rmb]"
+                                                        class="form-control" placeholder="Price in RMB"
+                                                        value="{{ $variant['price_rmb'] }}">
+                                                </div>                                          
                                                 
                                                 <div class="col-md-2">
                                                     <input type="text" name="variants[{{ $index }}][purchase_price]"
                                                         class="form-control" placeholder="Purchase price"
                                                         value="{{ $variant['purchase_price'] }}">
-                                                </div>
+                                                </div>                                                
+                                                
                                                 <div class="col-md-2">
-                                                    <input type="text" name="variants[{{ $index }}][stock]"
-                                                        class="form-control" placeholder="Stock"
-                                                        value="{{ $variant['stock'] }}">
+                                                    <input type="text" name="variants[{{ $index }}][purchase_price_rmb]"
+                                                        class="form-control" placeholder="Purchase price in RMB"
+                                                        value="{{ $variant['purchase_price_rmb'] }}">
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-3 mt-2">
                                                     <input type="file" name="variants[{{ $index }}][image]"
                                                         class="form-control-file">
                                                 </div>
@@ -249,14 +255,18 @@
                                                     placeholder="Price">
                                             </div>
                                             <div class="col-md-2">
+                                                <input type="text" name="variants[0][price_rmb]" class="form-control"
+                                                    placeholder="Price in RMB">
+                                            </div>
+                                            <div class="col-md-2">
                                                 <input type="text" name="variants[0][purchase_price]" class="form-control"
                                                     placeholder="Purchase price">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="number" name="variants[0][stock]" class="form-control"
-                                                    placeholder="Stock">
+                                                <input type="text" name="variants[0][purchase_price_rmb]" class="form-control"
+                                                    placeholder="Purchase price in RMB">
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 mt-2">
                                                 <input type="file" name="variants[0][image]"
                                                     class="form-control-file">
                                             </div>
@@ -330,12 +340,15 @@
                     <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
                 </div>
                 <div class="col-md-2">
+                    <input type="text" name="variants[${variantIndex}][price_rmb]" class="form-control" placeholder="Price in RMB">
+                </div>
+                <div class="col-md-2">
                     <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
                 </div>
                 <div class="col-md-2">
-                    <input type="text" name="variants[${variantIndex}][stock]" class="form-control" placeholder="Stock">
+                    <input type="text" name="variants[${variantIndex}][purchase_price_rmb]" class="form-control" placeholder="Purchase price in RMB">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mt-2">
                     <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
                 </div>
                 <div class="col-md-12 mb-2">
