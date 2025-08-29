@@ -31,7 +31,8 @@
                                 <option value="">Select Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
-                                        {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            data-letter="{{ strtoupper(substr($category->name, 0, 1)) }}"
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -357,7 +358,6 @@
 
 
             // Generate SKU
-
             function fetchUpcomingProductIdAndGenerateSKU() {
                 // Call backend to get the next product ID
                 $.ajax({
@@ -371,13 +371,15 @@
             }
 
             function generateSKU() {
+                var categorySelect = $('#category_id option:selected');
+                var firstLetter = categorySelect.data('letter') || '';
                 var category = $('#category_id').val() || '';
                 var subcategory = $('#subcategory_id').val() || '';
                 var childsubcategory = $('#childsubcategory_id').val() || '';
                 var upcomingProductId = $('#upcoming_product_id').val() || '';
 
                 if (category && subcategory && childsubcategory && upcomingProductId) {
-                    var sku = category + subcategory + childsubcategory + upcomingProductId;
+                    var sku = firstLetter + category + subcategory + childsubcategory + upcomingProductId;
                     $('#sku').val(sku);
                 } else {
                     $('#sku').val('');
@@ -385,12 +387,7 @@
             }
 
             $(document).on('change', '#category_id, #subcategory_id, #childsubcategory_id', function() {
-                // When all three selected, fetch product id
-                console.log($('#category_id').val());
-                console.log($('#subcategory_id').val());
-                console.log($('#childsubcategory_id').val());
-                if ($('#category_id').val() && $('#subcategory_id').val() && $('#childsubcategory_id')
-                    .val()) {
+                if ($('#category_id').val() && $('#subcategory_id').val() && $('#childsubcategory_id').val()) {
                     fetchUpcomingProductIdAndGenerateSKU();
                 } else {
                     $('#sku').val('');

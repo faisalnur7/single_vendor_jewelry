@@ -97,9 +97,7 @@ class ProductController extends Controller
         // Slug auto-generate if not provided
         $data['slug'] = $request->slug ?: Str::slug($request->name) . '-' . uniqid();
 
-        $data['sku'] = $request->category_id 
-              . ($request->sub_category_id ?? '0') 
-              . ($request->brand_id ?? '0');
+        $data['sku'] = $request->category_id.($request->sub_category_id ?? '0');
         // Image Upload
         if ($request->hasFile('image')) {
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
@@ -120,11 +118,12 @@ class ProductController extends Controller
     
         // Create Product First
         $product = Product::create($data);
+        $categoryFirstLetter = strtoupper(Str::substr($product->category->name, 0, 1));
 
-        $product->sku = $product->category_id 
-              . ($product->sub_category_id ?? '0') 
-              . ($product->brand_id ?? '0') 
-              . '.' 
+        $product->sku = $categoryFirstLetter 
+              . $product->category_id 
+              . ($product->sub_category_id ?? '0')
+              . ($product->child_sub_category_id ?? '0')
               . $product->id;
 
         $product->save();
