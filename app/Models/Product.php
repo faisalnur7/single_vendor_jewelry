@@ -20,6 +20,7 @@ class Product extends Model
         'max_price',
         'min_price',
         'price',
+        'price_rmb',
         'min_order_qty',
         'stock',
         'parent_id',

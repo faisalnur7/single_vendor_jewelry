@@ -125,18 +125,6 @@
                         </div>
 
                         <div class="col-md-4 form-group">
-                            <label>Minimum Price</label>
-                            <input type="number" step="0.01" name="min_price" class="form-control"
-                                value="{{ old('min_price', 0) }}">
-                        </div>
-
-                        <div class="col-md-4 form-group">
-                            <label>Maximum Price</label>
-                            <input type="number" step="0.01" name="max_price" class="form-control"
-                                value="{{ old('max_price', 0) }}">
-                        </div>
-
-                        <div class="col-md-4 form-group">
                             <label>Stock</label>
                             <input type="number" name="stock" class="form-control" value="{{ old('stock', 0) }}">
                         </div>
@@ -192,6 +180,11 @@
                                                         value="{{ $variant['price'] }}">
                                                 </div>
                                                 <div class="col-md-2">
+                                                    <input type="text" name="variants[{{ $index }}][price_rmb]"
+                                                        class="form-control" placeholder="Price in RMB"
+                                                        value="{{ $variant['price_rmb'] }}">
+                                                </div>
+                                                <div class="col-md-2">
                                                     <input type="text" name="variants[{{ $index }}][purchase_price]"
                                                         class="form-control" placeholder="Purchase price"
                                                         value="{{ $variant['purchase_price'] }}">
@@ -226,6 +219,10 @@
                                             <div class="col-md-2">
                                                 <input type="text" name="variants[0][price]" class="form-control"
                                                     placeholder="Price">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" name="variants[0][price_rmb]" class="form-control"
+                                                    placeholder="Price in RMB">
                                             </div>
                                             <div class="col-md-2">
                                                 <input type="text" name="variants[0][purchase_price]" class="form-control"
@@ -325,6 +322,9 @@
                     </div>
                     <div class="col-md-2">
                         <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" name="variants[${variantIndex}][price_rmb]" class="form-control" placeholder="Price in RMB">
                     </div>
                     <div class="col-md-2">
                         <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
