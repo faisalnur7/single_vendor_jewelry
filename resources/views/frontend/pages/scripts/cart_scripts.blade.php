@@ -12,16 +12,19 @@
                 success: function(response) {
                     if (response.success) {
                         const input = $(`.quantity-input[data-id="${productId}"]`);
-                        const price = parseFloat($(`[data-price][data-id="${productId}"]`).data(
-                            'price'));
-
+                        const price = parseFloat($(`[data-price][data-id="${productId}"]`).data('price'));
+                        
+                        let currentCurrency = $('#currentCurrency').attr('data-currentCurrency');
+                        let currencySymbol = (currentCurrency === 'RMB') ? '¥' : '$';
+                        
                         if (!isNaN(price) && !isNaN(quantity)) {
                             const newSubtotal = (price * quantity).toFixed(2);
-                            $(`.subtotal[data-id="${productId}"]`).text('$' + newSubtotal);
+                            $(`.subtotal[data-id="${productId}"]`).text(currencySymbol + newSubtotal);
                         }
 
                         // Recalculate total
                         let total = 0;
+                        
                         $('.quantity-input').each(function() {
                             const qty = parseInt($(this).val());
                             const id = $(this).data('id');
@@ -32,7 +35,7 @@
                                 total += price * qty;
                             }
                         });
-                        $('.cart-total').text('Total: $' + total.toFixed(2));
+                        $('.cart-total').text('Total: ' + currencySymbol + total.toFixed(2));
 
                         toastr.success("Cart updated.");
                     }
@@ -105,6 +108,9 @@
 
                             // Recalculate total
                             let total = 0;
+                            let currentCurrency = $('#currentCurrency').attr(
+                                'data-currentCurrency');
+                            let currencySymbol = (currentCurrency === 'RMB') ? '¥' : '$';
                             $('.quantity-input').each(function() {
                                 const qty = parseInt($(this).val());
                                 const id = $(this).data('id');
@@ -116,7 +122,8 @@
                                     total += price * qty;
                                 }
                             });
-                            $('.cart-total').text('Total: $' + total.toFixed(2));
+                            $('.cart-total').text('Total: ' + currencySymbol + total
+                                .toFixed(2));
 
 
                             // If cart is now empty

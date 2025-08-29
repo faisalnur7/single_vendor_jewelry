@@ -19,6 +19,9 @@
                         </div>
                     </div>
 
+                    @php
+                        $currency = session('currency', 'USD') === 'USD' ? 'USD' : 'RMB';
+                    @endphp
                     @foreach ($cartItems as $item)
                         @php
                             $isArray = is_array($item);
@@ -32,14 +35,21 @@
                             $color = $isArray
                                 ? $item['color'] ?? ($item['product']['color'] ?? '')
                                 : $item->color ?? $item->product->color;
-                            $price = $isArray
-                                ? $item['price'] ?? ($item['product']['price'] ?? 0)
-                                : $item->price ?? $item->product->price;
+                            $price_text = $isArray ? show_price($item['price']) ?? (show_price($item['product']['price']) ?? 0) : show_price($item->price) ?? show_price($item->product->price);
+                            
+                            $price = $isArray ? $item['price'] ?? ($item['product']['price'] ?? 0) : $item->price ?? $item->product->price;
+                            
+                            if($currency == 'RMB'){
+                                $price_text = $isArray ? show_price($item['price_rmb']) ?? (show_price($item['product']['price_rmb']) ?? 0) : show_price($item->price_rmb) ?? show_price($item->product->price_rmb);
+                                $price = $isArray ? $item['price_rmb'] ?? ($item['product']['price_rmb'] ?? 0) : $item->price_rmb ?? $item->product->price_rmb;
+                            }
                             $quantity = $isArray ? $item['quantity'] ?? 1 : $item->quantity ?? 1;
                             $product_id = $isArray ? $item['product_id'] ?? null : $item->product_id ?? null;
 
                             $subtotal = $price * $quantity;
                             $total += $subtotal;
+
+                            $subtotal_text = show_price($subtotal);
                         @endphp
                         <div class="bg-white p-4 border-b" data-id="{{ $product_id }}">
                             <div class="flex flex-wrap items-center">
@@ -66,7 +76,7 @@
                                 <!-- Price (w-3/12) -->
                                 <div class="w-1/2 sm:w-3/12 text-center mt-4 sm:mt-0">
                                     <p class="text-xl text-gray-800" data-price="{{ $price }}"
-                                        data-id="{{ $product_id }}">${{ number_format($price, 2) }}</p>
+                                        data-id="{{ $product_id }}">{{ $price_text }}</p>
                                 </div>
 
                                 <!-- Quantity (w-2/12) -->
@@ -88,7 +98,7 @@
                                 <div
                                     class="w-full sm:w-2/12 mt-4 sm:mt-0 flex justify-between sm:justify-end items-center gap-4">
                                     <p class="text-xl font-semibold text-gray-800 subtotal" data-id="{{ $product_id }}">
-                                        ${{ number_format($subtotal, 2) }}
+                                        {{ $subtotal_text }}
                                     </p>
                                 </div>
                             </div>

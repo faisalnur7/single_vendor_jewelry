@@ -52,7 +52,7 @@
                 <!-- Toggle button label -->
                 <button id="currencyToggle"
                     class="flex items-center gap-1 border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">
-                    <span id="currentCurrency">
+                    <span id="currentCurrency" data-currentCurrency="{{ session('currency', 'USD') === 'USD' ? 'USD' : 'RMB' }}">
                         {{ session('currency', 'USD') === 'USD' ? '$ USD' : '¥ RMB' }}
                     </span>
                     <i class="fa-solid fa-chevron-down text-xs"></i>

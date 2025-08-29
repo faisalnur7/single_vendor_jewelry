@@ -114,18 +114,27 @@
             let totalItems = 0;
             let totalPrice = 0;
 
+            let currentCurrency = $('#currentCurrency').attr('data-currentCurrency');
+
             $('[id^="qty-"]').each(function() {
                 let qty = parseInt($(this).text());
                 if (qty > 0) {
                     let index = $(this).attr('id').split('-')[1];
-                    let price = parseFloat($('[data-index="' + index + '"]').first().data('price'));
+
+                    // choose price field depending on currency
+                    let priceAttr = (currentCurrency === 'RMB') ? 'price_rmb' : 'price';
+                    let price = parseFloat($('[data-index="' + index + '"]').first().data(priceAttr));
+
                     totalItems += qty;
                     totalPrice += qty * price;
                 }
             });
 
-            $('#cartTotal').text(`(${totalItems} items - $${totalPrice.toFixed(2)})`);
+            // Update display
+            let currencySymbol = (currentCurrency === 'RMB') ? '¥' : '$';
+            $('#cartTotal').text(`(${totalItems} items - ${currencySymbol}${totalPrice.toFixed(2)})`);
         }
+
 
         $('.qty-increase').click(function() {
             var index = $(this).data('index');
