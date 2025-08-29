@@ -52,4 +52,12 @@ class CommonController extends Controller
         $cities = City::where('state_id', $state_id)->get();
         return response()->json($cities);
     }
+    
+    public function setCurrency(Request $request)
+    {
+        $currency = $request->currency ?? 'USD';
+        session(['currency' => $currency]);
+        return back();
+    }
+
 }

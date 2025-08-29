@@ -156,6 +156,7 @@
                 if (qty > 0) {
                     const index = $(this).attr('id').split('-')[1];
                     const price = $('[data-index="' + index + '"]').first().data('price');
+                    const price_rmb = $('[data-index="' + index + '"]').first().data('price_rmb');
                     const productId = $('[data-index="' + index + '"]').first().data('product_id');
                     const variant = @json($product->variants);
 
@@ -163,7 +164,8 @@
                         product_id: productId,
                         variant_index: index,
                         quantity: qty,
-                        price: price
+                        price: price,
+                        price_rmb: price_rmb,
                     });
                 }
             });

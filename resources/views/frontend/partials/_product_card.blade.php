@@ -27,8 +27,15 @@
 
         <!-- Product title -->
         <div
-            class="text-md overflow-hidden whitespace-nowrap text-ellipsis w-full max-w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[350px] mt-2">
+            class="text-sm overflow-hidden whitespace-nowrap text-ellipsis w-full max-w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[350px] mt-2">
             <a href="#" class="block">{{ $product->name }}</a>
+        </div>
+
+        <!-- Product price -->
+        <div
+            class="text-sm overflow-hidden text-ellipsis w-full max-w-full">
+            {{-- <p class="text-xl md:text-lg font-semibold  text-gray-800">${{ $product->variants->min('price') }} - ${{ $product->variants->max('price') }}</p> --}}
+            <p class="text-xl md:text-lg font-semibold  text-gray-800">{{ show_price_range($product->variants) }}</p>
         </div>
         <!-- Thumbnails -->
         <div class="flex space-x-2 my-2">

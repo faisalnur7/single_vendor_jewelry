@@ -70,7 +70,7 @@
                         </tbody>
                     </table>
 
-                    <div class="mt-3">
+                    <div class="mt-3 px-4">
                         {{ $suppliers->links() }}
                     </div>
                 </div>

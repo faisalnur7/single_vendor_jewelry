@@ -30,7 +30,7 @@ class CartController extends Controller
 
         // Guest cart from session
         $guestCart = session()->get('guest_cart', []);
-
+        // Delete guest_cart from session
         if (empty($guestCart)) {
             $cartItems = [];
             return view('frontend.pages.cart', compact('cartItems'));
@@ -49,8 +49,10 @@ class CartController extends Controller
                 'color' => $product->color ?? 'N/A',
                 'image' => $product->image ?? 'N/A',
                 'price' => $item['price'],
+                'price_rmb' => $item['price_rmb'],
                 'quantity' => $item['quantity'],
                 'subtotal' => $item['price'] * $item['quantity'],
+                'subtotal_rmb' => $item['price_rmb'] * $item['quantity'],
             ];
         }
 
@@ -87,6 +89,7 @@ class CartController extends Controller
                         'image' => $product->image,
                         'quantity' => $item['quantity'],
                         'price' => $item['price'],
+                        'price_rmb' => $item['price_rmb'],
                     ]);
                 }
             }
@@ -112,6 +115,7 @@ class CartController extends Controller
                     'image' => $product->image,
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
+                    'price_rmb' => $item['price_rmb'],
                 ];
             }
         }

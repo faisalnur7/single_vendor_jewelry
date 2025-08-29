@@ -170,6 +170,7 @@ Route::get('load_post_offices',[CommonController::class,'load_post_offices'])->n
 
 Route::get('/get-states/{country_id}', [CommonController::class, 'getStates'])->name('getStates');
 Route::get('/get-cities/{state_id}', [CommonController::class, 'getCities'])->name('getCities');
+Route::post('/setCurrency', [CommonController::class, 'setCurrency'])->name('setCurrency');
 
 // Product search
 Route::get('/ajax-search-products', [ProductController::class, 'ajaxSearchProducts'])->name('ajaxSearchProducts');

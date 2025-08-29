@@ -145,6 +145,7 @@ class ProductController extends Controller
                     $vProduct->name = $product->name . '-' . ($key + 1);
                     $vProduct->color = $variant['color'] ?? null;
                     $vProduct->price = $variant['price'] ?? null;
+                    $vProduct->price_rmb = $variant['price_rmb'] ?? null;
                     $vProduct->purchase_price = $variant['purchase_price'] ?? null;
                     $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'] ?? null;
                     $vProduct->description = $variant['description'] ?? null;
@@ -241,9 +242,9 @@ class ProductController extends Controller
                     $vProduct = Product::query()->findOrFail($variant['id']);
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
+                    $vProduct->price_rmb = $variant['price_rmb'];
                     $vProduct->purchase_price = $variant['purchase_price'];
                     $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
-                    // $vProduct->stock = $variant['stock'];
                     $vProduct->description = $variant['description'];
 
                     if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
@@ -263,6 +264,7 @@ class ProductController extends Controller
                     $vProduct->name = $product->name.'-'.($key+1);
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
+                    $vProduct->price_rmb = $variant['price_rmb'];
                     $vProduct->purchase_price = $variant['purchase_price'];
                     $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
                     $vProduct->description = $variant['description'];

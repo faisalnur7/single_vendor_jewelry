@@ -88,8 +88,7 @@
 
 
                     <!-- Price Range -->
-                    <p class="text-xl md:text-2xl font-semibold my-4 text-gray-600">${{ $product->variants->min('price') }} -
-                        ${{ $product->variants->max('price') }}</p>
+                    <p class="text-xl md:text-2xl font-semibold my-4 text-gray-600">{{ show_price_range($product->variants) }}</p>
 
                     <!-- Table -->
                     <div class="overflow-x-auto">
@@ -117,18 +116,20 @@
                                         </div>
 
                                         <!-- Price -->
-                                        <div class="p-2 font-semibold text-center pr-6">${{ $variant->price }}</div>
+                                        <div class="p-2 font-semibold text-center pr-6">{{ show_price($variant) }}</div>
 
                                         <!-- Quantity Controls -->
                                         <div class="p-2 flex justify-center text-center">
                                             <div class="flex items-center justify-center gap-2 pdp_quantity">
                                                 <button class="qty-decrease px-2 py-1 border rounded"
                                                     data-index="{{ $index }}" data-product_id="{{ $variant->id }}"
-                                                    data-price="{{ $variant->price }}">-</button>
+                                                    data-price="{{ $variant->price }}"
+                                                    data-price_rmb="{{ $variant->price_rmb }}">-</button>
                                                 <span id="qty-{{ $index }}">0</span>
                                                 <button class="qty-increase px-2 py-1 border rounded"
                                                     data-index="{{ $index }}" data-product_id="{{ $variant->id }}"
-                                                    data-price="{{ $variant->price }}">+</button>
+                                                    data-price="{{ $variant->price }}"
+                                                    data-price_rmb="{{ $variant->price_rmb }}">+</button>
                                             </div>
                                         </div>
                                     </div>

@@ -30,6 +30,37 @@
 
     {{-- Right Icons --}}
     <div class="flex items-center gap-4 text-sm">
+
+        <!-- Currency Dropdown -->
+        <div class="relative">
+            <div class="relative">
+                <div id="currencyMenu"
+                    class="hidden absolute right-0 mt-2 w-28 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <form action="{{ route('setCurrency') }}" method="POST" id="currencyForm">
+                        @csrf
+                        <button type="submit" name="currency" value="USD"
+                            class="block w-full text-left px-4 py-2 hover:bg-gray-100 {{ session('currency', 'USD') == 'USD' ? 'bg-gray-100 font-semibold' : '' }}">
+                            $ USD
+                        </button>
+                        <button type="submit" name="currency" value="RMB"
+                            class="block w-full text-left px-4 py-2 hover:bg-gray-100 {{ session('currency') == 'RMB' ? 'bg-gray-100 font-semibold' : '' }}">
+                            ¥ RMB
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Toggle button label -->
+                <button id="currencyToggle"
+                    class="flex items-center gap-1 border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">
+                    <span id="currentCurrency">
+                        {{ session('currency', 'USD') === 'USD' ? '$ USD' : '¥ RMB' }}
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+
+            </div>
+
+        </div>
         <!-- Search Overlay -->
         <div class="relative">
             <!-- Search Icon -->
@@ -94,8 +125,7 @@
             class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
         <!-- Close Button -->
-        <button id="searchClose"
-            class="text-gray-900 hover:text-gray-700 text-xl font-bold">
+        <button id="searchClose" class="text-gray-900 hover:text-gray-700 text-xl font-bold">
             &times;
         </button>
     </div>
@@ -179,5 +209,22 @@
     $(document).on('click', '#viewMoreBtn', function() {
         var keyword = $(this).data('keyword');
         window.location.href = "{{ route('searchPage') }}?keyword=" + encodeURIComponent(keyword);
+    });
+    $(document).ready(function() {
+        const $toggleBtn = $('#currencyToggle');
+        const $menu = $('#currencyMenu');
+
+        // Toggle dropdown
+        $toggleBtn.on('click', function(e) {
+            e.stopPropagation();
+            $menu.toggleClass('hidden');
+        });
+
+        // Close menu when clicking outside
+        $(document).on('click', function(e) {
+            if (!$toggleBtn.is(e.target) && !$menu.is(e.target) && $menu.has(e.target).length === 0) {
+                $menu.addClass('hidden');
+            }
+        });
     });
 </script>
