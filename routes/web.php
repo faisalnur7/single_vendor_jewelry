@@ -103,7 +103,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/user_profile_update', [UserController::class, 'user_profile_update'])->name('user_profile_update');
     Route::get('/user_order', [UserController::class, 'user_order'])->name('user_order');
     Route::get('/user_order/show/{id}', [UserController::class, 'user_order_show'])->name('user_order_show');
-    Route::get('/user_wishlist', [UserController::class, 'user_wishlist'])->name('user_wishlist');
+    // Route::get('/user_wishlist', [UserController::class, 'user_wishlist'])->name('user_wishlist');
     Route::get('/user_address', [UserController::class, 'user_address'])->name('user_address');
     Route::get('/user/list', [UserController::class, 'index'])->name('user.list');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
