@@ -380,4 +380,33 @@ class ProductController extends Controller
             ->appends($request->all());
         return view('admin.products.stock', $data);   
     }
+
+    public function ajaxSearchProducts(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $products = Product::where('parent_id','0')
+                    ->where('name', 'LIKE', "%{$keyword}%")
+                    ->orWhere('sku',$keyword)
+                    ->take(5)
+                    ->get(['name','slug','image']);
+
+        return response()->json(['products' => $products]);
+    }
+
+    public function searchPage(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $query = Product::where('parent_id','0')
+                    ->where('name', 'LIKE', "%{$keyword}%")
+                    ->orWhere('sku',$keyword);
+
+        $products = $query->paginate(20);
+
+        $product_count = $query->count();
+
+        return view('frontend.pages.search_results', compact('products', 'keyword','product_count'));
+    }
+
 }

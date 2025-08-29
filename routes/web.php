@@ -19,6 +19,7 @@ use App\Http\Controllers\ReturnPolicyController;
 use App\Http\Controllers\ShippingPolicyController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -169,6 +170,10 @@ Route::get('load_post_offices',[CommonController::class,'load_post_offices'])->n
 
 Route::get('/get-states/{country_id}', [CommonController::class, 'getStates'])->name('getStates');
 Route::get('/get-cities/{state_id}', [CommonController::class, 'getCities'])->name('getCities');
+
+// Product search
+Route::get('/ajax-search-products', [ProductController::class, 'ajaxSearchProducts'])->name('ajaxSearchProducts');
+Route::get('/search', [ProductController::class, 'searchPage'])->name('searchPage');
 
 require __DIR__.'/admin-auth.php';
 require __DIR__.'/admin-routes.php';

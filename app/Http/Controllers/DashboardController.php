@@ -65,6 +65,10 @@ class DashboardController extends Controller
         $data['subcategory'] = $product->subCategory;
         $data['childsubcategory'] = $product->childSubCategory;
         $data['product'] = $product;
+
+        if(empty($product->variants->first()) && !empty($product->parent)){
+            $data['product'] = $product->parent;
+        }
         return view('frontend.pages.pdp', $data);
     }
 }
