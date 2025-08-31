@@ -65,36 +65,45 @@
 
         <!-- Language Dropdown - AJAX Version -->
         <div class="relative">
-            <select id="languageSelect"
-                class="flex items-center gap-1 border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
-                @php $current = session('lang', 'en'); @endphp
-                <option value="en" {{ $current === 'en' ? 'selected' : '' }}>English</option>
-                <option value="pt" {{ $current === 'pt' ? 'selected' : '' }}>Portuguese</option>
-                <option value="ar" {{ $current === 'ar' ? 'selected' : '' }}>Arabic</option>
-                <option value="es" {{ $current === 'es' ? 'selected' : '' }}>Spanish</option>
-                <option value="fr" {{ $current === 'fr' ? 'selected' : '' }}>French</option>
-                <option value="it" {{ $current === 'it' ? 'selected' : '' }}>Italian</option>
-                <option value="de" {{ $current === 'de' ? 'selected' : '' }}>German</option>
-                <option value="sv" {{ $current === 'sv' ? 'selected' : '' }}>Swedish</option>
-                <option value="no" {{ $current === 'no' ? 'selected' : '' }}>Norwegian</option>
-                <option value="tr" {{ $current === 'tr' ? 'selected' : '' }}>Turkish</option>
-                <option value="hi" {{ $current === 'hi' ? 'selected' : '' }}>Hindi</option>
-                <option value="ru" {{ $current === 'ru' ? 'selected' : '' }}>Russian</option>
-                <option value="el" {{ $current === 'el' ? 'selected' : '' }}>Greek</option>
-                <option value="ro" {{ $current === 'ro' ? 'selected' : '' }}>Romanian</option>
-                <option value="cs" {{ $current === 'cs' ? 'selected' : '' }}>Czech</option>
-                <option value="pl" {{ $current === 'pl' ? 'selected' : '' }}>Polish</option>
-            </select>
+            <!-- Toggle button -->
+            @php
+                $languages = [
+                    'en' => ['name' => 'English', 'flag' => '🇬🇧'],
+                    'pt' => ['name' => 'Portuguese', 'flag' => '🇵🇹'],
+                    'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
+                    'es' => ['name' => 'Spanish', 'flag' => '🇪🇸'],
+                    'fr' => ['name' => 'French', 'flag' => '🇫🇷'],
+                    'it' => ['name' => 'Italian', 'flag' => '🇮🇹'],
+                    'de' => ['name' => 'German', 'flag' => '🇩🇪'],
+                    'sv' => ['name' => 'Swedish', 'flag' => '🇸🇪'],
+                    'no' => ['name' => 'Norwegian', 'flag' => '🇳🇴'],
+                    'tr' => ['name' => 'Turkish', 'flag' => '🇹🇷'],
+                    'hi' => ['name' => 'Hindi', 'flag' => '🇮🇳'],
+                    'ru' => ['name' => 'Russian', 'flag' => '🇷🇺'],
+                    'el' => ['name' => 'Greek', 'flag' => '🇬🇷'],
+                    'ro' => ['name' => 'Romanian', 'flag' => '🇷🇴'],
+                    'cs' => ['name' => 'Czech', 'flag' => '🇨🇿'],
+                    'pl' => ['name' => 'Polish', 'flag' => '🇵🇱'],
+                ];
+                $currentLang = session('lang', 'en');
+            @endphp
+            <button id="languageToggle"
+                class="flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">
+                <span class="text-lg">{{ $languages[$currentLang]['flag'] }}</span>
+                <span id="currentLanguage">{{ strtoupper($currentLang) }}</span>
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
 
-            <!-- Loading indicator -->
-            <div id="loadingIndicator" class="hidden absolute right-8 top-1/2 transform -translate-y-1/2">
-                <svg class="animate-spin h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                        stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                    </path>
-                </svg>
+            <!-- Dropdown menu -->
+            <div id="languageMenu"
+                class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                @foreach ($languages as $code => $lang)
+                    <button data-lang="{{ $code }}"
+                        class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 {{ $currentLang === $code ? 'bg-gray-100 font-semibold' : '' }}">
+                        <span class="text-lg">{{ $lang['flag'] }}</span>
+                        <span>{{ $lang['name'] }}</span>
+                    </button>
+                @endforeach
             </div>
         </div>
 

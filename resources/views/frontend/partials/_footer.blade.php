@@ -121,6 +121,25 @@
     $(document).ready(function() {
         let currentLang = "{{ session('lang', 'en') }}";
 
+        const languages = {
+            'en': '🇬🇧',
+            'pt': '🇵🇹',
+            'ar': '🇸🇦',
+            'es': '🇪🇸',
+            'fr': '🇫🇷',
+            'it': '🇮🇹',
+            'de': '🇩🇪',
+            'sv': '🇸🇪',
+            'no': '🇳🇴',
+            'tr': '🇹🇷',
+            'hi': '🇮🇳',
+            'ru': '🇷🇺',
+            'el': '🇬🇷',
+            'ro': '🇷🇴',
+            'cs': '🇨🇿',
+            'pl': '🇵🇱'
+        };
+
         // ✅ Global CSRF
         $.ajaxSetup({
             headers: {
@@ -135,18 +154,14 @@
             }
         });
 
-        // set dropdown to saved language
-        $("#languageSelect").val(currentLang);
+        // show dropdown menu
+        $('#languageToggle').on('click', function() {
+            $('#languageMenu').toggleClass('hidden');
+        });
 
-        // ✅ translate immediately on page load if not English
-        if (currentLang !== "en") {
-            translatePageContent(currentLang);
-            //$("html").attr("dir", currentLang === "ar" ? "rtl" : "ltr");
-        }
-
-        // language switch event
-        $("#languageSelect").on("change", function() {
-            let newLang = $(this).val();
+        // select a language from dropdown
+        $('#languageMenu button').on('click', function() {
+            let newLang = $(this).data('lang');
             if (newLang === currentLang) return;
 
             showLoading(true);
@@ -158,13 +173,21 @@
                     language: newLang
                 },
                 success: function() {
+                    // Update toggle button text and flag
+                    $('#currentLanguage').text(newLang.toUpperCase());
+                    $('#languageToggle span:first').text(languages[newLang]);
+
+                    // Translate page content
                     translatePageContent(newLang);
+
+                    // update currentLang
                     currentLang = newLang;
-                    // $("html").attr("dir", newLang === "ar" ? "rtl" : "ltr");
+
+                    // close dropdown
+                    $('#languageMenu').addClass('hidden');
                 },
                 error: function() {
                     console.error("Translation failed");
-                    $("#languageSelect").val(currentLang);
                 },
                 complete: function() {
                     showLoading(false);
@@ -173,40 +196,6 @@
         });
 
         // translate page content
-        function translatePageContentssss(language) {
-            let elements = $("[data-translate]");
-
-            if (language === "en") {
-                elements.each(function() {
-                    animateTextChange($(this), $(this).data("original"));
-                });
-                return;
-            }
-
-            let textsToTranslate = {};
-            elements.each(function(index) {
-                textsToTranslate[index] = $(this).data("original");
-            });
-
-            $.ajax({
-                url: "{{ route('translateTexts') }}",
-                type: "POST",
-                data: {
-                    texts: textsToTranslate,
-                    language
-                },
-                success: function(data) {
-                    if (data.success) {
-                        elements.each(function(index) {
-                            if (data.translations[index]) {
-                                animateTextChange($(this), data.translations[index]);
-                            }
-                        });
-                    }
-                }
-            });
-        }
-
         function translatePageContent(language) {
             let elements = $("[data-translate]");
 
@@ -222,7 +211,6 @@
                 textsToTranslate.push($(this).data("original"));
             });
 
-            // Split into chunks of 100
             let chunkSize = 50;
             for (let i = 0; i < textsToTranslate.length; i += chunkSize) {
                 let chunk = textsToTranslate.slice(i, i + chunkSize);
@@ -250,8 +238,6 @@
             }
         }
 
-
-
         // animate text change
         function animateTextChange($el, newText) {
             $el.css({
@@ -266,10 +252,10 @@
         // loading indicator
         function showLoading(show) {
             let $indicator = $("#loadingIndicator");
-            let $select = $("#languageSelect");
+            let $toggle = $("#languageToggle");
 
             $indicator.toggleClass("hidden", !show);
-            $select.prop("disabled", show);
+            $toggle.prop("disabled", show);
         }
     });
 </script>
