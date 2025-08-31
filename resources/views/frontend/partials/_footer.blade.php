@@ -117,3 +117,159 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        let currentLang = "{{ session('lang', 'en') }}";
+
+        // ✅ Global CSRF
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+            }
+        });
+
+        // store original texts
+        $("[data-translate]").each(function() {
+            if (!$(this).data("original")) {
+                $(this).data("original", $(this).text().trim());
+            }
+        });
+
+        // set dropdown to saved language
+        $("#languageSelect").val(currentLang);
+
+        // ✅ translate immediately on page load if not English
+        if (currentLang !== "en") {
+            translatePageContent(currentLang);
+            //$("html").attr("dir", currentLang === "ar" ? "rtl" : "ltr");
+        }
+
+        // language switch event
+        $("#languageSelect").on("change", function() {
+            let newLang = $(this).val();
+            if (newLang === currentLang) return;
+
+            showLoading(true);
+
+            $.ajax({
+                url: "{{ route('switchLanguage') }}",
+                type: "POST",
+                data: {
+                    language: newLang
+                },
+                success: function() {
+                    translatePageContent(newLang);
+                    currentLang = newLang;
+                    // $("html").attr("dir", newLang === "ar" ? "rtl" : "ltr");
+                },
+                error: function() {
+                    console.error("Translation failed");
+                    $("#languageSelect").val(currentLang);
+                },
+                complete: function() {
+                    showLoading(false);
+                }
+            });
+        });
+
+        // translate page content
+        function translatePageContentssss(language) {
+            let elements = $("[data-translate]");
+
+            if (language === "en") {
+                elements.each(function() {
+                    animateTextChange($(this), $(this).data("original"));
+                });
+                return;
+            }
+
+            let textsToTranslate = {};
+            elements.each(function(index) {
+                textsToTranslate[index] = $(this).data("original");
+            });
+
+            $.ajax({
+                url: "{{ route('translateTexts') }}",
+                type: "POST",
+                data: {
+                    texts: textsToTranslate,
+                    language
+                },
+                success: function(data) {
+                    if (data.success) {
+                        elements.each(function(index) {
+                            if (data.translations[index]) {
+                                animateTextChange($(this), data.translations[index]);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        function translatePageContent(language) {
+            let elements = $("[data-translate]");
+
+            if (language === "en") {
+                elements.each(function() {
+                    animateTextChange($(this), $(this).data("original"));
+                });
+                return;
+            }
+
+            let textsToTranslate = [];
+            elements.each(function() {
+                textsToTranslate.push($(this).data("original"));
+            });
+
+            // Split into chunks of 100
+            let chunkSize = 50;
+            for (let i = 0; i < textsToTranslate.length; i += chunkSize) {
+                let chunk = textsToTranslate.slice(i, i + chunkSize);
+                let chunkIndex = i / chunkSize;
+
+                $.ajax({
+                    url: "{{ route('translateTexts') }}",
+                    type: "POST",
+                    data: {
+                        texts: chunk,
+                        language: language
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            Object.keys(data.translations).forEach((j) => {
+                                let globalIndex = chunkIndex * chunkSize + parseInt(j);
+                                if (data.translations[j]) {
+                                    animateTextChange($(elements[globalIndex]), data
+                                        .translations[j]);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+
+
+
+        // animate text change
+        function animateTextChange($el, newText) {
+            $el.css({
+                transition: "opacity 0.15s",
+                opacity: "0.3"
+            });
+            setTimeout(function() {
+                $el.text(newText).css("opacity", "1");
+            }, 150);
+        }
+
+        // loading indicator
+        function showLoading(show) {
+            let $indicator = $("#loadingIndicator");
+            let $select = $("#languageSelect");
+
+            $indicator.toggleClass("hidden", !show);
+            $select.prop("disabled", show);
+        }
+    });
+</script>

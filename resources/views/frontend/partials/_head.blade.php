@@ -21,6 +21,7 @@
 <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
 <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
     body {
         /*font-family: "Playfair Display", serif; */

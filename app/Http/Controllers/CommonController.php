@@ -12,6 +12,9 @@ use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cache;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class CommonController extends Controller
 {
@@ -58,6 +61,83 @@ class CommonController extends Controller
         $currency = $request->currency ?? 'USD';
         session(['currency' => $currency]);
         return back();
+    }
+
+    protected $supportedLanguages = [
+        'en', 'pt', 'ar', 'es', 'fr', 'it', 'de', 'sv', 'no', 'tr', 'hi', 'ru', 'el', 'ro', 'cs', 'pl'
+    ];
+
+    public function switchLanguage(Request $request)
+    {
+        $request->validate([
+            'language' => 'required|string|in:en,pt,ar,es,fr,it,de,sv,no,tr,hi,ru,el,ro,cs,pl'
+        ]);
+
+        Session::put('lang', $request->language);
+        
+        return response()->json([
+            'success' => true,
+            'language' => $request->language,
+            'message' => 'Language switched successfully'
+        ]);
+    }
+
+    public function translateTexts(Request $request)
+    {
+        $request->validate([
+            'texts' => 'required|array|max:100',
+            'texts.*' => 'string|max:2000',
+            'language' => 'required|string|in:en,pt,ar,es,fr,it,de,sv,no,tr,hi,ru,el,ro,cs,pl'
+        ]);
+
+        $texts = $request->texts;
+        $language = $request->language;
+        
+        if ($language === 'en') {
+            return response()->json([
+                'success' => true,
+                'translations' => $texts
+            ]);
+        }
+
+        $translations = [];
+        
+        try {
+            $tr = new GoogleTranslate($language);
+            $tr->setSource('en');
+            
+            foreach ($texts as $key => $text) {
+                if (empty(trim($text))) {
+                    $translations[$key] = $text;
+                    continue;
+                }
+                
+                $cacheKey = 'trans_' . md5($text . '_' . $language);
+                
+                $translated = Cache::remember($cacheKey, 86400, function () use ($tr, $text) {
+                    return $tr->translate($text);
+                });
+                
+                $translations[$key] = $translated;
+            }
+            
+            return response()->json([
+                'success' => true,
+                'translations' => $translations
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Translation failed', [
+                'language' => $language,
+                'error' => $e->getMessage()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Translation service temporarily unavailable',
+                'translations' => $texts // Return original texts as fallback
+            ]);
+        }
     }
 
 }

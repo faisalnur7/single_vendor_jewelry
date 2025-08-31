@@ -34,6 +34,9 @@ Route::get('/reboot', function () {
     Artisan::call('view:cache');
     return 'rebooted & caches cleared!';
 });
+
+// sail artisan cache:clear && sail artisan route:clear && sail artisan config:clear &&  sail artisan view:clear && sail artisan clear-compiled && sail artisan config:cache && sail artisan route:cache && sail artisan view:cache
+
 Route::get('/', [DashboardController::class, 'index'])->name('homepage');
 Route::get('/collections', [DashboardController::class, 'product_list_page'])->name('collections');
 Route::get('/best_sellers', [DashboardController::class, 'best_sellers'])->name('best_sellers');
@@ -175,6 +178,17 @@ Route::post('/setCurrency', [CommonController::class, 'setCurrency'])->name('set
 // Product search
 Route::get('/ajax-search-products', [ProductController::class, 'ajaxSearchProducts'])->name('ajaxSearchProducts');
 Route::get('/search', [ProductController::class, 'searchPage'])->name('searchPage');
+Route::get('/lang/{locale}', function ($locale) {
+    $allowed = ['en','pt','ar','es','fr','it','de','sv','no','tr','hi','ru','el','ro','cs','pl'];
+    if (in_array($locale, $allowed)) {
+        session(['lang' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
+
+Route::post('switch-language', [CommonController::class, 'switchLanguage'])->name('switchLanguage');
+Route::post('translate-texts', [CommonController::class, 'translateTexts'])->name('translateTexts');
 
 require __DIR__.'/admin-auth.php';
 require __DIR__.'/admin-routes.php';

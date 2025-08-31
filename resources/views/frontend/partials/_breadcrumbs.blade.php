@@ -1,13 +1,13 @@
 <nav class="text-sm md:text-md text-gray-600 mt-6 ml-6" aria-label="Breadcrumb">
     <ol class="list-reset flex flex-wrap space-x-2">
         <li>
-            <a href="{{ url('/') }}" class="hover:underline">Home</a>
+            <a href="{{ url('/') }}" class="hover:underline" data-translate>Home</a>
         </li>
         @isset($category)
             <li>/</li>
             <li>
                 <a href="{{ route('category.show', $category->slug) }}"
-                    class="hover:underline @if (isset($category_bold)) text-gray-800 font-bold @endif">
+                    class="hover:underline @if (isset($category_bold)) text-gray-800 font-bold @endif"  data-translate>
                     {{ $category->name }}
                 </a>
             </li>
@@ -17,7 +17,7 @@
             <li>/</li>
             <li>
                 <a href="{{ route('subcategory.show', [$category->slug, $subcategory->slug]) }}"
-                    class="hover:underline @if (isset($subcategory_bold)) text-gray-800 font-bold @endif">
+                    class="hover:underline @if (isset($subcategory_bold)) text-gray-800 font-bold @endif"  data-translate>
                     {{ $subcategory->name }}
                 </a>
             </li>
@@ -27,7 +27,7 @@
             <li>/</li>
             <li>
                 <a href="{{ route('childsubcategory.show', [$category->slug, $subcategory->slug, $childsubcategory->slug]) }}"
-                    class="hover:underline @if (isset($childsubcategory_bold)) text-gray-800 font-bold @endif">
+                    class="hover:underline @if (isset($childsubcategory_bold)) text-gray-800 font-bold @endif"  data-translate>
                     {{ $childsubcategory->name }}
                 </a>
             </li>
@@ -35,7 +35,7 @@
 
         @isset($product)
             <li>/</li>
-            <li class="text-gray-800 font-bold">
+            <li class="text-gray-800 font-bold" data-translate>
                 {{ $product->name }}
             </li>
         @endisset

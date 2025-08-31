@@ -4,7 +4,7 @@
 <nav class="hidden md:flex gap-6 items-center text-lg font-bold">
     <div class="relative group w-full">
         <a href="#"
-            class="hover:text-orange-500 flex items-center gap-1 px-4 py-2 whitespace-nowrap text-xl">Categories <i
+            class="hover:text-orange-500 flex items-center gap-1 px-4 py-2 whitespace-nowrap text-xl"><span data-translate>Categories</span> <i
                 class="fa-solid fa-angle-down"></i></a>
 
         <!-- Dropdown -->
@@ -18,7 +18,7 @@
                             <li class="p-0 min-w-[230px] left_panel" data-id="{{ $category->id }}">
                                 <div class="flex justify-between items-center text-gray-600 hover:text-black py-2 pr-3">
                                     <a href="{{ route('category.show', $category->slug) }}"
-                                        class="font-normal text-lg">{{ $category->name }}</a>
+                                        class="font-normal text-lg" data-translate>{{ $category->name }}</a>
                                     <svg class="w-4 h-4 text-gray-400 hover:text-black" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -49,7 +49,7 @@
                                                     <img src="{{ asset($child->image) }}"
                                                         class="rounded-full w-28 scale-90 hover:scale-110 transition-all object-fill" />
                                                     <span
-                                                        class="font-normal whitespace-normal">{{ $child->name }}</span>
+                                                        class="font-normal whitespace-normal"  >{{ $child->name }}</span>
                                                 </a>
                                             </li>
                                         @endforeach
@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <a href="{{route('best_sellers')}}" class="hover:text-orange-500  whitespace-nowrap">Best Sellers</a>
+    <a href="{{route('best_sellers')}}" class="hover:text-orange-500  whitespace-nowrap" data-translate>Best Sellers</a>
 </nav>
 
 <!-- Mobile Navbar -->
@@ -82,12 +82,12 @@
             </button>
 
             <!-- Menu items -->
-            <h3 class="font-bold text-xl mb-4">Categories</h3>
+            <h3 class="font-bold text-xl mb-4" >Categories</h3>
             <ul>
                 @foreach ($categories as $category)
                     <li class="mb-3">
                         <a href="{{ route('category.show', $category->slug) }}" 
-                           class="block text-lg hover:text-orange-500">
+                           class="block text-lg hover:text-orange-500" >
                            {{ $category->name }}
                         </a>
 
@@ -96,7 +96,7 @@
                                 @foreach ($category->subcategories as $subcategory)
                                     <li>
                                         <a href="{{ route('subcategory.show', [$category->slug, $subcategory->slug]) }}" 
-                                           class="text-gray-600 hover:text-orange-500">
+                                           class="text-gray-600 hover:text-orange-500" >
                                            {{ $subcategory->name }}
                                         </a>
                                     </li>

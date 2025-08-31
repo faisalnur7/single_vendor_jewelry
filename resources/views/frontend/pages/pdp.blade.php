@@ -73,7 +73,7 @@
                 <!-- Product Details (dummy content) -->
                 <div id="productDetailsSection"
                     class="w-full bg-white p-0 md:p-6 pt-0 rounded shadow-none relative transition-all duration-300">
-                    <h2 class="text-sm md:text-xl font-semibold">{{ $product->name }}</h2>
+                    <h2 class="text-sm md:text-xl font-semibold" data-translate>{{ $product->name }}</h2>
                     {{-- <p class="mt-2 text-sm text-gray-600">From collection <span class="bg-black text-white px-2 py-1 rounded">Liora</span></p> --}}
 
                     <!-- Tags -->
@@ -112,7 +112,7 @@
                                         <div class="p-2 flex items-center gap-2">
                                             <img src="{{ asset($variant->image) }}"
                                                 class="w-12 h-12 object-cover rounded" />
-                                            <span class="whitespace-normal break-words">{{ $variant->color }}</span>
+                                            <span class="whitespace-normal break-words" data-translate>{{ $variant->color }}</span>
                                         </div>
 
                                         <!-- Price -->
@@ -177,14 +177,14 @@
 
                     <div class="mt-6">
                         <h3 class="text-lg font-semibold">Product Description</h3>
-                        <p class="text-sm text-gray-600 mt-2">
+                        <p class="text-sm text-gray-600 mt-2" data-translate>
                             {{ $product->description }}
                         </p>
                     </div>
 
                     <div class="mt-6">
                         <h3 class="text-lg font-semibold">Product Details</h3>
-                        <ul class="list-disc list-inside text-sm text-gray-600 mt-2 product_details">
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-2 product_details" data-translate>
                             {!! $product->variants->first()->description !!}
                         </ul>
                     </div>
