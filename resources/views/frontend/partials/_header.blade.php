@@ -10,11 +10,11 @@
 
     {{-- Logo --}}
 
-    <div class="flex justify-between items-center p-4 bg-white md:hidden">
-        <button id="mobileMenuBtn" class="relative flex flex-col justify-between w-7 h-6 group">
-            <span class="block h-1 bg-gray-800 rounded w-7"></span>
-            <span class="block h-1 bg-gray-800 rounded w-5 mr-2"></span>
-            <span class="block h-1 bg-gray-800 rounded w-6 mr-1"></span>
+    <div class="flex justify-between items-center p-4 pl-0 bg-white xl:hidden">
+        <button id="mobileMenuBtn" class="relative flex flex-col justify-between w-6 h-5 group">
+            <span class="block h-[2px] bg-gray-800 rounded w-6"></span>
+            <span class="block h-[2px] bg-gray-800 rounded w-5 mr-2"></span>
+            <span class="block h-[2px] bg-gray-800 rounded w-6 mr-1"></span>
         </button>
     </div>
 
@@ -29,7 +29,7 @@
     @include('frontend.partials._nav_bar')
 
     {{-- Right Icons --}}
-    <div class="flex items-center gap-4 text-sm">
+    <div class="flex items-center gap-2 pl-8 lg:pl-0 lg:gap-4 text-sm">
 
         <!-- Currency Dropdown -->
         <div class="relative">
@@ -51,12 +51,16 @@
 
                 <!-- Toggle button label -->
                 <button id="currencyToggle"
-                    class="flex items-center gap-1 border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">
-                    <span id="currentCurrency"
+                    class="flex items-center gap-1 border-none md:border border-gray-300 rounded-lg px-1 md:px-3 py-1 hover:bg-gray-100">
+                    <span id="currentCurrency" class="flex"
                         data-currentCurrency="{{ session('currency', 'USD') === 'USD' ? 'USD' : 'RMB' }}">
-                        {{ session('currency', 'USD') === 'USD' ? '$ USD' : '¥ RMB' }}
+                        @if (session('currency', 'USD') === 'USD')
+                            <span>$</span>&nbsp;<span class="hidden md:block">USD</span>
+                        @else
+                            <span>¥</span>&nbsp;<span class="hidden md:block">RMB</span>
+                        @endif
                     </span>
-                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                    <i class="fa-solid fa-chevron-down text-xs hidden md:block"></i>
                 </button>
 
             </div>
@@ -88,10 +92,10 @@
                 $currentLang = session('lang', 'en');
             @endphp
             <button id="languageToggle"
-                class="flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">
+                class="flex items-center gap-2 border-none md:border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">
                 <span class="text-lg">{{ $languages[$currentLang]['flag'] }}</span>
-                <span id="currentLanguage">{{ strtoupper($currentLang) }}</span>
-                <i class="fa-solid fa-chevron-down text-xs"></i>
+                <span id="currentLanguage" class="hidden md:block">{{ strtoupper($currentLang) }}</span>
+                <i class="fa-solid fa-chevron-down text-xs hidden md:block"></i>
             </button>
 
             <!-- Dropdown menu -->

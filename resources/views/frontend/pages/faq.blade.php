@@ -5,7 +5,7 @@
 @php
     $contactInformation  = App\Models\ContactSetting::first();
 @endphp
-<section class="mt-24 pt-0 pb-12 px-6">
+<section class="mt-6 md:mt-24 pt-0 pb-12 px-6">
     <div class="mx-auto max-w-6xl">
         <h2 class="text-2xl text-center font-semibold mb-6">FAQ</h2>
 

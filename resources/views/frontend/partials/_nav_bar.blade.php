@@ -1,12 +1,12 @@
 @php
     $categories = \App\Models\Category::with('subcategories.childsubcategories')->where('show_on_main_menu','1')->get();
 @endphp
-<nav class="hidden md:flex gap-6 items-center text-lg font-bold">
+<nav class="hidden xl:flex gap-3 xl:gap-6 items-center text-sm xl:text-lg font-bold">
     @foreach ($categories as $category)
         <div class="relative group">
             <!-- Top-level category link -->
             <a href="{{ route('category.show', $category->slug) }}"
-               class="hover:text-orange-500 flex items-center gap-1 px-0 py-3 whitespace-nowrap text-md font-bold">
+               class="hover:text-orange-500 flex items-center gap-0 md:gap-1 px-0 py-3 whitespace-nowrap text-md font-bold">
                 <span data-translate>{{ $category->name }}</span>
                 @if($category->subcategories->count() > 0)
                     <i class="fa-solid fa-angle-down"></i>
@@ -34,7 +34,7 @@
 
 
 <!-- Mobile Navbar -->
-<div class="md:hidden">
+<div class="xl:hidden">
     <!-- Slide Menu -->
     <div id="mobileMenu" 
          class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300">
@@ -75,53 +75,53 @@
             </ul>
 
             <hr class="my-4">
-
-            <a href="{{ route('best_sellers') }}" 
-               class="block text-lg hover:text-orange-500">
-               Best Sellers
-            </a>
         </div>
     </div>
 </div>
 
-
 <script>
-    $(function() {
-        const $rightContents = $('.right-content');
-
+$(document).ready(function() {
+    // ===== Desktop: hover dropdowns (optional if extra right-content exists) =====
+    const $rightContents = $('.right-content');
+    if ($rightContents.length) {
         $('.left_panel').on('mouseover', function() {
             const id = $(this).data('id');
             $rightContents.addClass('hidden');
             $rightContents.filter(`[data-id="${id}"]`).removeClass('hidden');
         });
 
-        // Trigger the first category on load
+        // Trigger the first category on page load
         $('.left_panel').first().trigger('mouseover');
-    });
-</script>
+    }
 
-<!-- Script -->
-<script>
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const menuOverlay = document.getElementById('menuOverlay');
+    // ===== Mobile Menu Toggle =====
+    const $mobileMenuBtn = $('#mobileMenuBtn');
+    const $mobileMenu = $('#mobileMenu');
+    const $closeMenuBtn = $('#closeMenuBtn');
+    const $menuOverlay = $('#menuOverlay');
 
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.remove('-translate-x-full');
-        mobileMenu.classList.add('translate-x-0');
-        menuOverlay.classList.remove('hidden');
-    });
+    function openMobileMenu() {
+        $mobileMenu.removeClass('-translate-x-full').addClass('translate-x-0');
+        $menuOverlay.removeClass('hidden');
+    }
 
-    closeMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.remove('translate-x-0');
-        mobileMenu.classList.add('-translate-x-full');
-        menuOverlay.classList.add('hidden');
-    });
+    function closeMobileMenu() {
+        $mobileMenu.addClass('-translate-x-full').removeClass('translate-x-0');
+        $menuOverlay.addClass('hidden');
+    }
 
-    menuOverlay.addEventListener('click', () => {
-        mobileMenu.classList.remove('translate-x-0');
-        mobileMenu.classList.add('-translate-x-full');
-        menuOverlay.classList.add('hidden');
+    $mobileMenuBtn.on('click', openMobileMenu);
+    $closeMenuBtn.on('click', closeMobileMenu);
+    $menuOverlay.on('click', closeMobileMenu);
+
+    // ===== Optional: mobile submenu toggle =====
+    // If you want categories in mobile to expand/collapse subcategories
+    $('#mobileMenu ul li > a').on('click', function(e) {
+        const $subMenu = $(this).siblings('ul');
+        if ($subMenu.length) {
+            e.preventDefault(); // prevent default link
+            $subMenu.slideToggle(200); // smooth slide animation
+        }
     });
+});
 </script>

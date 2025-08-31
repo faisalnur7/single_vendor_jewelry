@@ -2,7 +2,7 @@
 @section('title', 'Stainless Steel Jewelry')
 @section('contents')
 
-    <section class="mt-24 pt-0 pb-12 px-6">
+    <section class="mt-6 md:mt-24 pt-0 pb-12 px-6">
         <div class="mx-auto max-w-6xl">
             <h2 class="text-2xl font-semibold mb-6">Cart</h2>
 
@@ -11,12 +11,17 @@
                     @php $total = 0; @endphp
 
                     <div class="px-4 py-3 border-b font-medium text-lg">
-                        <div class="flex flex-wrap items-center text-gray-900">
+                        <div class="hidden md:flex flex-wrap items-center text-gray-900">
                             <div class="w-full sm:w-5/12">PRODUCT</div>
                             <div class="w-1/3 sm:w-3/12 text-center">PRICE</div>
                             <div class="w-1/3 sm:w-2/12 text-center">QUANTITY</div>
                             <div class="w-1/3 sm:w-2/12 text-right sm:text-end">TOTAL</div>
                         </div>
+
+                        <div class="flex md:hidden flex-wrap items-center text-gray-900">
+                            <div class="w-full">PRODUCT DETAILS</div>
+                        </div>
+
                     </div>
 
                     @php

@@ -34,7 +34,7 @@
     @include('frontend.partials._breadcrumbs')
     <section class="pt-0 pb-12 px-6">
         <div class="mx-auto p-0">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- Image Viewer -->
                 <div>
                     <div class="relative flex gap-4">

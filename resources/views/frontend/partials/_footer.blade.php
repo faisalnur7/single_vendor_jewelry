@@ -14,23 +14,31 @@
 
 @endphp
 
-<footer class="bg-white text-black px-6 md:px-20 py-10">
-    <div class="grid md:grid-cols-4 gap-8 border-t pt-12">
+<footer class="bg-white text-black px-6 md:px-12 xl:px-20 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-t pt-12">
         <!-- Get In Touch -->
         <div>
             <h2 class="text-lg font-semibold mb-4">Get In Touch</h2>
             <ul class="space-y-2 text-sm">
-                <li class="flex items-start"><span class="mr-2">📧</span> General Info: <a
-                        href="mailto:{{ $companyEmail }}" class="ml-1 hover:underline">{{ $companyEmail }}</a></li>
-                <li class="flex items-center"><span class="mr-2">📞</span> {{ $companyPhone }}</li>
-                <li>{{ $address }}</li>
+                <li class="flex items-start gap-2">
+                    <i class="fa fa-globe mt-1"></i> 
+                    <span>{{ $address }}</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa fa-envelope"></i>
+                    <a href="mailto:{{ $companyEmail }}" class="hover:underline break-words">{{ $companyEmail }}</a>
+                </li>
+                <li class="flex items-center gap-2">
+                    <i class="fa fa-phone"></i> 
+                    <span>{{ $companyPhone }}</span>
+                </li>
             </ul>
             <div class="flex space-x-4 mt-4 text-xl">
-                <a target="_blank" href="{{ $facebook }}"><i class="fab fa-facebook"></i></a>
-                <a target="_blank" href="{{ $twitter }}"><i class="fab fa-twitter"></i></a>
-                <a target="_blank" href="{{ $instagram }}"><i class="fab fa-instagram"></i></a>
-                <a target="_blank" href="{{ $linkedin }}"><i class="fab fa-linkedin"></i></a>
-                <a target="_blank" href="{{ $youtube }}"><i class="fab fa-youtube"></i></a>
+                <a target="_blank" href="{{ $facebook }}" class="hover:text-orange-500"><i class="fab fa-facebook"></i></a>
+                <a target="_blank" href="{{ $twitter }}" class="hover:text-orange-500"><i class="fab fa-twitter"></i></a>
+                <a target="_blank" href="{{ $instagram }}" class="hover:text-orange-500"><i class="fab fa-instagram"></i></a>
+                <a target="_blank" href="{{ $linkedin }}" class="hover:text-orange-500"><i class="fab fa-linkedin"></i></a>
+                <a target="_blank" href="{{ $youtube }}" class="hover:text-orange-500"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
 
@@ -53,29 +61,29 @@
                 <li><a href="{{ route('shipping_policy') }}" class="hover:underline">Shipping Policy</a></li>
                 <li><a href="{{ route('privacy_policy') }}" class="hover:underline">Privacy Policy</a></li>
                 <li><a href="#" class="hover:underline">Cookie Policy</a></li>
-                <li><a href="#" class="hover:underline">Terms and Conditions</a></li>
+                <li><a href="#" class="hover:underline">Terms & Conditions</a></li>
             </ul>
         </div>
 
         <!-- Newsletter -->
         <div>
             <h2 class="text-lg font-semibold mb-4">Subscribe to our newsletter</h2>
-            <div class="flex flex-col space-y-2">
-                <form class="flex flex-col space-y-2" action="{{ route('subscribers.store') }}" method="POST"
-                    id="subscriberForm">
-                    @csrf
-                    <input type="email" name="email" id="subscriber_email" placeholder="Your email address"
-                        class="border border-gray-300 px-4 py-2 rounded outline-none" />
-                    <button type="submit"
-                        class="bg-black text-white py-2 rounded hover:bg-gray-800 subscriber_form_submit">Subscribe</button>
-                </form>
-            </div>
+            <form class="flex flex-col sm:flex-row sm:items-center gap-3" 
+                  action="{{ route('subscribers.store') }}" method="POST" id="subscriberForm">
+                @csrf
+                <input type="email" name="email" id="subscriber_email" placeholder="Your email address"
+                    class="flex-1 border border-gray-300 px-4 py-2 rounded outline-none w-full sm:w-auto" />
+                <button type="submit"
+                    class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 w-full sm:w-auto">
+                    Subscribe
+                </button>
+            </form>
         </div>
     </div>
 
     <!-- Bottom Bar -->
     <div class="mt-10 border-t pt-6 text-center text-sm">
-        <p>Copyright © 2025 all rights reserved.</p>
+        <p>Copyright © 2025 All rights reserved.</p>
     </div>
 </footer>
 
