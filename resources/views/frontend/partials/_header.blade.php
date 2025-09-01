@@ -10,7 +10,7 @@
 
     {{-- Logo --}}
 
-    <div class="flex justify-between items-center p-4 pl-0 bg-white xl:hidden">
+    <div class="flex justify-between items-center p-4 pl-0 bg-white lg:hidden">
         <button id="mobileMenuBtn" class="relative flex flex-col justify-between w-6 h-5 group">
             <span class="block h-[2px] bg-gray-800 rounded w-6"></span>
             <span class="block h-[2px] bg-gray-800 rounded w-5 mr-2"></span>

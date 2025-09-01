@@ -1,7 +1,7 @@
 @php
     $categories = \App\Models\Category::with('subcategories.childsubcategories')->where('show_on_main_menu','1')->get();
 @endphp
-<nav class="hidden xl:flex gap-3 xl:gap-6 items-center text-sm xl:text-lg font-bold">
+<nav class="hidden lg:flex gap-3 lg:gap-6 items-center text-sm lg:text-lg font-bold">
     @foreach ($categories as $category)
         <div class="relative group">
             <!-- Top-level category link -->
@@ -34,7 +34,7 @@
 
 
 <!-- Mobile Navbar -->
-<div class="xl:hidden">
+<div class="lg:hidden">
     <!-- Slide Menu -->
     <div id="mobileMenu" 
          class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300">
