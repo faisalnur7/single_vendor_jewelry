@@ -124,9 +124,37 @@ class ProductController extends Controller
 
             // Create Product
             $product = Product::create($data);
-            $categoryFirstLetter = strtoupper(Str::substr($product->category->name, 0, 1));
+            // Get 1-letter category initial
+            $categoryInitial = '';
+            if ($product->category) {
+                $categoryInitial = strtoupper(Str::substr($product->category->name, 0, 1));
+            }
 
-            $product->sku = $categoryFirstLetter 
+            // Get up to 2-letter subcategory initials (skip single-character words like &)
+            $subCategoryInitials = '';
+            if ($product->subCategory) {
+                $words = explode(' ', $product->subCategory->name);
+
+                // Filter out single-character words (like &, -, @, etc.)
+                $filteredWords = array_filter($words, function ($word) {
+                    return strlen($word) > 1;
+                });
+
+                $filteredWords = array_values($filteredWords); // reindex
+
+                if (count($filteredWords) > 1) {
+                    // Take first letter of first 2 valid words
+                    $subCategoryInitials = strtoupper(
+                        Str::substr($filteredWords[0], 0, 1) . Str::substr($filteredWords[1], 0, 1)
+                    );
+                } elseif (count($filteredWords) === 1) {
+                    // Single valid word → take first 2 letters
+                    $subCategoryInitials = strtoupper(Str::substr($filteredWords[0], 0, 2));
+                }
+            }
+
+            $product->sku = $categoryInitial
+                . $subCategoryInitials
                 . $product->category_id 
                 . ($product->sub_category_id ?? '0')
                 . ($product->child_sub_category_id ?? '0')
@@ -208,22 +236,58 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-    
+
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'slug' => 'nullable|unique:products,slug,' . $product->id,
-            // 'sku' => 'required|unique:products,sku,' . $product->id,
-            //'price' => 'required|numeric',
             'image' => 'nullable|image',
         ]);
 
         $data = $request->all();
-    
-        $data['slug'] = $request->slug ?: Str::slug($request->name) . '-' . uniqid();
-        $data['sku'] = $product->sku;
 
-        // Replace Cover Image
+        // Slug generation
+        $data['slug'] = $request->slug ?: Str::slug($request->name) . '-' . uniqid();
+
+        // ✅ Regenerate SKU if category/subcategory changed
+        if ($request->category_id != $product->category_id || $request->sub_category_id != $product->sub_category_id) {
+            $category = Category::find($request->category_id);
+            $subCategory = SubCategory::find($request->sub_category_id);
+
+            // Category → 1 letter
+            $categoryInitial = $category ? strtoupper(Str::substr($category->name, 0, 1)) : '';
+
+            // Subcategory → max 2 letters, skip & and symbols
+            $subCategoryInitials = '';
+            if ($subCategory) {
+                $words = explode(' ', $subCategory->name);
+
+                // filter out single-char words like "&"
+                $filteredWords = array_filter($words, fn($w) => strlen($w) > 1);
+                $filteredWords = array_values($filteredWords);
+
+                if (count($filteredWords) > 1) {
+                    $subCategoryInitials = strtoupper(
+                        Str::substr($filteredWords[0], 0, 1) .
+                        Str::substr($filteredWords[1], 0, 1)
+                    );
+                } elseif (count($filteredWords) === 1) {
+                    $subCategoryInitials = strtoupper(Str::substr($filteredWords[0], 0, 2));
+                }
+            }
+
+            $data['sku'] = $categoryInitial
+                . $subCategoryInitials
+                . $request->category_id
+                . ($request->sub_category_id ?? '0')
+                . ($request->child_sub_category_id ?? '0')
+                . $product->id;
+        } else {
+            // keep old SKU if category/subcategory not changed
+            $data['sku'] = $product->sku;
+        }
+
+        // ✅ Replace Cover Image
         if ($request->hasFile('image')) {
             if ($product->image && file_exists(public_path($product->image))) {
                 unlink(public_path($product->image));
@@ -232,14 +296,15 @@ class ProductController extends Controller
             $request->file('image')->move(public_path('uploads/products'), $filename);
             $data['image'] = 'uploads/products/' . $filename;
         }
-        // Update Product
+
+        // ✅ Update Product
         $product->update($data);
 
-        if($request->has_variants){
+        // ✅ Variant handling (unchanged except SKU assignment fix)
+        if ($request->has_variants) {
             foreach ($request->variants as $key => $variant) {
-
-                if(!empty($variant['id'])){
-                    $vProduct = Product::query()->findOrFail($variant['id']);
+                if (!empty($variant['id'])) {
+                    $vProduct = Product::findOrFail($variant['id']);
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
                     $vProduct->price_rmb = $variant['price_rmb'];
@@ -254,14 +319,12 @@ class ProductController extends Controller
                     }
 
                     $vProduct->save();
-                }else{
-
+                } else {
                     $data['slug'] = $product->slug . '-' . ($key + 1);
                     $data['sku'] = $product->sku . '.' . ($key + 1);
-                    // dd($data, $key, $variant);
 
                     $vProduct = Product::create($data);
-                    $vProduct->name = $product->name.'-'.($key+1);
+                    $vProduct->name = $product->name . '-' . ($key + 1);
                     $vProduct->color = $variant['color'];
                     $vProduct->price = $variant['price'];
                     $vProduct->price_rmb = $variant['price_rmb'];
@@ -280,15 +343,12 @@ class ProductController extends Controller
 
                     $vProduct->save();
                 }
-
-                
             }
-
         }
-        
-    
+
         return redirect()->route('product.list')->with('success', 'Product updated successfully.');
     }
+
     
 
     public function destroy($id)
