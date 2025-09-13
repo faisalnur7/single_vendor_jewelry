@@ -1,45 +1,45 @@
 <nav class="text-sm md:text-md text-gray-600 m-0" aria-label="Breadcrumb">
-    <ol class="list-reset flex flex-wrap space-x-2">
-        <li>
+    <div class="list-reset flex flex-wrap space-x-2">
+        <span>
             <a href="{{ url('/') }}" class="hover:underline" data-translate>Home</a>
-        </li>
+        </span>
         @isset($category)
-            <li>/</li>
-            <li>
+            <span>/</span>
+            <span>
                 <a href="{{ route('category.show', $category->slug) }}"
                     class="hover:underline @if (isset($category_bold)) text-gray-800 font-bold @endif"  data-translate>
                     {{ $category->name }}
                 </a>
-            </li>
+            </span>
         @endisset
 
         @isset($subcategory)
-            <li>/</li>
-            <li>
+            <span>/</span>
+            <span>
                 <a href="{{ route('subcategory.show', [$category->slug, $subcategory->slug]) }}"
                     class="hover:underline @if (isset($subcategory_bold)) text-gray-800 font-bold @endif"  data-translate>
                     {{ $subcategory->name }}
                 </a>
-            </li>
+            </span>
         @endisset
 
         @isset($childsubcategory)
-            <li>/</li>
-            <li>
+            <span>/</span>
+            <span>
                 <a href="{{ route('childsubcategory.show', [$category->slug, $subcategory->slug, $childsubcategory->slug]) }}"
                     class="hover:underline @if (isset($childsubcategory_bold)) text-gray-800 font-bold @endif"  data-translate>
                     {{ $childsubcategory->name }}
                 </a>
-            </li>
+            </span>
         @endisset
 
         @isset($product)
-            <li>/</li>
-            <li class="text-gray-800 font-bold" data-translate>
+            <span>/</span>
+            <span class="text-gray-800" data-translate>
                 {{ $product->name }}
-            </li>
+            </span>
         @endisset
-    </ol>
+    </div>
     @isset($page_title)
         <h2 class="mt-6 text-3xl font-bold">{{ $page_title }}</h2>
     @endisset
