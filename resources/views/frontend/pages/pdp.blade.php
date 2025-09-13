@@ -1,5 +1,5 @@
 @extends('frontend.layouts.main')
-@section('title','Stainless Steel Jewelry')
+@section('title', 'Stainless Steel Jewelry')
 @section('styles')
     <style>
         .zoom-container {
@@ -28,67 +28,104 @@
             pointer-events: none;
             user-select: none;
         }
+
+        #mainImage {
+            cursor: zoom-in;
+            transform-origin: center center;
+            /* Will update with mouse move */
+        }
+
+        .thumbnailSwiper {
+            height: 400px;
+            /* adjust as needed */
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .swiper-button-next {
+            top: auto;
+            bottom: 0;
+        }
+
+        .swiper-button-prev {
+            top: 0;
+        }
+
+        .thumbnailSwiper .swiper-slide {
+            aspect-ratio: 1 / 1;
+            /* makes each slide a square */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumbnailSwiper .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* crop/cover inside the square */
+            border-radius: 6px;
+            /* optional rounded edges */
+        }
     </style>
 @endsection
 @section('contents')
-    @include('frontend.partials._breadcrumbs')
-    <section class="pt-0 pb-12 px-6">
+    <section class="pt-6 pb-12 px-6">
         <div class="mx-auto p-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- Image Viewer -->
-                <div>
-                    <div class="relative flex gap-4">
-                        <!-- Main Image Full Width, Natural Height -->
-                        <div class="relative  rounded overflow-hidden w-full">
+                <div class="flex flex-row-reverse gap-2 justify-end items-start">
+                    <div class="relative flex gap-4 w-full justify-center border rounded-md">
+                        <!-- Main Image Natural Width, Fixed Height -->
+                        <div class="relative overflow-hidden ">
                             <img id="mainImage" src="{{ asset($product->image) }}"
-                                class="w-full h-auto object-contain transition-opacity duration-300 opacity-100" />
-                            <div id="lens"
-                                class="absolute pointer-events-none border border-gray-400 bg-white bg-opacity-40 rounded hidden">
-                            </div>
-                        </div>
-
-                        <!-- Zoom Preview -->
-                        <div id="zoomWrapper"
-                            class="absolute left-full top-0 ml-6 w-[400px] h-[400px] border overflow-hidden rounded shadow-xl hidden z-50 bg-white">
-                            <div id="result" class="w-full h-full bg-no-repeat bg-center bg-white"></div>
+                                class="h-[800px] w-auto object-contain transition-opacity duration-300 opacity-100" />
                         </div>
                     </div>
 
-                    <div class="relative mt-4">
+
+                    <div class="relative mt-4 h-full">
                         <!-- Navigation buttons -->
                         <div class="swiper-button-prev !left-0"></div>
                         <div class="swiper-button-next !right-0"></div>
                         <div class="swiper thumbnailSwiper">
-                            <div class="swiper-wrapper">
+                            <div class="swiper-wrapper h-full">
                                 @foreach ($product->variants as $variant)
-                                    <div class="swiper-slide w-24 cursor-pointer">
-                                        <img onclick="changeImage(this.src, this)" src="{{ asset($variant->image) }}" data-product_details="{{ $variant->description }}" class="w-full border sw-item rounded" />
+                                    <div class="swiper-slide w-32 h-36 aspect-square cursor-pointer">
+                                        <img onclick="changeImage(this.src, this)" src="{{ asset($variant->image) }}"
+                                            data-product_details="{{ $variant->description }}"
+                                            class="w-full h-full object-cover sw-item rounded" />
                                     </div>
                                 @endforeach
                             </div>
                         </div>
+
                     </div>
                 </div>
 
                 <!-- Product Details (dummy content) -->
                 <div id="productDetailsSection"
-                    class="w-full bg-white p-0 md:p-6 pt-0 rounded shadow-none relative transition-all duration-300">
+                    class="w-full bg-white p-0 md:p-6 md:pt-0 pt-0 rounded shadow-none relative transition-all duration-300">
+                    @include('frontend.partials._breadcrumbs')
+
                     <h2 class="text-sm md:text-xl font-semibold" data-translate>{{ $product->name }}</h2>
                     {{-- <p class="mt-2 text-sm text-gray-600">From collection <span class="bg-black text-white px-2 py-1 rounded">Liora</span></p> --}}
-
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-2 mt-3">
-                        {{-- <span class="text-xs border px-2 py-1 rounded-full">Fall & Winter Jewelry</span>
-                        <span class="text-xs border px-2 py-1 rounded-full">Gold Plated Jewelry</span>
-                        <span class="text-xs border px-2 py-1 rounded-full">IHeart Collection</span>
-                        <span class="text-xs border px-2 py-1 rounded-full">Luxury Jewelry</span>
-                        <span class="text-xs border px-2 py-1 rounded-full">Stainless Steel Heart</span>
-                        <span class="text-xs border px-2 py-1 rounded-full">Water-Resistant Jewelry</span> --}}
+                        @foreach ($product?->category?->subcategories as $subcategory)
+                            <span
+                                class="text-sm border px-2 py-1 rounded-full hover:bg-black hover:text-white transition-all duration-300">{{ $subcategory->name }}</span>
+                        @endforeach
                     </div>
 
 
                     <!-- Price Range -->
-                    <p class="text-xl md:text-2xl font-semibold my-4 text-gray-600">{{ show_price_range($product->variants) }}</p>
+                    <p class="text-xl md:text-2xl font-semibold my-4 text-gray-600">
+                        {{ show_price_range($product->variants) }}</p>
 
                     <!-- Table -->
                     <div class="overflow-x-auto">
@@ -107,12 +144,13 @@
                                         data-image="{{ asset($variant->image) }}"
                                         data-product_details="{{ $variant->description }}"
                                         class="grid grid-cols-3 items-center mt-1 border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer text-xs sm:text-sm min-w-[320px]">
-                                        
+
                                         <!-- Color + Image -->
                                         <div class="p-2 flex items-center gap-2">
                                             <img src="{{ asset($variant->image) }}"
                                                 class="w-12 h-12 object-cover rounded" />
-                                            <span class="whitespace-normal break-words" data-translate>{{ $variant->color }}</span>
+                                            <span class="whitespace-normal break-words"
+                                                data-translate>{{ $variant->color }}</span>
                                         </div>
 
                                         <!-- Price -->
@@ -145,7 +183,8 @@
                             class="flex items-center gap-2 text-white justify-center  bg-black w-full p-3 rounded-md add_to_cart_btn">
                             🛒 <span>ADD TO CART</span> <span id="cartTotal">(0 items - $0.00)</span>
                         </button>
-                        <button class="hidden md:flex border p-3 rounded-md border-gray-800 text-black wishlist_btn" data-product_id="{{$product->id}}">
+                        <button class="hidden md:flex border p-3 rounded-md border-gray-800 text-black wishlist_btn"
+                            data-product_id="{{ $product->id }}">
                             <i class="fa-regular fa-heart heart_icon"></i>
                         </button>
                     </div>
