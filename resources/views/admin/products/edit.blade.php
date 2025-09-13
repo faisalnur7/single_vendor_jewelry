@@ -69,9 +69,21 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-4 form-group">
+                            <label>Supplier</label>
+                            <select name="supplier_id" class="form-control select2" id="supplier_id" required>
+                                <option value="">Select Supplier</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}"
+                                        {{ $product->supplier_id == $supplier->id ? 'selected' : '' }}>
+                                        {{ $supplier->contact_person }} - {{ $supplier->company_name }} - {{ $supplier->mobile_number }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         {{-- Featured / Status --}}
-                        <div class="col-md-4 form-group">
+                        {{-- <div class="col-md-4 form-group">
                             <label>Featured</label>
                             <select name="featured" class="form-control">
                                 <option value="1" {{ $product->featured == '1' ? 'selected' : '' }}>Yes</option>
@@ -86,7 +98,7 @@
                                 <option value="0" {{ $product->status == '0' ? 'selected' : '' }}>Inactive</option>
                                 <option value="2" {{ $product->status == '2' ? 'selected' : '' }}>Draft</option>
                             </select>
-                        </div>
+                        </div> --}}
 
                         {{-- Name / Slug / SKU --}}
                         <div class="col-md-4 form-group">
@@ -101,23 +113,32 @@
                                 required>
                         </div>
 
-                        <div class="col-md-4 form-group">
+                        {{-- <div class="col-md-4 form-group">
                             <label>SKU</label>
                             <input type="text" name="sku" class="form-control" value="{{ $product->sku }}" readonly
                                 required>
-                        </div>
+                        </div> --}}
 
                         {{-- Unit / Qty / Price / Stock --}}
                         <div class="col-md-4 form-group">
                             <label>Unit</label>
-                            <input type="text" name="unit" class="form-control" value="{{ $product->unit }}">
+                            <select name="unit" class="form-control">
+                                <option value="pcs" {{ old('unit') == 'pcs' ? 'selected' : '' }}>Pcs</option>
+                                <option value="set" {{ old('unit') == 'set' ? 'selected' : '' }}>Set</option>
+                            </select>
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label>Min Order Quantity</label>
                             <input type="number" step="0.01" name="min_order_qty" class="form-control"
-                                value="{{ $product->min_order_qty }}">
+                                value="{{ old('min_order_qty', 12) }}">
                         </div>
+
+                        {{-- <div class="col-md-4 form-group">
+                            <label>Min Order Quantity</label>
+                            <input type="number" step="0.01" name="min_order_qty" class="form-control"
+                                value="{{ $product->min_order_qty }}">
+                        </div> --}}
 
                         @if ($product->parent_id !== 0)
                             <input type="hidden" name="is_variant" value="1">
@@ -133,7 +154,7 @@
                             </div>
                         @else
                             <input type="hidden" name="is_variant" value="0">
-                            <div class="col-md-4 form-group">
+                            {{-- <div class="col-md-4 form-group">
                                 <label>Min Price</label>
                                 <input type="number" step="0.01" name="min_price" class="form-control"
                                     value="{{ $product->min_price }}">
@@ -143,9 +164,9 @@
                                 <label>Max Price</label>
                                 <input type="number" step="0.01" name="max_price" class="form-control"
                                     value="{{ $product->max_price }}">
-                            </div>
+                            </div> --}}
                         @endif
-                        <div class="col-md-4 form-group">
+                        {{-- <div class="col-md-4 form-group">
                             <label>Stock</label>
                             <input type="number" name="stock" class="form-control" value="{{ $product->stock }}">
                         </div>
@@ -154,7 +175,7 @@
                             <label>Weight (grams)</label>
                             <input type="number" step="0.01" name="weight" class="form-control"
                                 value="{{ $product->weight }}">
-                        </div>
+                        </div> --}}
 
                         @if ($product->parent_id == 0)
                             {{-- Descriptions --}}
@@ -163,10 +184,10 @@
                                 <textarea name="description" class="form-control">{{ $product->description }}</textarea>
                             </div>
 
-                            <div class="col-md-4 form-group">
+                            {{-- <div class="col-md-4 form-group">
                                 <label>Short Description</label>
                                 <textarea name="short_description" class="form-control" rows="2">{{ $product->short_description }}</textarea>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-4 form-group">
                                 <label>Meta Data</label>
@@ -202,29 +223,35 @@
                                                 </div>
                                                 <input type="hidden" name="variants[{{ $index }}][id]"
                                                     value="{{ $variant->id }}" />
-                                                <div class="col-md-3">
+                                                <div class="col-md-4 mt-2">
                                                     <input type="text" name="variants[{{ $index }}][color]"
                                                         class="form-control" placeholder="Color"
                                                         value="{{ $variant['color'] }}">
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-4 mt-2">
+                                                    <input type="text" name="variants[{{ $index }}][weight]"
+                                                        class="form-control" placeholder="Weight (grams)"
+                                                        value="{{ $variant['weight'] }}">
+                                                </div>
+
+                                                <div class="col-md-4 mt-2">
                                                     <input type="text" name="variants[{{ $index }}][price]"
                                                         class="form-control" placeholder="Price"
                                                         value="{{ $variant['price'] }}">
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-4 mt-2">
                                                     <input type="text" name="variants[{{ $index }}][price_rmb]"
                                                         class="form-control" placeholder="Price in RMB"
                                                         value="{{ $variant['price_rmb'] }}">
                                                 </div>                                          
                                                 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4 mt-2">
                                                     <input type="text" name="variants[{{ $index }}][purchase_price]"
                                                         class="form-control" placeholder="Purchase price"
                                                         value="{{ $variant['purchase_price'] }}">
                                                 </div>                                                
                                                 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4 mt-2">
                                                     <input type="text" name="variants[{{ $index }}][purchase_price_rmb]"
                                                         class="form-control" placeholder="Purchase price in RMB"
                                                         value="{{ $variant['purchase_price_rmb'] }}">
@@ -233,10 +260,10 @@
                                                     <input type="file" name="variants[{{ $index }}][image]"
                                                         class="form-control-file">
                                                 </div>
-                                                <div class="col-md-12 mb-2">
+                                                {{-- <div class="col-md-12 mb-2">
                                                     <label>Description</label>
                                                     <textarea name="variants[{{ $index }}][description]" class="form-control summernote" rows="3">{{ $variant->description }}</textarea>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         @endforeach
                                     @else
@@ -249,6 +276,9 @@
                                             <div class="col-md-3">
                                                 <input type="text" name="variants[0][color]" class="form-control"
                                                     placeholder="Color">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" name="variants[0][weight]" class="form-control" placeholder="Weight (grams)">
                                             </div>
                                             <div class="col-md-2">
                                                 <input type="text" name="variants[0][price]" class="form-control"
@@ -333,27 +363,26 @@
                     <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
                 </div>
                 <input type="hidden" name="variants[${variantIndex}][id]" />
-                <div class="col-md-3">
+                <div class="col-md-4 mt-2">
                     <input type="text" name="variants[${variantIndex}][color]" class="form-control" placeholder="Color">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4 mt-2">
+                    <input type="text" name="variants[${variantIndex}][weight]" class="form-control" placeholder="Weight (grams)">
+                </div>
+                <div class="col-md-4 mt-2">
                     <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4 mt-2">
                     <input type="text" name="variants[${variantIndex}][price_rmb]" class="form-control" placeholder="Price in RMB">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4 mt-2">
                     <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4 mt-2">
                     <input type="text" name="variants[${variantIndex}][purchase_price_rmb]" class="form-control" placeholder="Purchase price in RMB">
                 </div>
                 <div class="col-md-3 mt-2">
                     <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
-                </div>
-                <div class="col-md-12 mb-2">
-                    <label>Description</label>
-                    <textarea name="variants[${variantIndex}][description]" class="form-control summernote" rows="3"></textarea>
                 </div>
             </div>`;
                 $('#variants_container').append(html);

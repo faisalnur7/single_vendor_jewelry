@@ -78,22 +78,22 @@
                             </select>
                         </div>
 
-                        <div class="col-md-4 form-group">
+                        {{-- <div class="col-md-4 form-group">
                             <label>Featured</label>
                             <select name="featured" class="form-control">
                                 <option value="1" {{ old('featured') == '1' ? 'selected' : '' }}>Yes</option>
                                 <option value="0" {{ old('featured') == '0' ? 'selected' : '' }}>No</option>
                             </select>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4 form-group">
+                        {{-- <div class="col-md-4 form-group">
                             <label>Status</label>
                             <select name="status" class="form-control">
                                 <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Active</option>
                                 <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive</option>
                                 <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>Draft</option>
                             </select>
-                        </div>
+                        </div> --}}
 
 
                         <div class="col-md-4 form-group">
@@ -106,43 +106,30 @@
                             <input type="text" name="slug" class="form-control" value="{{ old('slug') }}" required>
                         </div>
 
-                        <div class="col-md-4 form-group">
+                        {{-- <div class="col-md-4 form-group">
                             <label>SKU</label>
                             <input type="hidden" id="upcoming_product_id">
                             <input type="text" name="sku" id="sku" class="form-control"
                                 value="{{ old('sku') }}" readonly required>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-4 form-group">
                             <label>Unit</label>
-                            <input type="text" name="unit" class="form-control" value="{{ old('unit') }}">
+                            <select name="unit" class="form-control">
+                                <option value="pcs" {{ old('unit') == 'pcs' ? 'selected' : '' }}>Pcs</option>
+                                <option value="set" {{ old('unit') == 'set' ? 'selected' : '' }}>Set</option>
+                            </select>
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label>Min Order Quantity</label>
                             <input type="number" step="0.01" name="min_order_qty" class="form-control"
-                                value="{{ old('min_order_qty', 0) }}">
-                        </div>
-
-                        <div class="col-md-4 form-group">
-                            <label>Stock</label>
-                            <input type="number" name="stock" class="form-control" value="{{ old('stock', 0) }}">
-                        </div>
-
-                        <div class="col-md-4 form-group">
-                            <label>Weight (grams)</label>
-                            <input type="number" step="0.01" name="weight" class="form-control"
-                                value="{{ old('weight') }}">
+                                value="{{ old('min_order_qty', 12) }}">
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label>Description</label>
                             <textarea name="description" class="form-control">{{ old('description') }}</textarea>
-                        </div>
-
-                        <div class="col-md-4 form-group">
-                            <label>Short Description</label>
-                            <textarea name="short_description" class="form-control" rows="2">{{ old('short_description') }}</textarea>
                         </div>
 
                         <div class="col-md-4 form-group">
@@ -180,6 +167,11 @@
                                                         value="{{ $variant['color'] }}">
                                                 </div>
                                                 <div class="col-md-2">
+                                                    <input type="text" name="variants[{{ $index }}][weight]"
+                                                        class="form-control" placeholder="Weight (grams)"
+                                                        value="{{ $variant['weight'] }}">
+                                                </div>
+                                                <div class="col-md-2">
                                                     <input type="text" name="variants[{{ $index }}][price]"
                                                         class="form-control" placeholder="Price"
                                                         value="{{ $variant['price'] }}">
@@ -194,7 +186,7 @@
                                                         class="form-control" placeholder="Purchase price"
                                                         value="{{ $variant['purchase_price'] }}">
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="col-md-2 mt-2">
                                                     <input type="text" name="variants[{{ $index }}][purchase_price_rmb]"
                                                         class="form-control" placeholder="Purchase price in RMB"
                                                         value="{{ $variant['purchase_price_rmb'] }}">
@@ -203,10 +195,10 @@
                                                     <input type="file" name="variants[{{ $index }}][image]"
                                                         class="form-control-file">
                                                 </div>
-                                                <div class="col-md-12 mb-2">
+                                                {{-- <div class="col-md-12 mb-2">
                                                     <label>Description</label>
                                                     <textarea name="variants[{{$index}}][description]" class="form-control summernote" rows="3"></textarea>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         @endforeach
                                     @else
@@ -215,23 +207,27 @@
                                             <div class="col-md-12 d-flex align-items-center justify-end">
                                                 <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4 mt-2">
                                                 <input type="text" name="variants[0][color]" class="form-control"
                                                     placeholder="Color">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-4 mt-2">
+                                                <input type="text" name="variants[0][weight]"
+                                                    class="form-control" placeholder="Weight (grams)">
+                                            </div>
+                                            <div class="col-md-4 mt-2">
                                                 <input type="text" name="variants[0][price]" class="form-control"
                                                     placeholder="Price">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-4 mt-2">
                                                 <input type="text" name="variants[0][price_rmb]" class="form-control"
                                                     placeholder="Price in RMB">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-4 mt-2">
                                                 <input type="text" name="variants[0][purchase_price]" class="form-control"
                                                     placeholder="Purchase price">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-4 mt-2">
                                                 <input type="text" name="variants[0][purchase_price_rmb]" class="form-control"
                                                     placeholder="Purchase price in RMB">
                                             </div>
@@ -239,10 +235,10 @@
                                                 <input type="file" name="variants[0][image]"
                                                     class="form-control-file">
                                             </div>
-                                            <div class="col-md-12 mb-2">
+                                            {{-- <div class="col-md-12 mb-2">
                                                 <label>Description</label>
                                                 <textarea name="variants[0][description]" class="form-control summernote" rows="3"></textarea>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     @endif
                                 </div>
@@ -318,27 +314,26 @@
                     <div class="col-md-12 d-flex align-items-center justify-end">
                         <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4 mt-2">
                         <input type="text" name="variants[${variantIndex}][color]" class="form-control" placeholder="Color">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4 mt-2">
+                        <input type="text" name="variants[${variantIndex}][weight]" class="form-control" placeholder="Weight (grams)">
+                    </div>
+                    <div class="col-md-4 mt-2">
                         <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4 mt-2">
                         <input type="text" name="variants[${variantIndex}][price_rmb]" class="form-control" placeholder="Price in RMB">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4 mt-2">
                         <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4 mt-2">
                         <input type="text" name="variants[${variantIndex}][purchase_price_rmb]" class="form-control" placeholder="Purchase price in RMB">
                     </div>
                     <div class="col-md-3 mt-2">
                         <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
-                    </div>
-                    <div class="col-md-12 mb-2">
-                        <label>Description</label>
-                        <textarea name="variants[${variantIndex}][description]" class="form-control summernote" rows="3"></textarea>
                     </div>
                 </div>`;
                 $('#variants_container').append(variantHtml);
@@ -351,45 +346,6 @@
             // Remove variant item
             $(document).on('click', '.remove-variant', function() {
                 $(this).closest('.variant-item').remove();
-            });
-
-
-
-            // Generate SKU
-            function fetchUpcomingProductIdAndGenerateSKU() {
-                // Call backend to get the next product ID
-                $.ajax({
-                    url: "{{ route('getNextProductId') }}", // Laravel route
-                    type: 'GET',
-                    success: function(response) {
-                        $('#upcoming_product_id').val(response.product_id);
-                        generateSKU();
-                    }
-                });
-            }
-
-            function generateSKU() {
-                var categorySelect = $('#category_id option:selected');
-                var firstLetter = categorySelect.data('letter') || '';
-                var category = $('#category_id').val() || '';
-                var subcategory = $('#subcategory_id').val() || '';
-                var childsubcategory = $('#childsubcategory_id').val() || '';
-                var upcomingProductId = $('#upcoming_product_id').val() || '';
-
-                if (category && subcategory && childsubcategory && upcomingProductId) {
-                    var sku = firstLetter + category + subcategory + childsubcategory + upcomingProductId;
-                    $('#sku').val(sku);
-                } else {
-                    $('#sku').val('');
-                }
-            }
-
-            $(document).on('change', '#category_id, #subcategory_id, #childsubcategory_id', function() {
-                if ($('#category_id').val() && $('#subcategory_id').val() && $('#childsubcategory_id').val()) {
-                    fetchUpcomingProductIdAndGenerateSKU();
-                } else {
-                    $('#sku').val('');
-                }
             });
         });
     </script>

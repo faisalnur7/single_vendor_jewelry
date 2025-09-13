@@ -172,6 +172,7 @@ class ProductController extends Controller
                     $vProduct = Product::create($vData);
                     $vProduct->name = $product->name . '-' . ($key + 1);
                     $vProduct->color = $variant['color'] ?? null;
+                    $vProduct->weight = $variant['weight'] ?? null;
                     $vProduct->price = $variant['price'] ?? null;
                     $vProduct->price_rmb = $variant['price_rmb'] ?? null;
                     $vProduct->purchase_price = $variant['purchase_price'] ?? null;
@@ -223,12 +224,14 @@ class ProductController extends Controller
         $categories = Category::all();
         $subcategories = SubCategory::all();
         $childsubcategories = ChildSubCategory::all();
+        $suppliers = Supplier::all();
     
         return view('admin.products.edit', compact(
             'product',
             'categories',
             'subcategories',
-            'childsubcategories'
+            'childsubcategories',
+            'suppliers'
         ));
     }
     
@@ -306,11 +309,12 @@ class ProductController extends Controller
                 if (!empty($variant['id'])) {
                     $vProduct = Product::findOrFail($variant['id']);
                     $vProduct->color = $variant['color'];
+                    $vProduct->weight = $variant['weight'];
                     $vProduct->price = $variant['price'];
                     $vProduct->price_rmb = $variant['price_rmb'];
                     $vProduct->purchase_price = $variant['purchase_price'];
                     $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
-                    $vProduct->description = $variant['description'];
+                    $vProduct->description = $variant['description'] ?? '';
 
                     if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
                         $filename = time() . '_' . $variant['image']->getClientOriginalName();
@@ -326,11 +330,12 @@ class ProductController extends Controller
                     $vProduct = Product::create($data);
                     $vProduct->name = $product->name . '-' . ($key + 1);
                     $vProduct->color = $variant['color'];
+                    $vProduct->weight = $variant['weight'];
                     $vProduct->price = $variant['price'];
                     $vProduct->price_rmb = $variant['price_rmb'];
                     $vProduct->purchase_price = $variant['purchase_price'];
                     $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
-                    $vProduct->description = $variant['description'];
+                    $vProduct->description = $variant['description'] ?? '';
                     $vProduct->parent_id = $product->id;
                     $vProduct->sku = $product->sku . ($key + 1);
                     $vProduct->has_variants = 0;
@@ -401,6 +406,7 @@ class ProductController extends Controller
                 'id' => $product->id,
                 'name' => $product->name,
                 'color' => $product->color,
+                'weight' => $product->weight,
                 'price' => $product->price,
                 'affiliate_price' => $product->affiliate_price,
                 'purchase_price' => $product->purchase_price,
