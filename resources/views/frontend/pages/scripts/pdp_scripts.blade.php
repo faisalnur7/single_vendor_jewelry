@@ -2,7 +2,6 @@
     $(function() {
         // Swiper initialization
         new Swiper('.thumbnailSwiper', {
-            direction: 'vertical', // 👈 make it vertical
             slidesPerView: 5,
             spaceBetween: 20,
             navigation: {

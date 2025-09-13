@@ -78,15 +78,14 @@
         <div class="mx-auto p-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- Image Viewer -->
-                <div class="flex flex-row-reverse gap-2 justify-end items-start">
+                <div class="flex flex-col gap-2 lg:sticky lg:top-28 self-start">
                     <div class="relative flex gap-4 w-full justify-center border rounded-md">
                         <!-- Main Image Natural Width, Fixed Height -->
-                        <div class="relative overflow-hidden ">
+                        <div class="relative overflow-hidden">
                             <img id="mainImage" src="{{ asset($product->image) }}"
-                                class="h-[800px] w-auto object-contain transition-opacity duration-300 opacity-100" />
+                                class="h-[600px] w-auto object-contain transition-opacity duration-300 opacity-100" />
                         </div>
                     </div>
-
 
                     <div class="relative mt-4 h-full">
                         <!-- Navigation buttons -->
@@ -103,9 +102,9 @@
                                 @endforeach
                             </div>
                         </div>
-
                     </div>
                 </div>
+
 
                 <!-- Product Details (dummy content) -->
                 <div id="productDetailsSection"
