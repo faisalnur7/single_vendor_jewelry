@@ -1,5 +1,5 @@
 <nav class="text-sm md:text-md text-gray-600 m-0" aria-label="Breadcrumb">
-    <div class="list-reset flex flex-wrap space-x-2">
+    <div class="space-x-2">
         <span>
             <a href="{{ url('/') }}" class="hover:underline" data-translate>Home</a>
         </span>
