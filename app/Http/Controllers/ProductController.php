@@ -173,6 +173,7 @@ class ProductController extends Controller
                     $vProduct->name = $product->name . '-' . ($key + 1);
                     $vProduct->color = $variant['color'] ?? null;
                     $vProduct->weight = $variant['weight'] ?? null;
+                    $vProduct->gender = $data['gender'] ?? null;
                     $vProduct->price = $variant['price'] ?? null;
                     $vProduct->price_rmb = $variant['price_rmb'] ?? null;
                     $vProduct->purchase_price = $variant['purchase_price'] ?? null;
@@ -310,6 +311,7 @@ class ProductController extends Controller
                     $vProduct = Product::findOrFail($variant['id']);
                     $vProduct->color = $variant['color'];
                     $vProduct->weight = $variant['weight'];
+                    $vProduct->gender = $data['gender'];
                     $vProduct->price = $variant['price'];
                     $vProduct->price_rmb = $variant['price_rmb'];
                     $vProduct->purchase_price = $variant['purchase_price'];
@@ -331,6 +333,7 @@ class ProductController extends Controller
                     $vProduct->name = $product->name . '-' . ($key + 1);
                     $vProduct->color = $variant['color'];
                     $vProduct->weight = $variant['weight'];
+                    $vProduct->gender = $data['gender'];
                     $vProduct->price = $variant['price'];
                     $vProduct->price_rmb = $variant['price_rmb'];
                     $vProduct->purchase_price = $variant['purchase_price'];

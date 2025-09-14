@@ -118,6 +118,14 @@
                             <input type="text" name="sku" class="form-control" value="{{ $product->sku }}" readonly
                                 required>
                         </div> --}}
+                        <div class="col-md-4 form-group">
+                            <label>Gender</label>
+                            <select name="gender" class="form-control">
+                                <option value="Female" {{ $product->gender == '0' ? 'selected' : '' }}>Female</option>
+                                <option value="Male" {{ $product->gender == '1' ? 'selected' : '' }}>Male</option>
+                                <option value="Unisex" {{ $product->gender == '2' ? 'selected' : '' }}>Unisex</option>
+                            </select>
+                        </div>
 
                         {{-- Unit / Qty / Price / Stock --}}
                         <div class="col-md-4 form-group">

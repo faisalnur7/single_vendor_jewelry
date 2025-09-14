@@ -36,7 +36,7 @@
         }
 
         .thumbnailSwiper {
-            height: 400px;
+            height: auto;
             /* adjust as needed */
         }
 
@@ -71,6 +71,15 @@
             border-radius: 6px;
             /* optional rounded edges */
         }
+
+        .prose p {
+            margin-bottom: 0.5rem;
+            line-height: 1.2 !important;
+        }
+
+        .prose span {
+            display: inline;
+        }
     </style>
 @endsection
 @section('contents')
@@ -83,7 +92,7 @@
                         <!-- Main Image Natural Width, Fixed Height -->
                         <div class="relative overflow-hidden">
                             <img id="mainImage" src="{{ asset($product->image) }}"
-                                class="h-[600px] w-auto object-contain transition-opacity duration-300 opacity-100" />
+                                class="h-auto md:h-[600px] w-auto object-contain transition-opacity duration-300 opacity-100" />
                         </div>
                     </div>
 
@@ -92,11 +101,11 @@
                         <div class="swiper-button-prev !left-0"></div>
                         <div class="swiper-button-next !right-0"></div>
                         <div class="swiper thumbnailSwiper">
-                            <div class="swiper-wrapper h-full">
+                            <div class="swiper-wrapper h-auto md:h-full">
                                 @foreach ($product->variants as $variant)
                                     <div class="swiper-slide w-32 h-36 aspect-square cursor-pointer">
                                         <img onclick="changeImage(this.src, this)" src="{{ asset($variant->image) }}"
-                                            data-product_details="{{ $variant->description }}"
+                                            data-weight="{{ $variant->weight }}"
                                             class="w-full h-full object-cover sw-item rounded" />
                                     </div>
                                 @endforeach
@@ -111,13 +120,13 @@
                     class="w-full bg-white p-0 md:p-6 md:pt-0 pt-0 rounded shadow-none relative transition-all duration-300">
                     @include('frontend.partials._breadcrumbs')
 
-                    <h2 class="text-sm md:text-xl font-semibold" data-translate>{{ $product->name }}</h2>
+                    <h2 class="text-md md:text-xl font-semibold" data-translate>{{ $product->name }}</h2>
                     {{-- <p class="mt-2 text-sm text-gray-600">From collection <span class="bg-black text-white px-2 py-1 rounded">Liora</span></p> --}}
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-2 mt-3">
                         @foreach ($product?->category?->subcategories as $subcategory)
                             <span
-                                class="text-sm border px-2 py-1 rounded-full hover:bg-black hover:text-white transition-all duration-300">{{ $subcategory->name }}</span>
+                                class="text-xs md:text-sm border px-2 py-1 rounded-full hover:bg-black hover:text-white transition-all duration-300">{{ $subcategory->name }}</span>
                         @endforeach
                     </div>
 
@@ -141,7 +150,7 @@
                                 @foreach ($product->variants as $index => $variant)
                                     <div onclick="changeImage('{{ asset($variant->image) }}', this)"
                                         data-image="{{ asset($variant->image) }}"
-                                        data-product_details="{{ $variant->description }}"
+                                        data-weight="{{ $variant->weight }}"
                                         class="grid grid-cols-3 items-center mt-1 border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer text-xs sm:text-sm min-w-[320px]">
 
                                         <!-- Color + Image -->
@@ -221,10 +230,72 @@
                     </div>
 
                     <div class="mt-6">
-                        <h3 class="text-lg font-semibold">Product Details</h3>
-                        <ul class="list-disc list-inside text-sm text-gray-600 mt-2 product_details" data-translate>
-                            {!! $product->variants->first()->description !!}
-                        </ul>
+                        <div class="border rounded-lg mb-3">
+                            <!-- Header -->
+                            <div class="bg-gray-100 px-4 py-2 flex justify-between items-center rounded-t-lg">
+                                <span class="font-medium">Description</span>
+                                <button
+                                    class="descToggle bg-black text-white w-6 h-6 flex items-center justify-center rounded">
+                                    –
+                                </button>
+                            </div>
+
+                            <!-- Content (first one visible) -->
+                            <div class="descContent px-6 py-4 grid grid-cols-2 gap-y-1 text-sm">
+                                <div>Quantity</div>
+                                <div>12 Pcs</div>
+
+                                <div class="font-medium">Plating Material</div>
+                                <div>18K Gold, Electroplating</div>
+
+                                <div>Spu</div>
+                                <div>{{$product->sku}}</div>
+
+                                <div>Classification</div>
+                                <div>{{$product->category->name}}</div>
+
+                                <div>Style</div>
+                                <div>Moderate Luxury</div>
+
+                                <div>Material</div>
+                                <div>Stainless Steel</div>
+
+                                <div>Weight</div>
+                                <div><span class="weight">{{$product->variants->first()->weight}}</span>g</div>
+
+                                <div>Occasion</div>
+                                <div>Daily, Holiday, Wedding</div>
+
+                                <div>Gender</div>
+                                <div>{{$product->gender}}</div>
+
+                                <div>Pendant Material</div>
+                                <div>Titanium Steel</div>
+                            </div>
+                        </div>
+
+                        <div class="border rounded-lg mb-3">
+                            <!-- Header -->
+                            <div class="bg-gray-100 px-4 py-2 flex justify-between items-center rounded-t-lg">
+                                <span class="font-medium">Shipping Policy</span>
+                                <button
+                                    class="descToggle bg-black text-white w-6 h-6 flex items-center justify-center rounded">
+                                    +
+                                </button>
+                            </div>
+
+                            <!-- Content (hidden by default) -->
+                            <div class="descContent p-2 grid grid-cols-2 gap-y-1 text-sm hidden">
+                                @foreach(App\Models\ShippingPolicy::where('status', 1)->get() as $shipping_policy)
+                                    <div class="p-2">
+                                        <h3 class="text-sm font-semibold mb-2">{{ $shipping_policy->title }}</h3>
+                                        <div class="text-gray-700 prose">
+                                            {!! $shipping_policy->description !!}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

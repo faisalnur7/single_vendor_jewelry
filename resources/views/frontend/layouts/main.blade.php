@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 @php
     $general_settings = App\Models\GeneralSetting::first();
 @endphp

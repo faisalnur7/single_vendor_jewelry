@@ -3,7 +3,7 @@
         // Swiper initialization
         new Swiper('.thumbnailSwiper', {
             slidesPerView: 5,
-            spaceBetween: 20,
+            spaceBetween: 5,
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
@@ -45,7 +45,7 @@
         window.changeImage = function(src, el = null) {
             const $img = $("#mainImage");
             const $result = $("#result");
-            const product_details = $(el).data('product_details');
+            const weight = $(el).data('weight');
 
             // Update the selected row style
             $(".variant_row").removeClass("border-gray-700");
@@ -53,7 +53,7 @@
             if (el) {
                 $(el).addClass("border-gray-700");
             }
-            $('.product_details').html(product_details);
+            $('.weight').html(weight);
 
             // Fade out current image
             $img.removeClass("opacity-100").addClass("opacity-0");
@@ -176,6 +176,18 @@
                     }
                 }
             });
+        });
+
+        $(".descToggle").click(function() {
+            let content = $(this).closest(".border").find(".descContent");
+
+            // Close all other accordions
+            $(".descContent").not(content).slideUp();
+            $(".descToggle").not(this).text("+");
+
+            // Toggle this one
+            content.slideToggle();
+            $(this).text($(this).text() === "–" ? "+" : "–");
         });
 
     });

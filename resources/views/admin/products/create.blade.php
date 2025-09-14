@@ -112,6 +112,14 @@
                             <input type="text" name="sku" id="sku" class="form-control"
                                 value="{{ old('sku') }}" readonly required>
                         </div> --}}
+                        <div class="col-md-4 form-group">
+                            <label>Gender</label>
+                            <select name="gender" class="form-control">
+                                <option value="Female" {{ old('gender') == '0' ? 'selected' : '' }}>Female</option>
+                                <option value="Male" {{ old('gender') == '1' ? 'selected' : '' }}>Male</option>
+                                <option value="Unisex" {{ old('gender') == '2' ? 'selected' : '' }}>Unisex</option>
+                            </select>
+                        </div>
 
                         <div class="col-md-4 form-group">
                             <label>Unit</label>
