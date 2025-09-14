@@ -29,7 +29,7 @@
     @include('frontend.partials._nav_bar')
 
     {{-- Right Icons --}}
-    <div class="flex items-center gap-2 pl-8 lg:pl-0 lg:gap-4 text-sm">
+    <div class="flex items-center gap-2 pl-2 lg:pl-0 lg:gap-4 text-sm">
 
         <!-- Currency Dropdown -->
         <div class="relative">

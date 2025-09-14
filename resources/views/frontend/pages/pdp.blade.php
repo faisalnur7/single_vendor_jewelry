@@ -2,33 +2,7 @@
 @section('title', 'Stainless Steel Jewelry')
 @section('styles')
     <style>
-        .zoom-container {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .zoom-containe img:hover {
-            transform: scale(1.5);
-            transition: transform 0.3s ease;
-        }
-
-        /* Fixed Zoom Wrapper */
-        #zoomWrapper.fixed {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            margin-left: 0 !important;
-            z-index: 9999;
-        }
-
         /* Blur effect on product details */
-        #productDetailsSection.blurred {
-            filter: blur(5px);
-            pointer-events: none;
-            user-select: none;
-        }
-
         #mainImage {
             cursor: zoom-in;
             transform-origin: center center;
@@ -87,7 +61,7 @@
         <div class="mx-auto p-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- Image Viewer -->
-                <div class="flex flex-col gap-2 lg:sticky lg:top-28 self-start">
+                <div class="flex flex-col gap-2 self-start sticky top-28 max-h-screen">
                     <div class="relative flex gap-4 w-full justify-center border rounded-md">
                         <!-- Main Image Natural Width, Fixed Height -->
                         <div class="relative overflow-hidden">
@@ -96,14 +70,14 @@
                         </div>
                     </div>
 
-                    <div class="relative mt-4 h-full">
+                    <div class="relative lg:mt-4 h-full">
                         <!-- Navigation buttons -->
                         <div class="swiper-button-prev !left-0"></div>
                         <div class="swiper-button-next !right-0"></div>
                         <div class="swiper thumbnailSwiper">
                             <div class="swiper-wrapper h-auto md:h-full">
                                 @foreach ($product->variants as $variant)
-                                    <div class="swiper-slide w-32 h-36 aspect-square cursor-pointer">
+                                    <div class="swiper-slide w-32 h-min md:h-36 aspect-square cursor-pointer">
                                         <img onclick="changeImage(this.src, this)" src="{{ asset($variant->image) }}"
                                             data-weight="{{ $variant->weight }}"
                                             class="w-full h-full object-cover sw-item rounded" />
