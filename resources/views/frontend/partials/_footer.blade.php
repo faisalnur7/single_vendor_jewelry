@@ -21,7 +21,7 @@
             <h2 class="text-lg font-semibold mb-4">Get In Touch</h2>
             <ul class="space-y-2 text-sm">
                 <li class="flex items-start gap-2">
-                    <i class="fa fa-globe mt-1"></i> 
+                    <i class="fa fa-globe mt-1"></i>
                     <span>{{ $address }}</span>
                 </li>
                 <li class="flex items-center gap-2">
@@ -29,16 +29,21 @@
                     <a href="mailto:{{ $companyEmail }}" class="hover:underline break-words">{{ $companyEmail }}</a>
                 </li>
                 <li class="flex items-center gap-2">
-                    <i class="fa fa-phone"></i> 
+                    <i class="fa fa-phone"></i>
                     <span>{{ $companyPhone }}</span>
                 </li>
             </ul>
             <div class="flex space-x-4 mt-4 text-xl">
-                <a target="_blank" href="{{ $facebook }}" class="hover:text-orange-500"><i class="fab fa-facebook"></i></a>
-                <a target="_blank" href="{{ $twitter }}" class="hover:text-orange-500"><i class="fab fa-twitter"></i></a>
-                <a target="_blank" href="{{ $instagram }}" class="hover:text-orange-500"><i class="fab fa-instagram"></i></a>
-                <a target="_blank" href="{{ $linkedin }}" class="hover:text-orange-500"><i class="fab fa-linkedin"></i></a>
-                <a target="_blank" href="{{ $youtube }}" class="hover:text-orange-500"><i class="fab fa-youtube"></i></a>
+                <a target="_blank" href="{{ $facebook }}" class="hover:text-orange-500"><i
+                        class="fab fa-facebook"></i></a>
+                <a target="_blank" href="{{ $twitter }}" class="hover:text-orange-500"><i
+                        class="fab fa-twitter"></i></a>
+                <a target="_blank" href="{{ $instagram }}" class="hover:text-orange-500"><i
+                        class="fab fa-instagram"></i></a>
+                <a target="_blank" href="{{ $linkedin }}" class="hover:text-orange-500"><i
+                        class="fab fa-linkedin"></i></a>
+                <a target="_blank" href="{{ $youtube }}" class="hover:text-orange-500"><i
+                        class="fab fa-youtube"></i></a>
             </div>
         </div>
 
@@ -68,13 +73,12 @@
         <!-- Newsletter -->
         <div>
             <h2 class="text-lg font-semibold mb-4">Subscribe to our newsletter</h2>
-            <form class="flex flex-col sm:flex-row sm:items-center gap-3" 
-                  action="{{ route('subscribers.store') }}" method="POST" id="subscriberForm">
+            <form class="flex flex-row md:flex-col sm:items-center !items-start gap-3" action="{{ route('subscribers.store') }}"
+                method="POST" id="subscriberForm">
                 @csrf
                 <input type="email" name="email" id="subscriber_email" placeholder="Your email address"
                     class="flex-1 border border-gray-300 px-4 py-2 rounded outline-none w-full sm:w-auto" />
-                <button type="submit"
-                    class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 w-full sm:w-auto">
+                <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 w-full sm:w-auto">
                     Subscribe
                 </button>
             </form>
@@ -123,10 +127,7 @@
                 }
             });
         });
-    });
-</script>
-<script>
-    $(document).ready(function() {
+
         let currentLang = "{{ session('lang', 'en') }}";
 
         const languages = {
@@ -203,7 +204,7 @@
             });
         });
 
-        $('#languageSelect').on('change', function () {
+        $('#languageSelect').on('change', function() {
             let newLang = $(this).val();
             if (newLang === currentLang) return;
 
@@ -216,7 +217,7 @@
                     language: newLang,
                     _token: "{{ csrf_token() }}" // important for POST
                 },
-                success: function () {
+                success: function() {
                     // Update toggle text/flag
                     $('#currentLanguage').text(newLang.toUpperCase());
                     $('#languageToggle span:first').text(languages[newLang]);
@@ -227,10 +228,10 @@
                     // update currentLang
                     currentLang = newLang;
                 },
-                error: function () {
+                error: function() {
                     console.error("Translation failed");
                 },
-                complete: function () {
+                complete: function() {
                     showLoading(false);
                 }
             });
@@ -299,5 +300,23 @@
             $indicator.toggleClass("hidden", !show);
             $toggle.prop("disabled", show);
         }
+
+        $(".variant-thumb").each(function() {
+            var $thumb = $(this);
+            var mainId = $thumb.data("main-image");
+            var $mainImg = $("#" + mainId);
+
+            $thumb.on("mouseenter", function() {
+                // Fade out
+                $mainImg.addClass("opacity-0");
+
+                // Swap image after short delay
+                setTimeout(function() {
+                    $mainImg.attr("src", $thumb.data("variant-src"));
+                    // Fade in
+                    $mainImg.removeClass("opacity-0");
+                }, 200); // matches your transition duration
+            });
+        });
     });
 </script>

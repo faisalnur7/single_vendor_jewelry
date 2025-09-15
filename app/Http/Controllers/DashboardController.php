@@ -35,7 +35,7 @@ class DashboardController extends Controller
         $data['title'] = $data['page_title'] = "Collections";
         $data['category_bold'] = true;
         $data['category'] = $category = Category::query()->where('slug',$slug)->first();
-        $data['products'] = Product::query()->with('variants')->where('category_id',$category->id)->where('parent_id',0)->get();
+        $data['products'] = Product::query()->with('variants')->where('category_id',$category->id)->where('parent_id',0)->paginate(50);
         return view('frontend.pages.plp', $data);
     }
 
@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $data['subcategory_bold'] = true;
         $data['subcategory'] = $subcategory;
         $data['category'] = $category;
-        $data['products'] = Product::query()->with('variants')->where('sub_category_id',$subcategory->id)->where('parent_id',0)->get();
+        $data['products'] = Product::query()->with('variants')->where('sub_category_id',$subcategory->id)->where('parent_id',0)->paginate(50);
         return view('frontend.pages.plp', $data);
     }
 
@@ -54,7 +54,7 @@ class DashboardController extends Controller
         $data['childsubcategory'] = $childsubcategory;
         $data['subcategory'] = $subcategory;
         $data['category'] = $category;
-        $data['products'] = Product::query()->with('variants')->where('child_sub_category_id',$childsubcategory->id)->where('parent_id',0)->get();
+        $data['products'] = Product::query()->with('variants')->where('child_sub_category_id',$childsubcategory->id)->where('parent_id',0)->paginate(50);
         return view('frontend.pages.plp', $data);
     }
 

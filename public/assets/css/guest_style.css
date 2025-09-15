@@ -103,3 +103,7 @@ html{
     pointer-events: none;
     user-select: none;
 }
+
+.product-main-img {
+    transition: opacity 0.2s ease;
+}
