@@ -16,4 +16,10 @@ class Category extends Model
         return 'slug';
     }
 
+    public function subcategoriesSorted()
+    {
+        return $this->hasMany(SubCategory::class)->orderBy('order', 'asc');
+    }
+
+
 }

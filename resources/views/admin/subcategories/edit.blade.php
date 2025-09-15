@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label for="order">Order</label>
-                    <input type="number" name="order" id="order" class="form-control" value="{{ $subcategory->order ?? 0 }}" min="0" />
+                    <input type="number" name="order" id="order" class="form-control" value="{{ $subcategory->order }}" min="0" />
 
                 </div>
 

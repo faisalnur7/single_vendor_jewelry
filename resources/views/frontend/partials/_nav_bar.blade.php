@@ -1,5 +1,5 @@
 @php
-    $categories = \App\Models\Category::with('subcategories.childsubcategories')->where('show_on_main_menu','1')->get();
+    $categories = \App\Models\Category::with('subcategories.childsubcategories')->where('show_on_main_menu', '1')->orderBy('order', 'asc')->get();
 @endphp
 <nav class="hidden lg:flex gap-3 lg:gap-6 items-center text-sm lg:text-sm font-bold">
     @foreach ($categories as $category)
@@ -14,10 +14,10 @@
             </a>
 
             <!-- Dropdown: only if subcategories exist -->
-            @if($category->subcategories->count() > 0)
+            @if($category->subcategoriesSorted->count() > 0)
                 <div class="absolute left-0 top-full z-50 w-48 bg-white border shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 mt-2">
                     <ul class="flex flex-col">
-                        @foreach ($category->subcategories as $subcategory)
+                        @foreach ($category->subcategoriesSorted as $subcategory)
                             <li>
                                 <a href="{{ route('subcategory.show', [$category->slug, $subcategory->slug]) }}"
                                    class="block px-2 py-2 text-gray-700 hover:text-orange-500 hover:bg-gray-100" data-translate>

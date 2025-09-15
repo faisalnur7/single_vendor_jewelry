@@ -31,7 +31,7 @@ class SubCategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only('name', 'slug', 'category_id');
+        $data = $request->only('name', 'slug', 'category_id','order');
 
         if ($request->hasFile('image')) {
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
@@ -62,7 +62,7 @@ class SubCategoryController extends Controller
 
         $subcategory = SubCategory::findOrFail($id);
 
-        $data = $request->only('name', 'slug','category_id');
+        $data = $request->only('name', 'slug','category_id','order');
         
         if ($request->hasFile('image')) {
             $filename = time() . '_' . $request->file('image')->getClientOriginalName();
