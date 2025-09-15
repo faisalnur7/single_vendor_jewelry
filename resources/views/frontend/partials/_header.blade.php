@@ -1,4 +1,35 @@
 <!-- Header -->
+@php
+    $languages = [
+        'en' => ['name' => 'English', 'flag' => '🇬🇧'],
+        'pt' => ['name' => 'Portuguese', 'flag' => '🇵🇹'],
+        'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
+        'es' => ['name' => 'Spanish', 'flag' => '🇪🇸'],
+        'fr' => ['name' => 'French', 'flag' => '🇫🇷'],
+        'it' => ['name' => 'Italian', 'flag' => '🇮🇹'],
+        'de' => ['name' => 'German', 'flag' => '🇩🇪'],
+        'sv' => ['name' => 'Swedish', 'flag' => '🇸🇪'],
+        'no' => ['name' => 'Norwegian', 'flag' => '🇳🇴'],
+        'tr' => ['name' => 'Turkish', 'flag' => '🇹🇷'],
+        'hi' => ['name' => 'Hindi', 'flag' => '🇮🇳'],
+        'ru' => ['name' => 'Russian', 'flag' => '🇷🇺'],
+        'el' => ['name' => 'Greek', 'flag' => '🇬🇷'],
+        'ro' => ['name' => 'Romanian', 'flag' => '🇷🇴'],
+        'cs' => ['name' => 'Czech', 'flag' => '🇨🇿'],
+        'pl' => ['name' => 'Polish', 'flag' => '🇵🇱'],
+    ];
+    $currentLang = session('lang', 'en');
+    $contactSettings = App\Models\ContactSetting::first();
+    $profile_link = auth()->check() ? route('user_profile') : '#';
+    $wishlistCount = 0;
+    
+    if (auth()->check()) {
+        $wishlistCount = auth()->user()->wishlists()->count();
+    }
+
+    $cartCount = auth()->check() && !empty(auth()->user()->cart) ? auth()->user()->cart->items->count() ?? 0 : (session('guest_cart') ? count(session('guest_cart')) : 0);
+
+@endphp
 <header class="site_header flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white z-50">
 
     {{-- Mobile Sidebar Toggle Button --}}
@@ -27,28 +58,7 @@
     {{-- Navbar previous place --}}
     @include('frontend.partials._nav_bar')
 
-    @php
-        $languages = [
-            'en' => ['name' => 'English', 'flag' => '🇬🇧'],
-            'pt' => ['name' => 'Portuguese', 'flag' => '🇵🇹'],
-            'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
-            'es' => ['name' => 'Spanish', 'flag' => '🇪🇸'],
-            'fr' => ['name' => 'French', 'flag' => '🇫🇷'],
-            'it' => ['name' => 'Italian', 'flag' => '🇮🇹'],
-            'de' => ['name' => 'German', 'flag' => '🇩🇪'],
-            'sv' => ['name' => 'Swedish', 'flag' => '🇸🇪'],
-            'no' => ['name' => 'Norwegian', 'flag' => '🇳🇴'],
-            'tr' => ['name' => 'Turkish', 'flag' => '🇹🇷'],
-            'hi' => ['name' => 'Hindi', 'flag' => '🇮🇳'],
-            'ru' => ['name' => 'Russian', 'flag' => '🇷🇺'],
-            'el' => ['name' => 'Greek', 'flag' => '🇬🇷'],
-            'ro' => ['name' => 'Romanian', 'flag' => '🇷🇴'],
-            'cs' => ['name' => 'Czech', 'flag' => '🇨🇿'],
-            'pl' => ['name' => 'Polish', 'flag' => '🇵🇱'],
-        ];
-        $currentLang = session('lang', 'en');
-        $contactSettings = App\Models\ContactSetting::first();
-    @endphp
+    
 
     {{-- Right Icons --}}
     <div class="flex flex-wrap items-center gap-2 pl-2 lg:pl-0 lg:gap-4 text-sm">
@@ -135,21 +145,10 @@
             });
         </script>
 
-
-        @php
-            $profile_link = auth()->check() ? route('user_profile') : '#';
-        @endphp
-
         <a href="{{ $profile_link }}" class="text-lg header-user-icon hidden md:block">
             {{-- <i class="fa-regular fa-user"></i> --}}
             <img src="{{ asset('/assets/img/user.png') }}" class="w-7" />
         </a>
-        @php
-            $wishlistCount = 0;
-            if (auth()->check()) {
-                $wishlistCount = auth()->user()->wishlists()->count();
-            }
-        @endphp
 
         <a href="{{ auth()->check() ? route('user_wishlist') : route('guest_wishlist') }}"
             class="text-lg relative hidden md:block">
@@ -166,15 +165,6 @@
         <a href="{{ route('cart') }}" class="relative text-xl">
             {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
             <img src="{{ asset('/assets/img/trolley.png') }}" class="w-7" />
-            @php
-                $cartCount =
-                    auth()->check() && !empty(auth()->user()->cart)
-                        ? auth()->user()->cart->items->count() ?? 0
-                        : (session('guest_cart')
-                            ? count(session('guest_cart'))
-                            : 0);
-            @endphp
-
             <span
                 class="absolute -top-1 -right-2 @if ($cartCount == 0) bg-transparent @else bg-red-500 @endif  text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none cart_count">
                 @if ($cartCount > 0)
@@ -209,7 +199,6 @@
     // Open overlay
     $('#searchToggle').on('click', function() {
         $('#searchOverlay').toggleClass('hidden');
-        $('#searchKeyword').focus();
     });
 
     // Close overlay
