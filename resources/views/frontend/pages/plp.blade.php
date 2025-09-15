@@ -1,7 +1,9 @@
 @extends('frontend.layouts.main')
 @section('title','Stainless Steel Jewelry')
 @section('contents')
+    <div class="ml-6 mt-4 !text-md">
     @include('frontend.partials._breadcrumbs')
+    </div>
     <!-- Products you may like Section -->
     <section class="py-12 px-6">
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">

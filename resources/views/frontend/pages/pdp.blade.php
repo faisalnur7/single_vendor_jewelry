@@ -216,34 +216,34 @@
 
                             <!-- Content (first one visible) -->
                             <div class="descContent px-6 py-4 grid grid-cols-2 gap-y-1 text-sm">
-                                <div>Quantity</div>
+                                <div data-translate>Quantity</div>
                                 <div>12 Pcs</div>
 
-                                <div class="font-medium">Plating Material</div>
-                                <div>18K Gold, Electroplating</div>
+                                <div class="font-medium" data-translate>Plating Material</div>
+                                <div data-translate>18K Gold, Electroplating</div>
 
                                 <div>Spu</div>
                                 <div>{{$product->sku}}</div>
 
-                                <div>Classification</div>
-                                <div>{{$product->category->name}}</div>
+                                <div data-translate>Classification</div>
+                                <div data-translate>{{$product->category->name}}</div>
 
-                                <div>Style</div>
-                                <div>Moderate Luxury</div>
+                                <div data-translate>Style</div>
+                                <div data-translate>Moderate Luxury</div>
 
-                                <div>Material</div>
-                                <div>Stainless Steel</div>
+                                <div data-translate>Material</div>
+                                <div data-translate>Stainless Steel</div>
 
-                                <div>Weight</div>
+                                <div data-translate>Weight</div>
                                 <div><span class="weight">{{$product->variants->first()->weight}}</span>g</div>
 
-                                <div>Occasion</div>
-                                <div>Daily, Holiday, Wedding</div>
+                                <div data-translate>Occasion</div>
+                                <div data-translate>Daily, Holiday, Wedding</div>
 
-                                <div>Gender</div>
-                                <div>{{$product->gender}}</div>
+                                <div data-translate>Gender</div>
+                                <div data-translate>{{$product->gender}}</div>
 
-                                <div>Pendant Material</div>
+                                <div data-translate>Pendant Material</div>
                                 <div>Titanium Steel</div>
                             </div>
                         </div>
