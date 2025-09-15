@@ -124,7 +124,7 @@
                     <div class="flex flex-wrap gap-2 mt-3">
                         @foreach ($product?->category?->subcategories as $subcategory)
                             <a data-translate href="{{route('subcategory.show',[$product?->category->slug, $subcategory->slug])}}"
-                                class="text-xs md:text-sm border px-2 py-1 rounded-full hover:bg-black hover:text-white transition-all duration-300">{{ $subcategory->name }}</a>
+                                class="text-xs md:text-sm border border-black text-gray-600 px-2 py-1 rounded-full hover:bg-black hover:text-white transition-all duration-300">{{ $subcategory->name }}</a>
                         @endforeach
                     </div>
 
