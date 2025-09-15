@@ -168,47 +168,6 @@
             }
         });
 
-        // show dropdown menu
-        $('#languageToggle').on('click', function() {
-            $('#languageMenu').toggleClass('hidden');
-        });
-
-        // select a language from dropdown
-        $('#languageMenu button').on('click', function() {
-            let newLang = $(this).data('lang');
-            if (newLang === currentLang) return;
-
-            showLoading();
-
-            $.ajax({
-                url: "{{ route('switchLanguage') }}",
-                type: "POST",
-                data: {
-                    language: newLang
-                },
-                success: function() {
-                    // Update toggle button text and flag
-                    $('#currentLanguage').text(newLang.toUpperCase());
-                    $('#languageToggle span:first').text(languages[newLang]);
-
-                    // Translate page content
-                    translatePageContent(newLang);
-
-                    // update currentLang
-                    currentLang = newLang;
-
-                    // close dropdown
-                    $('#languageMenu').addClass('hidden');
-                },
-                error: function() {
-                    console.error("Translation failed");
-                },
-                complete: function() {
-                    hideLoading();
-                }
-            });
-        });
-
         $('#languageSelect').on('change', function() {
             let newLang = $(this).val();
             if (newLang === currentLang) return;
