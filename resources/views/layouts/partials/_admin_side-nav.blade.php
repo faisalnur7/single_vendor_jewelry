@@ -308,6 +308,13 @@
                                                 <p>Hero Section</p>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="{{route('homepage.edit')}}"
+                                                class="nav-link {{ request()->routeIs('homepage.edit') ? 'active' : '' }}">
+                                                <i class="fas fa-map nav-icon"></i>
+                                                <p>About Section</p>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
