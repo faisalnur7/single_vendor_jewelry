@@ -30,6 +30,11 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+                
+                <div class="form-group">
+                    <label for="order">Order</label>
+                    <input type="number" name="order" id="order" class="form-control" value="{{ old('order', 0) }}" min="0" />
+                </div>
 
                 <div class="form-group">
                     <label for="image">Image</label>
