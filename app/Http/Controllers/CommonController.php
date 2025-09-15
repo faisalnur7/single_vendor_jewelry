@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
-use App\Jobs\TranslateTextJob;
-use Illuminate\Support\Facades\Bus;
 
 class CommonController extends Controller
 {

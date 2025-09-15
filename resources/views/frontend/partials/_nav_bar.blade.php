@@ -1,7 +1,7 @@
 @php
     $categories = \App\Models\Category::with('subcategories.childsubcategories')->where('show_on_main_menu', '1')->orderBy('order', 'asc')->get();
 @endphp
-<nav class="hidden lg:flex gap-3 lg:gap-6 items-center text-sm lg:text-sm font-bold">
+<nav class="hidden lg:flex flex-wrap gap-3 px-6 lg:gap-6 items-center text-sm lg:text-sm font-bold">
     @foreach ($categories as $category)
         <div class="relative group">
             <!-- Top-level category link -->
