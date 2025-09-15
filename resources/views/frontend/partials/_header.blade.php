@@ -28,88 +28,97 @@
     {{-- Navigation --}}
     @include('frontend.partials._nav_bar')
 
+    @php
+        $languages = [
+            'en' => ['name' => 'English', 'flag' => '🇬🇧'],
+            'pt' => ['name' => 'Portuguese', 'flag' => '🇵🇹'],
+            'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
+            'es' => ['name' => 'Spanish', 'flag' => '🇪🇸'],
+            'fr' => ['name' => 'French', 'flag' => '🇫🇷'],
+            'it' => ['name' => 'Italian', 'flag' => '🇮🇹'],
+            'de' => ['name' => 'German', 'flag' => '🇩🇪'],
+            'sv' => ['name' => 'Swedish', 'flag' => '🇸🇪'],
+            'no' => ['name' => 'Norwegian', 'flag' => '🇳🇴'],
+            'tr' => ['name' => 'Turkish', 'flag' => '🇹🇷'],
+            'hi' => ['name' => 'Hindi', 'flag' => '🇮🇳'],
+            'ru' => ['name' => 'Russian', 'flag' => '🇷🇺'],
+            'el' => ['name' => 'Greek', 'flag' => '🇬🇷'],
+            'ro' => ['name' => 'Romanian', 'flag' => '🇷🇴'],
+            'cs' => ['name' => 'Czech', 'flag' => '🇨🇿'],
+            'pl' => ['name' => 'Polish', 'flag' => '🇵🇱'],
+        ];
+        $currentLang = session('lang', 'en');
+    @endphp
+
     {{-- Right Icons --}}
     <div class="flex items-center gap-2 pl-2 lg:pl-0 lg:gap-4 text-sm">
 
-        <!-- Currency Dropdown -->
-        <div class="relative">
-            <div class="relative">
-                <div id="currencyMenu"
-                    class="hidden absolute right-0 mt-2 w-28 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                    <form action="{{ route('setCurrency') }}" method="POST" id="currencyForm">
+        <!-- Globe Toggle -->
+        <div class="relative hidden md:block">
+            <!-- Globe Button -->
+            <button id="globalToggle" class="flex items-center gap-2  rounded-lg px-3 py-1 hover:bg-gray-100">
+                <img src="{{ asset('/assets/img/globe.png') }}" class="w-6" />
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+
+            <!-- Wrapper for Currency + Language -->
+            <div id="globalMenu"
+                class="hidden absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 space-y-3">
+
+                <!-- Currency Dropdown -->
+                <div>
+                    <span class="block text-sm font-semibold px-2 py-1 text-gray-600">Currency</span>
+                    <form action="{{ route('setCurrency') }}" method="POST" id="currencyForm" class="flex flex-col">
                         @csrf
-                        <button type="submit" name="currency" value="USD"
-                            class="block w-full text-left px-4 py-2 hover:bg-gray-100 {{ session('currency', 'USD') == 'USD' ? 'bg-gray-100 font-semibold' : '' }}">
-                            $ USD
-                        </button>
-                        <button type="submit" name="currency" value="RMB"
-                            class="block w-full text-left px-4 py-2 hover:bg-gray-100 {{ session('currency') == 'RMB' ? 'bg-gray-100 font-semibold' : '' }}">
-                            ¥ RMB
-                        </button>
+                        <select name="currency" onchange="this.form.submit()"
+                            class="block w-full border rounded px-3 py-2 text-gray-700 focus:ring focus:ring-blue-200">
+                            <option value="USD" {{ session('currency', 'USD') == 'USD' ? 'selected' : '' }}>$ USD
+                            </option>
+                            <option value="RMB" {{ session('currency') == 'RMB' ? 'selected' : '' }}>¥ RMB</option>
+                        </select>
                     </form>
                 </div>
 
-                <!-- Toggle button label -->
-                <button id="currencyToggle"
-                    class="flex items-center gap-1 border-none md:border border-gray-300 rounded-lg px-1 md:px-3 py-1 hover:bg-gray-100">
-                    <span id="currentCurrency" class="flex"
-                        data-currentCurrency="{{ session('currency', 'USD') === 'USD' ? 'USD' : 'RMB' }}">
-                        @if (session('currency', 'USD') === 'USD')
-                            <span>$</span>&nbsp;<span class="hidden md:block">USD</span>
-                        @else
-                            <span>¥</span>&nbsp;<span class="hidden md:block">RMB</span>
-                        @endif
-                    </span>
-                    <i class="fa-solid fa-chevron-down text-xs hidden md:block"></i>
-                </button>
+                <!-- Language Dropdown -->
+                <div>
+                    <span class="block text-sm font-semibold px-2 py-1 text-gray-600">Language</span>
+                    <div class="flex flex-col">
+                        <select id="languageSelect" class="border rounded px-3 py-2">
+                            @foreach ($languages as $code => $lang)
+                                <option value="{{ $code }}" {{ $currentLang === $code ? 'selected' : '' }}>
+                                    {{ $lang['flag'] }} {{ $lang['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                    </div>
+                </div>
+
+                {{-- <div>
+                    <span class="block text-sm font-semibold px-2 py-1 text-gray-600">Language</span>
+                    <form action="{{ route('setLanguage') }}" method="POST" id="languageForm">
+                        @csrf
+                        <select name="language" onchange="this.form.submit()"
+                            class="block w-full border rounded px-3 py-2 text-gray-700 focus:ring focus:ring-blue-200">
+                            @foreach ($languages as $code => $lang)
+                                <option value="{{ $code }}" {{ $currentLang === $code ? 'selected' : '' }}>
+                                    {{ $lang['flag'] }} {{ $lang['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div> --}}
+
 
             </div>
-
         </div>
 
-        <!-- Language Dropdown - AJAX Version -->
-        <div class="relative">
-            <!-- Toggle button -->
-            @php
-                $languages = [
-                    'en' => ['name' => 'English', 'flag' => '🇬🇧'],
-                    'pt' => ['name' => 'Portuguese', 'flag' => '🇵🇹'],
-                    'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
-                    'es' => ['name' => 'Spanish', 'flag' => '🇪🇸'],
-                    'fr' => ['name' => 'French', 'flag' => '🇫🇷'],
-                    'it' => ['name' => 'Italian', 'flag' => '🇮🇹'],
-                    'de' => ['name' => 'German', 'flag' => '🇩🇪'],
-                    'sv' => ['name' => 'Swedish', 'flag' => '🇸🇪'],
-                    'no' => ['name' => 'Norwegian', 'flag' => '🇳🇴'],
-                    'tr' => ['name' => 'Turkish', 'flag' => '🇹🇷'],
-                    'hi' => ['name' => 'Hindi', 'flag' => '🇮🇳'],
-                    'ru' => ['name' => 'Russian', 'flag' => '🇷🇺'],
-                    'el' => ['name' => 'Greek', 'flag' => '🇬🇷'],
-                    'ro' => ['name' => 'Romanian', 'flag' => '🇷🇴'],
-                    'cs' => ['name' => 'Czech', 'flag' => '🇨🇿'],
-                    'pl' => ['name' => 'Polish', 'flag' => '🇵🇱'],
-                ];
-                $currentLang = session('lang', 'en');
-            @endphp
-            <button id="languageToggle"
-                class="flex items-center gap-2 border-none md:border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">
-                <span class="text-lg">{{ $languages[$currentLang]['flag'] }}</span>
-                <span id="currentLanguage" class="hidden md:block">{{ strtoupper($currentLang) }}</span>
-                <i class="fa-solid fa-chevron-down text-xs hidden md:block"></i>
-            </button>
-
-            <!-- Dropdown menu -->
-            <div id="languageMenu"
-                class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                @foreach ($languages as $code => $lang)
-                    <button data-lang="{{ $code }}"
-                        class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 {{ $currentLang === $code ? 'bg-gray-100 font-semibold' : '' }}">
-                        <span class="text-lg">{{ $lang['flag'] }}</span>
-                        <span>{{ $lang['name'] }}</span>
-                    </button>
-                @endforeach
-            </div>
-        </div>
+        <!-- Script -->
+        <script>
+            document.getElementById("globalToggle").addEventListener("click", function() {
+                document.getElementById("globalMenu").classList.toggle("hidden");
+            });
+        </script>
 
 
 
@@ -117,7 +126,8 @@
         <div class="relative">
             <!-- Search Icon -->
             <button id="searchToggle" class="text-lg">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                {{-- <i class="fa-solid fa-magnifying-glass"></i> --}}
+                <img src="{{ asset('/assets/img/search.png') }}" class="w-7" />
             </button>
         </div>
 
@@ -127,8 +137,9 @@
             $profile_link = auth()->check() ? route('user_profile') : '#';
         @endphp
 
-        <a href="{{ $profile_link }}" class="text-lg header-user-icon">
-            <i class="fa-regular fa-user"></i>
+        <a href="{{ $profile_link }}" class="text-lg header-user-icon hidden md:block">
+            {{-- <i class="fa-regular fa-user"></i> --}}
+            <img src="{{ asset('/assets/img/user.png') }}" class="w-7" />
         </a>
         @php
             $wishlistCount = 0;
@@ -137,8 +148,10 @@
             }
         @endphp
 
-        <a href="{{ auth()->check() ? route('user_wishlist') : route('guest_wishlist') }}" class="text-lg relative">
-            <i class="fa-regular fa-heart"></i>
+        <a href="{{ auth()->check() ? route('user_wishlist') : route('guest_wishlist') }}"
+            class="text-lg relative hidden md:block">
+            {{-- <i class="fa-regular fa-heart"></i> --}}
+            <img src="{{ asset('/assets/img/heart.png') }}" class="w-7" />
             <span
                 class="absolute -top-1 -right-2 @if ($wishlistCount == 0) bg-transparent @else bg-red-500 @endif text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none wishlist_count">
                 @if (auth()->check() && $wishlistCount > 0)
@@ -147,9 +160,9 @@
             </span>
         </a>
 
-        <a href="{{ route('cart') }}" class="relative text-lg">
-            <i class="fa-solid fa-cart-shopping"></i>
-
+        <a href="{{ route('cart') }}" class="relative text-xl">
+            {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
+            <img src="{{ asset('/assets/img/trolley.png') }}" class="w-7" />
             @php
                 $cartCount =
                     auth()->check() && !empty(auth()->user()->cart)

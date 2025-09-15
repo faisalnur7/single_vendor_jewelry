@@ -61,7 +61,7 @@
         <div class="mx-auto p-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- Image Viewer -->
-                <div class="flex flex-col gap-2 self-start sticky top-28 max-h-screen">
+                <div class="flex flex-col gap-2 self-start sticky top-24 max-h-screen">
                     <div class="relative flex gap-4 w-full justify-center border rounded-md">
                         <!-- Main Image Natural Width, Fixed Height -->
                         <div class="relative overflow-hidden">

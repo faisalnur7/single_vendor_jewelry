@@ -203,6 +203,40 @@
             });
         });
 
+        $('#languageSelect').on('change', function () {
+            let newLang = $(this).val();
+            if (newLang === currentLang) return;
+
+            showLoading(true);
+
+            $.ajax({
+                url: "{{ route('switchLanguage') }}",
+                type: "POST",
+                data: {
+                    language: newLang,
+                    _token: "{{ csrf_token() }}" // important for POST
+                },
+                success: function () {
+                    // Update toggle text/flag
+                    $('#currentLanguage').text(newLang.toUpperCase());
+                    $('#languageToggle span:first').text(languages[newLang]);
+
+                    // Translate page content dynamically
+                    translatePageContent(newLang);
+
+                    // update currentLang
+                    currentLang = newLang;
+                },
+                error: function () {
+                    console.error("Translation failed");
+                },
+                complete: function () {
+                    showLoading(false);
+                }
+            });
+        });
+
+
         // translate page content
         function translatePageContent(language) {
             let elements = $("[data-translate]");
