@@ -123,7 +123,7 @@
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-2 mt-3">
                         @foreach ($product?->category?->subcategories as $subcategory)
-                            <a href="{{route('subcategory.show',[$product?->category->slug, $subcategory->slug])}}"
+                            <a data-translate href="{{route('subcategory.show',[$product?->category->slug, $subcategory->slug])}}"
                                 class="text-xs md:text-sm border px-2 py-1 rounded-full hover:bg-black hover:text-white transition-all duration-300">{{ $subcategory->name }}</a>
                         @endforeach
                     </div>
@@ -188,7 +188,7 @@
                     <div class="mt-6 flex items-center justify-between text-white rounded gap-4">
                         <button
                             class="flex items-center gap-2 text-white justify-center  bg-black w-full p-3 rounded-md add_to_cart_btn">
-                            🛒 <span>ADD TO CART</span> <span id="cartTotal">(0 items - $0.00)</span>
+                            🛒 <span data-translate>ADD TO CART</span> <span id="cartTotal">(0 items - $0.00)</span>
                         </button>
                         <button class="hidden md:flex border p-3 rounded-md border-gray-800 text-black wishlist_btn"
                             data-product_id="{{ $product->id }}">
@@ -235,7 +235,7 @@
                         <div class="border rounded-lg mb-3">
                             <!-- Header -->
                             <div class="bg-gray-100 px-4 py-2 flex justify-between items-center rounded-t-lg">
-                                <span class="font-medium">Description</span>
+                                <span class="font-medium" data-translate>Description</span>
                                 <button
                                     class="descToggle bg-black text-white w-6 h-6 flex items-center justify-center rounded">
                                     –
@@ -279,7 +279,7 @@
                         <div class="border rounded-lg mb-3">
                             <!-- Header -->
                             <div class="bg-gray-100 px-4 py-2 flex justify-between items-center rounded-t-lg">
-                                <span class="font-medium">Shipping Policy</span>
+                                <span class="font-medium" data-translate>Shipping Policy</span>
                                 <button
                                     class="descToggle bg-black text-white w-6 h-6 flex items-center justify-center rounded">
                                     +
