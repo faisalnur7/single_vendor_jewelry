@@ -33,7 +33,7 @@
         </div>
     </section>
 
-    <section class="mt-0 md:mt-8 py-6 px-6 min-h-[600px] bg-cover bg-right md:bg-center bg-no-repeat" style="background-image: url('/assets/img/images/about_stainless.webp')">
+    <section class="mt-8 py-6 px-6 min-h-[600px] bg-cover bg-right md:bg-center bg-no-repeat" style="background-image: url('/assets/img/images/about_stainless.webp')">
         <div class="flex w-full bg-transparent py-6 rounded">
             <div class="w-1/2"></div>
             <div class="w-1/2">
