@@ -1,4 +1,4 @@
-<nav class="text-xs md:text-md text-gray-600 m-0" aria-label="Breadcrumb">
+<nav class="text-sm md:text-md text-gray-600 m-0" aria-label="Breadcrumb">
     <div class="space-x-2">
         <span>
             <a href="{{ url('/') }}" class="hover:underline" data-translate>Home</a>
