@@ -11,7 +11,7 @@
 <body class="font-sans bg-white text-gray-800 overflow-x-hidden">
     {{-- @include('frontend.partials._top_bar') --}}
     <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="hidden fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
+    <div id="loadingIndicator" class="fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
             <img src="{{asset('/infinity_loader.gif')}}" />
     </div>
 

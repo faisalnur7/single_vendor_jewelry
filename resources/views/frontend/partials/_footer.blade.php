@@ -92,6 +92,11 @@
 </footer>
 
 <script>
+    $(window).on("load", function() {
+        let $indicator = $("#loadingIndicator");
+        $indicator.addClass("hidden");
+    });
+
     $(document).ready(function() {
         // $('#subscriberForm').on('submit', function(e) {
         $(document).on('click', '.subscriber_form_submit', function(e) {
