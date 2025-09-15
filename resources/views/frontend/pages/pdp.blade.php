@@ -11,27 +11,10 @@
 
         .thumbnailSwiper {
             height: auto;
-            /* adjust as needed */
-        }
-
-        .swiper-button-next,
-        .swiper-button-prev {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .swiper-button-next {
-            top: auto;
-            bottom: 0;
-        }
-
-        .swiper-button-prev {
-            top: 0;
         }
 
         .thumbnailSwiper .swiper-slide {
             aspect-ratio: 1 / 1;
-            /* makes each slide a square */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -40,10 +23,8 @@
         .thumbnailSwiper .swiper-slide img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            /* crop/cover inside the square */
+            object-fit: cover;
             border-radius: 6px;
-            /* optional rounded edges */
         }
 
         .prose p {
@@ -53,6 +34,42 @@
 
         .prose span {
             display: inline;
+        }
+
+        /* Hide default arrow icons */
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            display: none;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.45);
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            z-index: 10;
+            transition: .3s;
+        }
+
+        .swiper-button-prev {
+            left: 24px;
+        }
+
+        .swiper-button-next {
+            right: 24px;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background-color: rgba(255, 255, 255, 0.9);
         }
     </style>
 @endsection
@@ -72,9 +89,11 @@
 
                     <div class="relative lg:mt-4 h-full">
                         <!-- Navigation buttons -->
-                        <div class="swiper-button-prev !left-0"></div>
-                        <div class="swiper-button-next !right-0"></div>
+
                         <div class="swiper thumbnailSwiper">
+                            <div class="swiper-button-prev">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </div>
                             <div class="swiper-wrapper h-auto md:h-full">
                                 @foreach ($product->variants as $variant)
                                     <div class="swiper-slide w-32 h-min md:h-36 aspect-square cursor-pointer">
@@ -84,7 +103,12 @@
                                     </div>
                                 @endforeach
                             </div>
+
+                            <div class="swiper-button-next">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -120,11 +144,10 @@
                             </div>
 
                             <!-- Data Rows -->
-                            <div class="max-h-[500px] overflow-y-auto overflow-x-auto">
+                            <div class=" overflow-y-auto overflow-x-auto">
                                 @foreach ($product->variants as $index => $variant)
                                     <div onclick="changeImage('{{ asset($variant->image) }}', this)"
-                                        data-image="{{ asset($variant->image) }}"
-                                        data-weight="{{ $variant->weight }}"
+                                        data-image="{{ asset($variant->image) }}" data-weight="{{ $variant->weight }}"
                                         class="grid grid-cols-3 items-center mt-1 border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer text-xs sm:text-sm min-w-[320px]">
 
                                         <!-- Color + Image -->
@@ -144,12 +167,14 @@
                                                 <button class="qty-decrease px-2 py-1 border rounded"
                                                     data-index="{{ $index }}" data-product_id="{{ $variant->id }}"
                                                     data-price="{{ $variant->price }}"
-                                                    data-price_rmb="{{ $variant->price_rmb }}">-</button>
+                                                    data-price_rmb="{{ $variant->price_rmb }}"
+                                                    data-min_order_qty="{{ $variant->min_order_qty }}">-</button>
                                                 <span id="qty-{{ $index }}">0</span>
                                                 <button class="qty-increase px-2 py-1 border rounded"
                                                     data-index="{{ $index }}" data-product_id="{{ $variant->id }}"
                                                     data-price="{{ $variant->price }}"
-                                                    data-price_rmb="{{ $variant->price_rmb }}">+</button>
+                                                    data-price_rmb="{{ $variant->price_rmb }}"
+                                                    data-min_order_qty="{{ $variant->min_order_qty }}">+</button>
                                             </div>
                                         </div>
                                     </div>
@@ -199,7 +224,10 @@
                     <div class="mt-6">
                         <h3 class="text-lg font-semibold">Product Description</h3>
                         <p class="text-sm text-gray-600 mt-2" data-translate>
-                            "Our stainless steel jewelry is crafted from premium 304 and 316L corrosion-resistant stainless steel, ensuring superior strength and longevity. Featuring a weatherproof finish and an exquisite 18k gold plating, each piece combines luxury and durability with a sleek, modern design, perfect for everyday wear or special occasions"
+                            "Our stainless steel jewelry is crafted from premium 304 and 316L corrosion-resistant stainless
+                            steel, ensuring superior strength and longevity. Featuring a weatherproof finish and an
+                            exquisite 18k gold plating, each piece combines luxury and durability with a sleek, modern
+                            design, perfect for everyday wear or special occasions"
                         </p>
                     </div>
 
@@ -223,10 +251,10 @@
                                 <div data-translate>18K Gold, Electroplating</div>
 
                                 <div>Spu</div>
-                                <div>{{$product->sku}}</div>
+                                <div>{{ $product->sku }}</div>
 
                                 <div data-translate>Classification</div>
-                                <div data-translate>{{$product->category->name}}</div>
+                                <div data-translate>{{ $product->category->name }}</div>
 
                                 <div data-translate>Style</div>
                                 <div data-translate>Moderate Luxury</div>
@@ -235,13 +263,13 @@
                                 <div data-translate>Stainless Steel</div>
 
                                 <div data-translate>Weight</div>
-                                <div><span class="weight">{{$product->variants->first()->weight}}</span>g</div>
+                                <div><span class="weight">{{ $product->variants->first()->weight }}</span>g</div>
 
                                 <div data-translate>Occasion</div>
                                 <div data-translate>Daily, Holiday, Wedding</div>
 
                                 <div data-translate>Gender</div>
-                                <div data-translate>{{$product->gender}}</div>
+                                <div data-translate>{{ $product->gender }}</div>
 
                                 <div data-translate>Pendant Material</div>
                                 <div>Titanium Steel</div>
@@ -260,7 +288,7 @@
 
                             <!-- Content (hidden by default) -->
                             <div class="descContent p-2 grid grid-cols-2 gap-y-1 text-sm hidden">
-                                @foreach(App\Models\ShippingPolicy::where('status', 1)->get() as $shipping_policy)
+                                @foreach (App\Models\ShippingPolicy::where('status', 1)->get() as $shipping_policy)
                                     <div class="p-2">
                                         <h3 class="text-sm font-semibold mb-2">{{ $shipping_policy->title }}</h3>
                                         <div class="text-gray-700 prose">

@@ -51,6 +51,7 @@ class CartController extends Controller
                 'price' => $item['price'],
                 'price_rmb' => $item['price_rmb'],
                 'quantity' => $item['quantity'],
+                'min_order_qty' => $item['min_order_qty'],
                 'subtotal' => $item['price'] * $item['quantity'],
                 'subtotal_rmb' => $item['price_rmb'] * $item['quantity'],
             ];
@@ -67,6 +68,7 @@ class CartController extends Controller
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.price' => 'required|numeric|min:0',
             'items.*.quantity' => 'required|integer|min:1',
+            'items.*.min_order_qty' => 'required|integer|min:1',
         ]);
 
         $user = auth()->user();
@@ -90,6 +92,7 @@ class CartController extends Controller
                         'quantity' => $item['quantity'],
                         'price' => $item['price'],
                         'price_rmb' => $item['price_rmb'],
+                        'min_order_qty' => $item['min_order_qty'],
                     ]);
                 }
             }
@@ -116,6 +119,7 @@ class CartController extends Controller
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                     'price_rmb' => $item['price_rmb'],
+                    'min_order_qty' => $item['min_order_qty'],
                 ];
             }
         }

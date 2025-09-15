@@ -49,25 +49,28 @@
 
         $('.increase-qty').on('click', function() {
             var id = $(this).data('id');
+            var min_order_qty = $(this).data('min_order_qty');
             var input = $('.quantity-input[data-id="' + id + '"]');
             var currentVal = parseInt(input.val());
             if (!isNaN(currentVal)) {
-                input.val(currentVal + 1);
-                updateCart(id, currentVal + 1);
+                input.val(currentVal + min_order_qty);
+                updateCart(id, currentVal + min_order_qty);
             }
         });
 
         $('.decrease-qty').on('click', function() {
             var id = $(this).data('id');
+            var min_order_qty = $(this).data('min_order_qty');
             var input = $('.quantity-input[data-id="' + id + '"]');
             var currentVal = parseInt(input.val());
             if (!isNaN(currentVal) && currentVal > 1) {
-                input.val(currentVal - 1);
-                updateCart(id, currentVal - 1);
+                input.val(currentVal - min_order_qty);
+                updateCart(id, currentVal - min_order_qty);
             }
         });
 
         // Optional: trigger update if quantity is manually typed
+        /** 
         $('.quantity-input').on('change', function() {
             var id = $(this).data('id');
             var qty = parseInt($(this).val());
@@ -78,6 +81,32 @@
                 updateCart(id, 1);
             }
         });
+
+        **/
+
+        $('.quantity-input').on('change', function() {
+            var id = $(this).data('id');
+            var qty = parseInt($(this).val());
+            var minOrderQty = parseInt($(this).data('min_order_qty'));
+
+            if (!isNaN(qty) && qty >= minOrderQty) {
+                // Round to nearest multiple of minOrderQty
+                var adjustedQty = Math.round(qty / minOrderQty) * minOrderQty;
+
+                // Prevent adjustedQty from being 0
+                if (adjustedQty < minOrderQty) {
+                    adjustedQty = minOrderQty;
+                }
+
+                $(this).val(adjustedQty);
+                updateCart(id, adjustedQty);
+            } else {
+                // Default to minOrderQty if invalid
+                $(this).val(minOrderQty);
+                updateCart(id, minOrderQty);
+            }
+        });
+
     });
 
     $('.delete-cart-item-btn').on('click', function() {

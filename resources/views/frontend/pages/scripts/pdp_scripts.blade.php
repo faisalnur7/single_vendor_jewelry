@@ -3,7 +3,8 @@
         // Swiper initialization
         new Swiper('.thumbnailSwiper', {
             slidesPerView: 5,
-            spaceBetween: 2,
+            spaceBetween: 5,
+            loop: true,
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
@@ -103,18 +104,20 @@
 
         $('.qty-increase').click(function() {
             var index = $(this).data('index');
+            var min_order_qty = parseInt($(this).data('min_order_qty'));
             var qtyElem = $('#qty-' + index);
             var current = parseInt(qtyElem.text());
-            qtyElem.text(current + 1);
+            qtyElem.text(current + min_order_qty);
             updateCartTotal();
         });
 
         $('.qty-decrease').click(function() {
             var index = $(this).data('index');
+            var min_order_qty = parseInt($(this).data('min_order_qty'));
             var qtyElem = $('#qty-' + index);
             var current = parseInt(qtyElem.text());
             if (current > 0) {
-                qtyElem.text(current - 1);
+                qtyElem.text(current - min_order_qty);
                 updateCartTotal();
             }
         });
@@ -132,6 +135,7 @@
                     const price = $('[data-index="' + index + '"]').first().data('price');
                     const price_rmb = $('[data-index="' + index + '"]').first().data('price_rmb');
                     const productId = $('[data-index="' + index + '"]').first().data('product_id');
+                    const min_order_qty = $('[data-index="' + index + '"]').first().data('min_order_qty');
                     const variant = @json($product->variants);
 
                     itemsToAdd.push({
@@ -140,6 +144,7 @@
                         quantity: qty,
                         price: price,
                         price_rmb: price_rmb,
+                        min_order_qty: min_order_qty,
                     });
                 }
             });

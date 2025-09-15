@@ -43,6 +43,7 @@
                             $price_text = $isArray ? show_price($item['price']) ?? (show_price($item['product']['price']) ?? 0) : show_price($item->price) ?? show_price($item->product->price);
                             
                             $price = $isArray ? $item['price'] ?? ($item['product']['price'] ?? 0) : $item->price ?? $item->product->price;
+                            $min_order_qty = $isArray ? $item['min_order_qty'] ?? ($item['product']['min_order_qty'] ?? 0) : $item->min_order_qty ?? $item->product->min_order_qty;
                             
                             if($currency == 'RMB'){
                                 $price_text = $isArray ? show_price($item['price_rmb']) ?? (show_price($item['product']['price_rmb']) ?? 0) : show_price($item->price_rmb) ?? show_price($item->product->price_rmb);
@@ -59,7 +60,7 @@
                         <div class="bg-white p-4 border-b" data-id="{{ $product_id }}">
                             <div class="flex flex-wrap items-center">
                                 <!-- Product (w-5/12) -->
-                                <div class="w-full sm:w-5/12 flex items-center gap-3">
+                                <div class="w-full sm:w-5/12 flex items-start gap-3">
                                     <div class="w-96 overflow-hidden rounded">
                                         <img src="{{ asset($image) }}"
                                             class="w-full h-full object-cover transition-transform duration-300 hover:scale-110" />
@@ -88,15 +89,15 @@
                                 <div class="w-1/2 sm:w-2/12 text-center mt-4 sm:mt-0 flex justify-center items-center">
                                     <button type="button"
                                         class="decrease-qty h-10 px-3 rounded-l-full border border-gray-400 border-r-0 text-black"
-                                        data-id="{{ $product_id }}">−</button>
+                                        data-id="{{ $product_id }}" data-min_order_qty="{{$min_order_qty}}">−</button>
 
-                                    <input type="number" min="1" value="{{ $quantity }}"
-                                        class="w-14 h-10 text-xl text-center border border-gray-400 border-r-0 border-l-0 quantity-input"
-                                        data-id="{{ $product_id }}">
+                                    <input type="text" min="1" value="{{ $quantity }}"
+                                        class="w-20 h-10 text-xl text-center border border-gray-400 border-r-0 border-l-0 quantity-input"
+                                        data-id="{{ $product_id }}" data-min_order_qty="{{$min_order_qty}}">
 
                                     <button type="button"
                                         class="increase-qty h-10 px-3 rounded-r-full border border-gray-400 border-l-0 text-black"
-                                        data-id="{{ $product_id }}">+</button>
+                                        data-id="{{ $product_id }}" data-min_order_qty="{{$min_order_qty}}">+</button>
                                 </div>
 
                                 <!-- Subtotal + Remove (w-2/12) -->
