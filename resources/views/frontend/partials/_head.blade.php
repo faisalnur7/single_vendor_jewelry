@@ -107,13 +107,13 @@
         /* red-400 */
     }
 
-    .why_choose_us_list li{
+    .why_choose_us_list li {
         line-height: 2.5;
         font-size: 18px;
         font-family: 'arial';
     }
 
-    .why_choose_us_list li::before{
+    .why_choose_us_list li::before {
         content: '🤎';
         margin-right: 10px;
     }
@@ -128,21 +128,46 @@
         top: 0.75rem;
         background-color: white;
         padding: 0 0.25rem;
-        color: #6b7280; /* text-gray-500 */
+        color: #6b7280;
+        /* text-gray-500 */
         transition: all 0.2s ease;
         pointer-events: none;
         z-index: 10;
     }
 
     /* FIXED: Only sibling selector required */
-    .transition_label_form input:focus + .floating-label,
-    .transition_label_form input:not(:placeholder-shown) + .floating-label {
+    .transition_label_form input:focus+.floating-label,
+    .transition_label_form input:not(:placeholder-shown)+.floating-label {
         top: -0.6rem;
         left: 0.75rem;
-        font-size: 0.75rem; /* text-xs */
-        color: #111827; /* text-gray-900 */
+        font-size: 0.75rem;
+        /* text-xs */
+        color: #111827;
+        /* text-gray-900 */
     }
 
+    /* Spinner style */
+    .loader {
+        border: 6px solid #f3f3f3;
+        /* Light gray */
+        border-top: 6px solid #000;
+        /* Black */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    /* Spin animation */
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 @vite('resources/css/app.css')

@@ -73,8 +73,8 @@
         <!-- Newsletter -->
         <div>
             <h2 class="text-lg font-semibold mb-4">Subscribe to our newsletter</h2>
-            <form class="flex flex-row md:flex-col sm:items-center !items-start gap-3" action="{{ route('subscribers.store') }}"
-                method="POST" id="subscriberForm">
+            <form class="flex flex-row md:flex-col sm:items-center !items-start gap-3"
+                action="{{ route('subscribers.store') }}" method="POST" id="subscriberForm">
                 @csrf
                 <input type="email" name="email" id="subscriber_email" placeholder="Your email address"
                     class="flex-1 border border-gray-300 px-4 py-2 rounded outline-none w-full sm:w-auto" />
@@ -173,7 +173,7 @@
             let newLang = $(this).data('lang');
             if (newLang === currentLang) return;
 
-            showLoading(true);
+            showLoading();
 
             $.ajax({
                 url: "{{ route('switchLanguage') }}",
@@ -199,7 +199,7 @@
                     console.error("Translation failed");
                 },
                 complete: function() {
-                    showLoading(false);
+                    hideLoading();
                 }
             });
         });
@@ -208,7 +208,9 @@
             let newLang = $(this).val();
             if (newLang === currentLang) return;
 
-            showLoading(true);
+            showLoading();
+
+            document.getElementById("globalMenu").classList.toggle("hidden");
 
             $.ajax({
                 url: "{{ route('switchLanguage') }}",
@@ -232,7 +234,7 @@
                     console.error("Translation failed");
                 },
                 complete: function() {
-                    showLoading(false);
+                    hideLoading();
                 }
             });
         });
@@ -253,7 +255,7 @@
             elements.each(function() {
                 textsToTranslate.push($(this).data("original"));
             });
-
+            showLoading();
             let chunkSize = 50;
             for (let i = 0; i < textsToTranslate.length; i += chunkSize) {
                 let chunk = textsToTranslate.slice(i, i + chunkSize);
@@ -276,6 +278,12 @@
                                 }
                             });
                         }
+                    },
+                    error: function() {
+                        console.error("Translation failed");
+                    },
+                    complete: function() {
+                        hideLoading();
                     }
                 });
             }
@@ -293,12 +301,16 @@
         }
 
         // loading indicator
-        function showLoading(show) {
+        function showLoading() {
             let $indicator = $("#loadingIndicator");
-            let $toggle = $("#languageToggle");
+            console.log('...............loading..................');
+            $indicator.removeClass("hidden");
+        }
 
-            $indicator.toggleClass("hidden", !show);
-            $toggle.prop("disabled", show);
+        function hideLoading() {
+            let $indicator = $("#loadingIndicator");
+            console.log('...............completed..................');
+            $indicator.addClass("hidden");
         }
 
         $(".variant-thumb").each(function() {
