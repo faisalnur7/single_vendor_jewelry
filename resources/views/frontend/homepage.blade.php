@@ -35,7 +35,7 @@
 
     <section class="md:mt-8 py-6 px-6 min-h-[600px] bg-cover bg-right md:bg-center bg-no-repeat" style="background-image: url('/assets/img/images/about_stainless.webp')">
         <div class="flex w-full bg-transparent py-6 rounded">
-            <div class="w-1/2 hidden md:block"></div>
+            <div class="w-0 md:w-1/2"></div>
             <div class="w-full md:w-1/2">
                 <div class="why_choose_us_list">
                 <h2 class="text-3xl text-center md:text-left md:text-5xl font-bold mb-6">Welcome to Stainless Steel Jewellery</h2>
