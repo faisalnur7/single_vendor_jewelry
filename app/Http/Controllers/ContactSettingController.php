@@ -20,6 +20,7 @@ class ContactSettingController extends Controller
             'info_email' => 'nullable|email',
             'customer_support_email' => 'nullable|email',
             'whatsapp' => 'nullable|string|max:50',
+            'whatsapp_link' => 'nullable|string|max:50',
             'email' => 'nullable|email',
             'phone' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:255',
@@ -27,6 +28,7 @@ class ContactSettingController extends Controller
             'company_name' => 'nullable|string|max:255',
             'company_description' => 'nullable|string',
             'company_logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'whatsapp_qr' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $data = $validated;
@@ -36,6 +38,13 @@ class ContactSettingController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('settings/company_logo'), $filename);
             $data['company_logo'] = 'settings/company_logo/' . $filename;
+        }
+
+        if ($request->hasFile('whatsapp_qr')) {
+            $file = $request->file('whatsapp_qr');
+            $qr_filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('settings/whatsapp_qr'), $qr_filename);
+            $data['whatsapp_qr'] = 'settings/whatsapp_qr/' . $qr_filename;
         }
 
         ContactSetting::updateOrCreate(['id' => 1], $data);

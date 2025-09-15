@@ -48,10 +48,34 @@
             'pl' => ['name' => 'Polish', 'flag' => '🇵🇱'],
         ];
         $currentLang = session('lang', 'en');
+        $contactSettings = App\Models\ContactSetting::first();
     @endphp
 
     {{-- Right Icons --}}
     <div class="flex items-center gap-2 pl-2 lg:pl-0 lg:gap-4 text-sm">
+
+        <!-- WhatsApp Toggle -->
+        <div class="relative hidden md:block">
+            <!-- WhatsApp Button -->
+            <button id="whatsappToggle" class="flex items-center gap-2 rounded-lg px-1 py-1 hover:bg-gray-100">
+                <img src="{{ asset('/assets/img/whatsapp.png') }}" class="w-8" />
+            </button>
+
+            <!-- WhatsApp Card -->
+            <div id="whatsappMenu"
+                class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 space-y-3 text-center">
+
+                <p class="text-lg mb-4 font-bold text-gray-900">Stainless Steel Jewelry</p>
+                <a href="{{$contactSettings?->whatsapp_link}}" target="_blank">{{$contactSettings?->whatsapp_link}}</a>
+                <span class="block text-sm font-semibold text-gray-600">WhatsApp Business Account</span>
+
+                <!-- QR Code -->
+                <div class="flex justify-center">
+                    <img src="{{ asset($contactSettings?->whatsapp_qr) }}" alt="WhatsApp QR"
+                        class="w-42 h-42 rounded-md border" />
+                </div>
+            </div>
+        </div>
 
         <!-- Globe Toggle -->
         <div class="relative hidden md:block">
@@ -93,23 +117,6 @@
 
                     </div>
                 </div>
-
-                {{-- <div>
-                    <span class="block text-sm font-semibold px-2 py-1 text-gray-600">Language</span>
-                    <form action="{{ route('setLanguage') }}" method="POST" id="languageForm">
-                        @csrf
-                        <select name="language" onchange="this.form.submit()"
-                            class="block w-full border rounded px-3 py-2 text-gray-700 focus:ring focus:ring-blue-200">
-                            @foreach ($languages as $code => $lang)
-                                <option value="{{ $code }}" {{ $currentLang === $code ? 'selected' : '' }}>
-                                    {{ $lang['flag'] }} {{ $lang['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </form>
-                </div> --}}
-
-
             </div>
         </div>
 
@@ -292,4 +299,18 @@
             }
         });
     });
+
+    // Toggle WhatsApp menu
+    $('#whatsappToggle').on('click', function (e) {
+        e.stopPropagation();
+        $('#whatsappMenu').toggleClass('hidden');
+    });
+
+    // Close when clicking outside
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('#whatsappToggle, #whatsappMenu').length) {
+            $('#whatsappMenu').addClass('hidden');
+        }
+    });
+
 </script>

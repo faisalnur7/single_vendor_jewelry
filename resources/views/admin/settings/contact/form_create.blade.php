@@ -35,6 +35,19 @@
                     <label>WhatsApp</label>
                     <input name="whatsapp" class="form-control" value="{{ old('whatsapp', $setting->whatsapp) }}">
                 </div>
+                
+                <div class="form-group">
+                    <label>WhatsApp QR</label>
+                    <input type="file" name="whatsapp_qr" class="form-control-file">
+                    @if($setting->whatsapp_qr)
+                        <img src="{{ asset($setting->whatsapp_qr) }}" class="mt-4 h-24" height="80" class="mt-2">
+                    @endif
+                </div>
+                
+                <div class="form-group">
+                    <label>WhatsApp link</label>
+                    <input name="whatsapp_link" class="form-control" value="{{ old('whatsapp_link', $setting->whatsapp_link) }}">
+                </div>
 
                 <div class="form-group">
                     <label>Phone</label>
