@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white z-40 site_header">
+<header class="site_header flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white z-50">
 
     {{-- Mobile Sidebar Toggle Button --}}
     @auth
@@ -24,8 +24,7 @@
                 alt="{{ $general_settings->site_title }}" class="h-10 object-contain" style="min-width: 150px" />
         </a>
     </div>
-
-    {{-- Navigation --}}
+    {{-- Navbar previous place --}}
     @include('frontend.partials._nav_bar')
 
     @php
@@ -53,6 +52,14 @@
 
     {{-- Right Icons --}}
     <div class="flex items-center gap-2 pl-2 lg:pl-0 lg:gap-4 text-sm">
+        <!-- Search Overlay -->
+        <div class="relative">
+            <!-- Search Icon -->
+            <button id="searchToggle" class="text-lg">
+                {{-- <i class="fa-solid fa-magnifying-glass"></i> --}}
+                <img src="{{ asset('/assets/img/search.png') }}" class="w-7" />
+            </button>
+        </div>
 
         <!-- WhatsApp Toggle -->
         <div class="relative hidden md:block">
@@ -66,7 +73,8 @@
                 class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 space-y-3 text-center">
 
                 <p class="text-lg mb-4 font-bold text-gray-900">Stainless Steel Jewelry</p>
-                <a href="{{$contactSettings?->whatsapp_link}}" target="_blank">{{$contactSettings?->whatsapp_link}}</a>
+                <a href="{{ $contactSettings?->whatsapp_link }}"
+                    target="_blank">{{ $contactSettings?->whatsapp_link }}</a>
                 <span class="block text-sm font-semibold text-gray-600">WhatsApp Business Account</span>
 
                 <!-- QR Code -->
@@ -126,18 +134,6 @@
                 document.getElementById("globalMenu").classList.toggle("hidden");
             });
         </script>
-
-
-
-        <!-- Search Overlay -->
-        <div class="relative">
-            <!-- Search Icon -->
-            <button id="searchToggle" class="text-lg">
-                {{-- <i class="fa-solid fa-magnifying-glass"></i> --}}
-                <img src="{{ asset('/assets/img/search.png') }}" class="w-7" />
-            </button>
-        </div>
-
 
 
         @php
@@ -204,7 +200,7 @@
 
     <!-- Search Results Container -->
     <div id="searchResults"
-        class="absolute top-full left-0 w-full bg-white shadow-lg max-h-[500px] overflow-y-auto p-4 flex flex-wrap gap-4">
+        class="absolute top-full left-0 w-full bg-white shadow-lg max-h-[500px] overflow-y-auto pl-4 pb-4 pr-4 flex flex-wrap gap-4">
     </div>
 </div>
 
@@ -301,16 +297,15 @@
     });
 
     // Toggle WhatsApp menu
-    $('#whatsappToggle').on('click', function (e) {
+    $('#whatsappToggle').on('click', function(e) {
         e.stopPropagation();
         $('#whatsappMenu').toggleClass('hidden');
     });
 
     // Close when clicking outside
-    $(document).on('click', function (e) {
+    $(document).on('click', function(e) {
         if (!$(e.target).closest('#whatsappToggle, #whatsappMenu').length) {
             $('#whatsappMenu').addClass('hidden');
         }
     });
-
 </script>
