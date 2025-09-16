@@ -294,5 +294,11 @@
                 }, 200); // matches your transition duration
             });
         });
+
+        currentLang = "{{ session('lang', 'en') }}";
+        console.log(currentLang);
+        if(currentLang !== 'en'){
+            translatePageContent(currentLang);
+        }
     });
 </script>

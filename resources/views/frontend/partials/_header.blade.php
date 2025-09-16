@@ -30,7 +30,7 @@
     $cartCount = auth()->check() && !empty(auth()->user()->cart) ? auth()->user()->cart->items->count() ?? 0 : (session('guest_cart') ? count(session('guest_cart')) : 0);
 
 @endphp
-<header class="site_header flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white z-50">
+<header class="site_header flex items-center justify-between px-4 py-4 border-b sticky top-0 bg-white z-50">
 
     {{-- Mobile Sidebar Toggle Button --}}
     @auth
@@ -61,7 +61,7 @@
     
 
     {{-- Right Icons --}}
-    <div class="flex flex-wrap items-center gap-2 pl-2 lg:pl-0 lg:gap-4 text-sm">
+    <div class="flex flex-wrap items-center gap-4 pl-2 lg:pl-0 lg:gap-6 text-sm">
         <!-- Search Overlay -->
         <div class="relative">
             <!-- Search Icon -->
@@ -74,7 +74,7 @@
         <!-- WhatsApp Toggle -->
         <div class="relative hidden md:block">
             <!-- WhatsApp Button -->
-            <button id="whatsappToggle" class="flex items-center gap-2 rounded-lg px-1 py-1 hover:bg-gray-100">
+            <button id="whatsappToggle" class="flex items-center gap-2 rounded-lg px-0 py-1 hover:bg-gray-100">
                 <img src="{{ asset('/assets/img/whatsapp.png') }}" class="w-8" />
             </button>
 
@@ -98,9 +98,9 @@
         <!-- Globe Toggle -->
         <div class="relative hidden md:block">
             <!-- Globe Button -->
-            <button id="globalToggle" class="flex items-center gap-2  rounded-lg px-3 py-1 hover:bg-gray-100">
+            <button id="globalToggle" class="flex items-center gap-2  rounded-lg px-0 py-1 hover:bg-gray-100">
                 <img src="{{ asset('/assets/img/globe.png') }}" class="w-6" />
-                <i class="fa-solid fa-chevron-down text-xs"></i>
+                {{-- <i class="fa-solid fa-chevron-down text-xs"></i> --}}
             </button>
 
             <!-- Wrapper for Currency + Language -->
@@ -147,13 +147,13 @@
 
         <a href="{{ $profile_link }}" class="text-lg header-user-icon hidden md:block">
             {{-- <i class="fa-regular fa-user"></i> --}}
-            <img src="{{ asset('/assets/img/user.png') }}" class="w-7" />
+            <img src="{{ asset('/assets/img/user.png') }}" class="w-6" />
         </a>
 
         <a href="{{ auth()->check() ? route('user_wishlist') : route('guest_wishlist') }}"
             class="text-lg relative hidden md:block">
             {{-- <i class="fa-regular fa-heart"></i> --}}
-            <img src="{{ asset('/assets/img/heart.png') }}" class="w-7" />
+            <img src="{{ asset('/assets/img/heart.png') }}" class="w-6" />
             <span
                 class="absolute -top-1 -right-2 @if ($wishlistCount == 0) bg-transparent @else bg-red-500 @endif text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none wishlist_count">
                 @if (auth()->check() && $wishlistCount > 0)

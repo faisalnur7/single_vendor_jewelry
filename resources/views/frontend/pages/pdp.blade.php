@@ -290,8 +290,8 @@
                             <div class="descContent p-2 grid grid-cols-2 gap-y-1 text-sm hidden">
                                 @foreach (App\Models\ShippingPolicy::where('status', 1)->get() as $shipping_policy)
                                     <div class="p-2">
-                                        <h3 class="text-sm font-semibold mb-2">{{ $shipping_policy->title }}</h3>
-                                        <div class="text-gray-700 prose">
+                                        <h3 class="text-sm font-semibold mb-2" data-translate>{{ $shipping_policy->title }}</h3>
+                                        <div class="text-gray-700 prose" data-translate>
                                             {!! $shipping_policy->description !!}
                                         </div>
                                     </div>
