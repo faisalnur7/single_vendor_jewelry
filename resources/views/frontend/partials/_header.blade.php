@@ -61,12 +61,12 @@
     
 
     {{-- Right Icons --}}
-    <div class="flex flex-wrap items-center gap-4 pl-2 lg:pl-0 lg:gap-8 text-sm">
+    <div class="flex flex-wrap items-center gap-4 pl-2 lg:pl-0 lg:gap-7 text-sm">
         <!-- WhatsApp Toggle -->
         <div class="relative hidden md:block">
             <!-- WhatsApp Button -->
             <button id="whatsappToggle" class="flex items-center gap-2 rounded-lg px-0 py-1 hover:bg-gray-100">
-                <img src="{{ asset('/assets/img/whatsapp.png') }}" class="w-9" />
+                <img src="{{ asset('/assets/img/whatsapp.png') }}" class="w-8" />
             </button>
 
             <!-- WhatsApp Card -->
@@ -134,20 +134,20 @@
             <!-- Search Icon -->
             <button id="searchToggle" class="text-lg">
                 {{-- <i class="fa-solid fa-magnifying-glass"></i> --}}
-                <img src="{{ asset('/assets/img/search.png') }}" class="w-8" />
+                <img src="{{ asset('/assets/img/search.png') }}" class="w-7" />
             </button>
         </div>
 
         <!-- Script -->
         <a href="{{ $profile_link }}" class="text-lg header-user-icon hidden md:block">
             {{-- <i class="fa-regular fa-user"></i> --}}
-            <img src="{{ asset('/assets/img/user.png') }}" class="w-8" />
+            <img src="{{ asset('/assets/img/user.png') }}" class="w-7" />
         </a>
 
         <a href="{{ auth()->check() ? route('user_wishlist') : route('guest_wishlist') }}"
             class="text-lg relative hidden md:block">
             {{-- <i class="fa-regular fa-heart"></i> --}}
-            <img src="{{ asset('/assets/img/heart.png') }}" class="w-8" />
+            <img src="{{ asset('/assets/img/heart.png') }}" class="w-7" />
             <span
                 class="absolute -top-1 -right-2 @if ($wishlistCount == 0) bg-transparent @else bg-red-500 @endif text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none wishlist_count">
                 @if (auth()->check() && $wishlistCount > 0)
@@ -158,7 +158,7 @@
 
         <a href="{{ route('cart') }}" class="relative text-xl">
             {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
-            <img src="{{ asset('/assets/img/trolley.png') }}" class="w-8" />
+            <img src="{{ asset('/assets/img/trolley.png') }}" class="w-7" />
             <span
                 class="absolute -top-1 -right-2 @if ($cartCount == 0) bg-transparent @else bg-red-500 @endif  text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none cart_count">
                 @if ($cartCount > 0)
