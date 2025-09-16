@@ -6,7 +6,7 @@
         <div class="relative group">
             <!-- Top-level category link -->
             <a href="{{ route('category.show', $category->slug) }}"
-               class="hover:text-orange-500 flex items-center gap-0 md:gap-1 px-0 py-3 whitespace-nowrap text-md font-bold">
+               class="hover:text-orange-500 flex items-center gap-0 md:gap-1 px-0 py-3 whitespace-nowrap text-lg font-bold">
                 <span data-translate>{{ $category->name }}</span>
                 @if($category->subcategories->count() > 0)
                     <i class="fa-solid fa-angle-down"></i>
@@ -20,7 +20,7 @@
                         @foreach ($category->subcategoriesSorted as $subcategory)
                             <li>
                                 <a href="{{ route('subcategory.show', [$category->slug, $subcategory->slug]) }}"
-                                   class="block px-2 py-2 text-gray-700 hover:text-orange-500 hover:bg-gray-100" data-translate>
+                                   class="block px-2 py-2 text-gray-700 text-lg hover:text-orange-500 hover:bg-gray-100" data-translate>
                                     {{ $subcategory->name }}
                                 </a>
                             </li>
