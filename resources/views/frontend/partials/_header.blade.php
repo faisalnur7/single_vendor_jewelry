@@ -22,12 +22,17 @@
     $contactSettings = App\Models\ContactSetting::first();
     $profile_link = auth()->check() ? route('user_profile') : '#';
     $wishlistCount = 0;
-    
+
     if (auth()->check()) {
         $wishlistCount = auth()->user()->wishlists()->count();
     }
 
-    $cartCount = auth()->check() && !empty(auth()->user()->cart) ? auth()->user()->cart->items->count() ?? 0 : (session('guest_cart') ? count(session('guest_cart')) : 0);
+    $cartCount =
+        auth()->check() && !empty(auth()->user()->cart)
+            ? auth()->user()->cart->items->count() ?? 0
+            : (session('guest_cart')
+                ? count(session('guest_cart'))
+                : 0);
 
 @endphp
 <header class="site_header flex items-center justify-between px-4 md:px-8 py-4 border-b sticky top-0 bg-white z-50">
@@ -58,114 +63,38 @@
     {{-- Navbar previous place --}}
     @include('frontend.partials._nav_bar')
 
-    
+
 
     {{-- Right Icons --}}
     <div class="flex flex-wrap items-center gap-4 pl-2 lg:pl-0 lg:gap-7 text-sm">
         <!-- WhatsApp Toggle -->
         <div class="relative hidden md:block">
-            <!-- WhatsApp Button -->
-            <button id="whatsappToggle" class="flex items-center gap-2 rounded-lg px-0 py-1 hover:bg-gray-100">
-                <img src="{{ asset('/assets/img/whatsapp.png') }}" class="w-8" />
-            </button>
-
-            <!-- WhatsApp Card -->
-            <div id="whatsappMenu"
-                class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 space-y-3 text-center">
-
-                <p class="text-lg mb-4 font-bold text-gray-900">Stainless Steel Jewelry</p>
-                <a href="{{ $contactSettings?->whatsapp_link }}"
-                    target="_blank">{{ $contactSettings?->whatsapp_link }}</a>
-                <span class="block text-sm font-semibold text-gray-600">WhatsApp Business Account</span>
-
-                <!-- QR Code -->
-                <div class="flex justify-center">
-                    <img src="{{ asset($contactSettings?->whatsapp_qr) }}" alt="WhatsApp QR"
-                        class="w-42 h-42 rounded-md border" />
-                </div>
-            </div>
+            @include('frontend.partials.header_icons._whatsapp_icon')
+           
         </div>
 
         <!-- Globe Toggle -->
         <div class="relative hidden md:block">
-            <!-- Globe Button -->
-            <button id="globalToggle" class="flex items-center gap-2  rounded-lg px-0 py-1 hover:bg-gray-100">
-                <img src="{{ asset('/assets/img/globe.png') }}" class="w-6" />
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-            </button>
-
-            <!-- Wrapper for Currency + Language -->
-            <div id="globalMenu"
-                class="hidden absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 space-y-3">
-
-                <!-- Currency Dropdown -->
-                <div>
-                    <span class="block text-sm font-semibold px-2 py-1 text-gray-600">Currency</span>
-                    <form action="{{ route('setCurrency') }}" method="POST" id="currencyForm" class="flex flex-col">
-                        @csrf
-                        <select name="currency" onchange="this.form.submit()"
-                            class="block w-full border rounded px-3 py-2 text-gray-700 focus:ring focus:ring-blue-200">
-                            <option value="USD" {{ session('currency', 'USD') == 'USD' ? 'selected' : '' }}>$ USD
-                            </option>
-                            <option value="RMB" {{ session('currency') == 'RMB' ? 'selected' : '' }}>¥ RMB</option>
-                        </select>
-                    </form>
-                </div>
-
-                <!-- Language Dropdown -->
-                <div>
-                    <span class="block text-sm font-semibold px-2 py-1 text-gray-600">Language</span>
-                    <div class="flex flex-col">
-                        <select id="languageSelect" class="border rounded px-3 py-2">
-                            @foreach ($languages as $code => $lang)
-                                <option value="{{ $code }}" {{ $currentLang === $code ? 'selected' : '' }}>
-                                    {{ $lang['flag'] }} {{ $lang['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                    </div>
-                </div>
-            </div>
+            @include('frontend.partials.header_icons._globe_icon')
         </div>
 
         <!-- Search Overlay -->
         <div class="relative">
-            <!-- Search Icon -->
-            <button id="searchToggle" class="text-lg">
-                {{-- <i class="fa-solid fa-magnifying-glass"></i> --}}
-                <img src="{{ asset('/assets/img/search.png') }}" class="w-7" />
-            </button>
+            @include('frontend.partials.header_icons._search_icon')
         </div>
 
         <!-- Script -->
-        <a href="{{ $profile_link }}" class="text-lg header-user-icon hidden md:block">
-            {{-- <i class="fa-regular fa-user"></i> --}}
-            <img src="{{ asset('/assets/img/user.png') }}" class="w-7" />
-        </a>
+        <div class="relative">
+            @include('frontend.partials.header_icons._user_icon')
+        </div>
 
-        <a href="{{ auth()->check() ? route('user_wishlist') : route('guest_wishlist') }}"
-            class="text-lg relative hidden md:block">
-            {{-- <i class="fa-regular fa-heart"></i> --}}
-            <img src="{{ asset('/assets/img/heart.png') }}" class="w-7" />
-            <span
-                class="absolute -top-1 -right-2 @if ($wishlistCount == 0) bg-transparent @else bg-red-500 @endif text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none wishlist_count">
-                @if (auth()->check() && $wishlistCount > 0)
-                    {{ $wishlistCount }}
-                @endif
-            </span>
-        </a>
+        <div class="relative">
+            @include('frontend.partials.header_icons._wishlist_icon')
+        </div>
 
-        <a href="{{ route('cart') }}" class="relative text-xl">
-            {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
-            <img src="{{ asset('/assets/img/trolley.png') }}" class="w-7" />
-            <span
-                class="absolute -top-1 -right-2 @if ($cartCount == 0) bg-transparent @else bg-red-500 @endif  text-white text-xs font-bold rounded-full px-1.5 py-0.5 leading-none cart_count">
-                @if ($cartCount > 0)
-                    {{ $cartCount }}
-                @endif
-            </span>
-        </a>
+        <div class="relative">
+            @include('frontend.partials.header_icons._cart_icon')
+        </div>
     </div>
 
 </header>
@@ -190,7 +119,6 @@
 
 
 <script>
-
     document.getElementById("globalToggle").addEventListener("click", function() {
         document.getElementById("globalMenu").classList.toggle("hidden");
     });

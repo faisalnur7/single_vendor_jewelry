@@ -26,7 +26,7 @@
     body {
         /*font-family: "Playfair Display", serif; */
         font-family: "Playfair Display", serif !important;
-        zoom:0.95;
+        zoom:0.98;
     }
 
     /* Make all bullets transparent by default */
