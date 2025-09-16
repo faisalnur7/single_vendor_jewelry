@@ -8,7 +8,7 @@
     @yield('styles')
 </head>
 
-<body class="font-sans bg-white text-gray-800 overflow-x-hidden">
+<body class="font-sans bg-white text-gray-800 overflow-x-hidden body_class">
     {{-- @include('frontend.partials._top_bar') --}}
     <!-- Loading Indicator -->
     <div id="loadingIndicator" class="fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
