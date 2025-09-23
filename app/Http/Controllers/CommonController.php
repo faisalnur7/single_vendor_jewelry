@@ -8,6 +8,7 @@ use App\Models\PoliceStation;
 use App\Models\PostOffice;
 use App\Models\User;
 use App\Models\State;
+use App\Models\Product;
 use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -140,5 +141,14 @@ class CommonController extends Controller
             ]);
         }
     }
+
+    public function recentProducts(Request $request)
+    {
+        $ids = $request->ids ?? [];
+        $products = Product::with('variants')->whereIn('id', $ids)->get();
+
+        return view('frontend.partials.recent_products', compact('products'))->render();
+    }
+
 
 }

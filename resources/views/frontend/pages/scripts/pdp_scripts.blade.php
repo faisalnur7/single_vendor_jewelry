@@ -11,7 +11,16 @@
             },
         });
 
-        
+        new Swiper('.productSwiper', {
+            slidesPerView: 5,
+            spaceBetween: 5,
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+
         const $lens = $("#lens");
         const $result = $("#result");
         const $zoomWrapper = $("#zoomWrapper");
@@ -133,9 +142,12 @@
                 if (qty > 0) {
                     const index = $(this).attr('id').split('-')[1];
                     const price = $('[data-index="' + index + '"]').first().data('price');
-                    const price_rmb = $('[data-index="' + index + '"]').first().data('price_rmb');
-                    const productId = $('[data-index="' + index + '"]').first().data('product_id');
-                    const min_order_qty = $('[data-index="' + index + '"]').first().data('min_order_qty');
+                    const price_rmb = $('[data-index="' + index + '"]').first().data(
+                        'price_rmb');
+                    const productId = $('[data-index="' + index + '"]').first().data(
+                        'product_id');
+                    const min_order_qty = $('[data-index="' + index + '"]').first().data(
+                        'min_order_qty');
                     const variant = @json($product->variants);
 
                     itemsToAdd.push({
@@ -195,7 +207,39 @@
             $(this).text($(this).text() === "–" ? "+" : "–");
         });
 
+
+        const recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+
+        if (recentlyViewed.length) {
+            $.ajax({
+                url: '/recent-products',
+                type: 'POST',
+                data: { ids: recentlyViewed, _token: '{{ csrf_token() }}' },
+                success: function(html) {
+                    $('#recently-viewed #recent-products').html(html);
+
+                    // Optional: fade-in effect
+                    $('#recently-viewed .product_card').each(function(index) {
+                        $(this).delay(index * 100).queue(function(next) {
+                            $(this).removeClass('opacity-0');
+                            next();
+                        });
+                    });
+
+                    // Initialize Swiper AFTER slides are added
+                    new Swiper('.recentProductSwiper', {
+                        slidesPerView: 5,
+                        spaceBetween: 5,
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                        loop: $('#recently-viewed .product_card').length >= 5
+                    });
+                }
+            });
+        }
+
+
     });
-
-
 </script>

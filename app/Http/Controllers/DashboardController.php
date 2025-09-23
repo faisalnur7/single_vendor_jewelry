@@ -35,6 +35,15 @@ class DashboardController extends Controller
         $data['subcategory'] = $product->subCategory;
         $data['childsubcategory'] = $product->childSubCategory;
         $data['product'] = $product;
+        $data['products'] = null;
+
+        if(!empty($product->childSubCategory)){
+            $data['products'] = Product::query()->where('child_sub_category_id', $product->childSubCategory->id)->where('parent_id',0)->take(15)->get();
+        }else if(!empty($product->subCategory)){
+            $data['products'] = Product::query()->where('sub_category_id', $product->subCategory->id)->where('parent_id',0)->take(15)->get();
+        }else if(!empty($product->category)){
+            $data['products'] = Product::query()->where('category_id', $product->category->id)->where('parent_id',0)->take(15)->get();
+        }
 
         if(empty($product->variants->first()) && !empty($product->parent)){
             $data['product'] = $product->parent;
@@ -114,6 +123,8 @@ class DashboardController extends Controller
             $data['subcategory'] = $subcategory;
             $data['childsubcategory'] = $model;
         }
+
+        $data['opacityZero'] = 'opacity-0';
 
         // **Return AJAX partial if requested**
         if ($request->ajax()) {

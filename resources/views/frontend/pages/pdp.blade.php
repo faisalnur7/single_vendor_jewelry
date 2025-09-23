@@ -118,12 +118,14 @@
                     class="w-full bg-white p-0 md:p-6 md:pt-0 pt-0 rounded shadow-none relative transition-all duration-300">
                     @include('frontend.partials._breadcrumbs')
 
+                    <input type="hidden" id="pdpProductId" value={{$product->id}} />
                     <h2 class="text-md md:text-xl font-semibold" data-translate>{{ $product->name }}</h2>
                     {{-- <p class="mt-2 text-sm text-gray-600">From collection <span class="bg-black text-white px-2 py-1 rounded">Liora</span></p> --}}
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-2 mt-3">
                         @foreach ($product?->category?->subcategories as $subcategory)
-                            <a data-translate href="{{route('subcategory.show',[$product?->category->slug, $subcategory->slug])}}"
+                            <a data-translate
+                                href="{{ route('subcategory.show', [$product?->category->slug, $subcategory->slug]) }}"
                                 class="text-xs md:text-sm border border-black text-gray-600 px-2 py-1 rounded-full hover:bg-black hover:text-white transition-all duration-300">{{ $subcategory->name }}</a>
                         @endforeach
                     </div>
@@ -290,7 +292,8 @@
                             <div class="descContent p-2 grid grid-cols-2 gap-y-1 text-sm hidden">
                                 @foreach (App\Models\ShippingPolicy::where('status', 1)->get() as $shipping_policy)
                                     <div class="p-2">
-                                        <h3 class="text-sm font-semibold mb-2" data-translate>{{ $shipping_policy->title }}</h3>
+                                        <h3 class="text-sm font-semibold mb-2" data-translate>{{ $shipping_policy->title }}
+                                        </h3>
                                         <div class="text-gray-700 prose" data-translate>
                                             {!! $shipping_policy->description !!}
                                         </div>
@@ -301,6 +304,49 @@
                     </div>
                 </div>
             </div>
+
+            <div class="flex flex-col mt-12 gap-6">
+                <h2 class="text-4xl">You may also like</h2>
+
+                <div class="">
+                    <div class="swiper productSwiper">
+                        <div class="swiper-button-prev">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </div>
+                        <div class="swiper-wrapper h-auto md:h-full">
+                            @foreach ($products as $product)
+                                <div class="swiper-slide w-m-32  cursor-pointer">
+                                    @include('frontend.partials._product_card')
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="swiper-button-next">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col mt-12 gap-6" id="recently-viewed">
+                <h2 class="text-4xl">Recently Viewed</h2>
+
+                <div>
+                    <div class="swiper recentProductSwiper">
+                        <div class="swiper-button-prev">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </div>
+                        <div class="swiper-wrapper h-auto md:h-full" id="recent-products">
+                            
+                        </div>
+
+                        <div class="swiper-button-next">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </section>
 @endsection

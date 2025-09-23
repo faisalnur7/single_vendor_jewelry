@@ -184,4 +184,24 @@
 
     });
 
+    // jQuery on product page
+    $(document).ready(function() {
+        const productId = $('#pdpProductId').val(); // Hidden input or data attribute
+        const maxItems = 10; // Number of products to show
+
+        // Get stored products from localStorage
+        let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+
+        // Remove if already exists to avoid duplicates
+        recentlyViewed = recentlyViewed.filter(id => id != productId);
+
+        // Add current product to the beginning
+        recentlyViewed.unshift(productId);
+
+        // Limit array to maxItems
+        recentlyViewed = recentlyViewed.slice(0, maxItems);
+
+        // Save back to localStorage
+        localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+    });
 </script>
