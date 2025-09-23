@@ -43,7 +43,7 @@
             @endforeach
         </div>
 
-        <div id="loader" class="text-center py-4 hidden">
+        <div id="loader" class="text-center py-4 flex hidden justify-center">
             <img src="{{ asset('/infinity_loader.gif') }}" />
         </div>
     </section>
@@ -60,7 +60,7 @@
             // Function to fade in products
             function fadeInProducts($products) {
                 $products.each(function(index) {
-                    $(this).delay(index * 100).queue(function(next) {
+                    $(this).delay(index * 40).queue(function(next) {
                         $(this).removeClass('opacity-0');
                         next();
                     });
