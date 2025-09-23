@@ -3,7 +3,7 @@
 
         <!-- Image with overlay icons -->
         <div class="relative bg-white border rounded-none group overflow-hidden">
-            <img id="mainImage-{{ $product->id }}" src="{{ asset($product->image) }}" alt="Product Main"
+            <img loading="lazy" id="mainImage-{{ $product->id }}" src="{{ asset($product->image) }}" alt="Product Main"
                 class="mx-auto transition-transform duration-[3000ms] group-hover:scale-[1.5] opacity-100 transition-opacity duration-500" />
 
             <!-- Icons (eye + heart) -->
@@ -35,7 +35,9 @@
 
         <!-- Product price -->
         <div class="text-sm overflow-hidden text-ellipsis w-full max-w-full">
-            <p class="text-xl md:text-lg font-semibold  text-gray-800">{{ show_price_range($product->variants) }}</p>
+            {{-- <p class="text-xl md:text-lg font-semibold  text-gray-800">{{ show_price_range($product->variants) }}</p> --}}
+            <p class="text-xl md:text-lg font-semibold text-gray-800">{{ $product->price_range }}</p>
+
         </div>
 
         <!-- Thumbnails -->

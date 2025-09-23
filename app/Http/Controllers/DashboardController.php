@@ -9,6 +9,8 @@ use App\Models\SubCategory;
 use App\Models\ChildSubCategory;
 use App\Models\Product;
 use App\Models\HomePageSetting;
+use Illuminate\Support\Facades\Cache;
+
 
 class DashboardController extends Controller
 {
@@ -18,12 +20,27 @@ class DashboardController extends Controller
         $data['homepage_setting'] = HomePageSetting::first(); 
         return view('frontend.homepage', $data);
     }
-
+    
     public function product_list_page(){
         $data['title'] = $data['page_title'] = "Best Sellers";
-        $data['products'] = Product::query()->with('variants')->where('parent_id',0)->get();
+
+        $page = request()->get('page', 1); // get current page for pagination
+
+        $data['products'] = Cache::remember(
+            "best_sellers_page_{$page}", // unique cache key per page
+            60, // cache duration in minutes
+            function() {
+                return Product::with('variants')
+                    ->where('parent_id', 0)
+                    ->paginate(30);
+            }
+        );
+
+        $data['products'] = $this->mapProducts($data['products']);
+
         return view('frontend.pages.plp', $data);
     }
+
 
     public function best_sellers(){
         $data['title'] = $data['page_title'] = "Collections";
@@ -34,19 +51,51 @@ class DashboardController extends Controller
     public function show_categorywise($slug){
         $data['title'] = $data['page_title'] = "Collections";
         $data['category_bold'] = true;
-        $data['category'] = $category = Category::query()->where('slug',$slug)->first();
-        $data['products'] = Product::query()->with('variants')->where('category_id',$category->id)->where('parent_id',0)->paginate(50);
+        $data['category'] = $category = Category::query()->where('slug', $slug)->first();
+
+        $page = request()->get('page', 1); // current page
+
+        $data['products'] = Cache::remember(
+            "category_products_{$category->id}_page_{$page}",
+            60, // cache in minutes
+            function() use ($category) {
+                return Product::with('variants')
+                    ->where('category_id', $category->id)
+                    ->where('parent_id', 0)
+                    ->paginate(30);
+            }
+        );
+
+        $data['products'] = $this->mapProducts($data['products']);
+
         return view('frontend.pages.plp', $data);
     }
+
 
     public function show_subcategorywise(Category $category, Subcategory $subcategory){
         $data['title'] = $data['page_title'] = "Collections";
         $data['subcategory_bold'] = true;
         $data['subcategory'] = $subcategory;
         $data['category'] = $category;
-        $data['products'] = Product::query()->with('variants')->where('sub_category_id',$subcategory->id)->where('parent_id',0)->paginate(50);
+
+        $page = request()->get('page', 1);
+
+        $data['products'] = Cache::remember(
+            "subcategory_products_{$subcategory->id}_page_{$page}",
+            60,
+            function() use ($subcategory) {
+                return Product::with('variants')
+                    ->where('sub_category_id', $subcategory->id)
+                    ->where('parent_id', 0)
+                    ->paginate(30);
+            }
+        );
+
+        $data['products'] = $this->mapProducts($data['products']);
+
         return view('frontend.pages.plp', $data);
     }
+
 
     public function show_child_subcategorywise(Category $category, Subcategory $subcategory, ChildSubCategory $childsubcategory){
         $data['title'] = $data['page_title'] = "Collections";
@@ -54,8 +103,32 @@ class DashboardController extends Controller
         $data['childsubcategory'] = $childsubcategory;
         $data['subcategory'] = $subcategory;
         $data['category'] = $category;
-        $data['products'] = Product::query()->with('variants')->where('child_sub_category_id',$childsubcategory->id)->where('parent_id',0)->paginate(50);
+
+        $page = request()->get('page', 1);
+
+        $data['products'] = Cache::remember(
+            "childsubcategory_products_{$childsubcategory->id}_page_{$page}",
+            60,
+            function() use ($childsubcategory) {
+                return Product::with('variants')
+                    ->where('child_sub_category_id', $childsubcategory->id)
+                    ->where('parent_id', 0)
+                    ->paginate(30);
+            }
+        );
+
+        $data['products'] = $this->mapProducts($data['products']);
+
         return view('frontend.pages.plp', $data);
+    }
+
+
+    public function mapProducts($products){
+        $products->map(function($product){
+            $product->price_range = show_price_range($product->variants);
+            return $product;
+        });
+        return $products;
     }
 
     public function show_product(Product $product){
