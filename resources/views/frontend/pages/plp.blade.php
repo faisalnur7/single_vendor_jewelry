@@ -44,88 +44,90 @@
         </div>
 
         <div id="loader" class="text-center py-4 hidden">
-            <p class="text-gray-500">Loading more products...</p>
+            <img src="{{ asset('/infinity_loader.gif') }}" />
         </div>
     </section>
 
 @endsection
 
 @section('scripts')
-<script>
-$(document).ready(function() {
-    let page = 1;
-    let loading = false;
-    let lastPage = {{ $products->lastPage() }};
+    <script>
+        $(document).ready(function() {
+            let page = 1;
+            let loading = false;
+            let lastPage = {{ $products->lastPage() }};
 
-    // Function to fade in products
-    function fadeInProducts($products) {
-        $products.each(function(index) {
-            $(this).delay(index * 100).queue(function(next) {
-                $(this).removeClass('opacity-0');
-                next();
-            });
-        });
-    }
-
-    function loadProducts(pageNumber, append = true) {
-        if (loading) return;
-        loading = true;
-        $('#loader').removeClass('hidden');
-
-        let sortBy = $('#sortDropdown').val();
-        let url = "{{ request()->url() }}?page=" + pageNumber + "&sort_by=" + sortBy;
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            success: function(response) {
-                let $newProducts = $(response.html).addClass('opacity-0'); // initially hidden
-
-                if (append) {
-                    $('#productContainer').append($newProducts);
-                } else {
-                    $('#productContainer').html($newProducts);
-                    page = 1; // reset page counter
-                }
-
-                // Fade in effect
-                fadeInProducts($newProducts);
-
-                // Update lastPage dynamically
-                lastPage = response.lastPage;
-
-                loading = false;
-                $('#loader').addClass('hidden');
-            },
-            error: function(err) {
-                console.error(err);
-                loading = false;
-                $('#loader').addClass('hidden');
+            // Function to fade in products
+            function fadeInProducts($products) {
+                $products.each(function(index) {
+                    $(this).delay(index * 100).queue(function(next) {
+                        $(this).removeClass('opacity-0');
+                        next();
+                    });
+                });
             }
+
+            function loadProducts(pageNumber, append = true) {
+                if (loading) return;
+                loading = true;
+                $('#loader').removeClass('hidden');
+
+                let sortBy = $('#sortDropdown').val();
+                let url = "{{ request()->url() }}?page=" + pageNumber + "&sort_by=" + sortBy;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        let $newProducts = $(response.html).addClass('opacity-0'); // initially hidden
+
+                        if (append) {
+                            $('#productContainer').append($newProducts);
+                        } else {
+                            $('#productContainer').html($newProducts);
+                            page = 1; // reset page counter
+                        }
+
+                        // Fade in effect
+                        fadeInProducts($newProducts);
+
+                        // Update lastPage dynamically
+                        lastPage = response.lastPage;
+
+                        loading = false;
+                        $('#loader').addClass('hidden');
+                    },
+                    error: function(err) {
+                        console.error(err);
+                        loading = false;
+                        $('#loader').addClass('hidden');
+                    }
+                });
+            }
+
+            // Infinite scroll
+            $(window).on('scroll', function() {
+                let scrollPosition = $(window).scrollTop() + $(window).height();
+                let threshold = $(document).height() - 200;
+
+                if (scrollPosition >= threshold && !loading) {
+                    page++;
+                    if (page > lastPage) return;
+                    loadProducts(page);
+                }
+            });
+
+            // Sort change event
+            $('#sortDropdown').on('change', function() {
+                page = 1;
+                loadProducts(1, false); // replace content
+            });
+
+            // Initial fade-in for first load
+            fadeInProducts($('.product_card'));
         });
-    }
-
-    // Infinite scroll
-    $(window).on('scroll', function() {
-        let scrollPosition = $(window).scrollTop() + $(window).height();
-        let threshold = $(document).height() - 200;
-
-        if (scrollPosition >= threshold && !loading) {
-            page++;
-            if (page > lastPage) return;
-            loadProducts(page);
-        }
-    });
-
-    // Sort change event
-    $('#sortDropdown').on('change', function() {
-        page = 1;
-        loadProducts(1, false); // replace content
-    });
-
-    // Initial fade-in for first load
-    fadeInProducts($('.product_card'));
-});
-</script>
+    </script>
 @endsection
