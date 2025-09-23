@@ -99,7 +99,6 @@ class DashboardController extends Controller
             'title' => $data['page_title'] = $model->name ?? "Collection",
         ];
 
-        // Bold flags for UI highlighting
         if ($type === 'category') {
             $data['category_bold'] = true;
             $data['category'] = $model;
@@ -115,6 +114,17 @@ class DashboardController extends Controller
             $data['subcategory'] = $subcategory;
             $data['childsubcategory'] = $model;
         }
+
+        // **Return AJAX partial if requested**
+        if ($request->ajax()) {
+            $html = view('frontend.partials._product_cards_ajax', compact('products'))->render();
+
+            return response()->json([
+                'html' => $html,
+                'lastPage' => $products->lastPage(),
+            ]);
+        }
+
 
         return view('frontend.pages.plp', $data);
     }

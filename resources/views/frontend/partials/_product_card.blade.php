@@ -1,4 +1,4 @@
-<div class="flex flex-col product_card">
+<div class="flex flex-col product_card opacity-0 transform transition-opacity duration-700">
     <a href="{{ route('show_product', $product->slug) }}">
 
         <!-- Image with overlay icons -->
