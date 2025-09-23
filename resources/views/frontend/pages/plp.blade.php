@@ -21,7 +21,7 @@
         </h1>
 
         <!-- Sort dropdown -->
-        <form method="GET" id="sortForm" class="min-w-44">
+        <form method="GET" id="sortForm" class="md:min-w-44">
             <select name="sort_by" class="border border-gray-300 rounded-md px-3 py-2 text-md w-full"
                 onchange="document.getElementById('sortForm').submit();">
                 <option value="manual" {{ request('sort_by') == 'manual' ? 'selected' : '' }}>Featured</option>
