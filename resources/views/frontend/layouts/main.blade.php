@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" class="overflow-x-hidden lg:overflow-x-visible">
+{{-- <html lang="en" class="overflow-x-hidden lg:overflow-x-visible"> --}}
+<html lang="en">
 @php
     $general_settings = App\Models\GeneralSetting::first();
 @endphp

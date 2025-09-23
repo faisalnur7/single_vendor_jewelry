@@ -26,6 +26,7 @@ use App\Http\Controllers\ReturnPolicyController;
 use App\Http\Controllers\ShippingPolicyController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\CacheSettingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -251,7 +252,9 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::post('/privacy-policy/update/{privacyPolicy}', [PrivacyPolicyController::class, 'update'])->name('privacy_policy.update');
         Route::delete('/privacy-policy/delete/{privacyPolicy}', [PrivacyPolicyController::class, 'destroy'])->name('privacy_policy.delete');
 
-
+        
+        Route::get('/cache_setting', [CacheSettingController::class, 'edit'])->name('cache.setting');
+        Route::post('/cache_setting/update', [CacheSettingController::class, 'update'])->name('admin.cache_settings.update');
     });
 
 

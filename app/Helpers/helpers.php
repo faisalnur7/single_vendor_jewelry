@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Cache;
 use Stichoza\GoogleTranslate\GoogleTranslate;
+use App\Models\CacheSetting;
 
 if (! function_exists('menuOpen')) {
     function menuOpen(array $routes): bool {
@@ -67,5 +68,12 @@ if (!function_exists('translateText')) {
                 return $text;
             }
         });
+    }
+}
+
+if (! function_exists('cache_enabled')) {
+    function cache_enabled(): bool
+    {
+        return CacheSetting::first()?->is_enabled ?? false;
     }
 }

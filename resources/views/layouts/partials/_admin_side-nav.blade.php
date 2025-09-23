@@ -255,7 +255,7 @@
 
                 <!-- Settings -->
                 <li
-                    class="nav-item {{ menuOpen(['faq.*','return_policy.*','shipping_policy.*','privacy_policy.*','homepage_banner.*','settings.*', 'admin.general-settings.*', 'contact-settings.edit', 'social.edit', 'homepage.edit']) ? 'menu-is-opening menu-open' : '' }}">
+                    class="nav-item {{ menuOpen(['faq.*', 'return_policy.*', 'shipping_policy.*', 'privacy_policy.*', 'homepage_banner.*', 'settings.*', 'admin.general-settings.*', 'contact-settings.edit', 'social.edit', 'homepage.edit']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
@@ -280,8 +280,10 @@
                                 <p>Social Links</p>
                             </a></li>
 
-                        <li class="nav-item {{ menuOpen(['homepage_banner.*'])  ? 'menu-is-opening menu-open' : ''  }}"><a href="{{ route('homepage.edit') }}"
-                                class="nav-link {{ request()->routeIs(['homepage.edit','homepage_banner.*']) ? 'active' : '' }}"><i
+                        <li
+                            class="nav-item {{ menuOpen(['homepage_banner.*']) ? 'menu-is-opening menu-open' : '' }}">
+                            <a href="{{ route('homepage.edit') }}"
+                                class="nav-link {{ request()->routeIs(['homepage.edit', 'homepage_banner.*']) ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Homepage Settings</p>
                                 <i class="right fas fa-angle-left"></i>
@@ -290,7 +292,7 @@
                             <ul class="nav nav-treeview">
                                 <!-- Location Setting Parent -->
                                 <li
-                                    class="nav-item {{ menuOpen(['homepage_banner.*', 'district.*', 'police-station.*', 'post-office.*','homepage_trending.*']) ? 'menu-is-opening menu-open' : '' }}">
+                                    class="nav-item {{ menuOpen(['homepage_banner.*', 'district.*', 'police-station.*', 'post-office.*', 'homepage_trending.*']) ? 'menu-is-opening menu-open' : '' }}">
                                     <a href="#"
                                         class="nav-link {{ request()->routeIs(['homepage_banner.*', 'district.*', 'police-station.*', 'post-office.*']) ? 'bg-gray-800' : '' }}">
                                         <i class="fas fa-map-marked-alt nav-icon"></i>
@@ -302,14 +304,14 @@
 
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="{{route('homepage_banner.index')}}"
+                                            <a href="{{ route('homepage_banner.index') }}"
                                                 class="nav-link {{ request()->routeIs('homepage_banner.*') ? 'active' : '' }}">
                                                 <i class="fas fa-map nav-icon"></i>
                                                 <p>Hero Section</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{route('homepage.edit')}}"
+                                            <a href="{{ route('homepage.edit') }}"
                                                 class="nav-link {{ request()->routeIs('homepage.edit') ? 'active' : '' }}">
                                                 <i class="fas fa-map nav-icon"></i>
                                                 <p>About Section</p>
@@ -320,14 +322,16 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('faq.index') }}" class="nav-link {{ request()->routeIs(['faq.*']) ? 'active' : '' }}"><i
+                            <a href="{{ route('faq.index') }}"
+                                class="nav-link {{ request()->routeIs(['faq.*']) ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>FAQ</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('return_policy.index') }}" class="nav-link {{ request()->routeIs(['return_policy.*']) ? 'active' : '' }}"><i
+                            <a href="{{ route('return_policy.index') }}"
+                                class="nav-link {{ request()->routeIs(['return_policy.*']) ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Return Policy</p>
                             </a>
@@ -335,19 +339,21 @@
 
 
                         <li class="nav-item">
-                            <a href="{{ route('shipping_policy.index') }}" class="nav-link {{ request()->routeIs(['shipping_policy.*']) ? 'active' : '' }}"><i
+                            <a href="{{ route('shipping_policy.index') }}"
+                                class="nav-link {{ request()->routeIs(['shipping_policy.*']) ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Shipping Policy</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('privacy_policy.index') }}" class="nav-link {{ request()->routeIs(['privacy_policy.*']) ? 'active' : '' }}"><i
+                            <a href="{{ route('privacy_policy.index') }}"
+                                class="nav-link {{ request()->routeIs(['privacy_policy.*']) ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Privacy Policy</p>
                             </a>
                         </li>
-                        
+
                         <li class="nav-item"><a href="{{ route('settings.branding') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Branding</p>
@@ -359,6 +365,10 @@
                         <li class="nav-item"><a href="{{ route('settings.seo') }}" class="nav-link"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>SEO</p>
+                            </a></li>
+                        <li class="nav-item"><a href="{{ route('cache.setting') }}" class="nav-link"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Cache</p>
                             </a></li>
                     </ul>
                 </li>
