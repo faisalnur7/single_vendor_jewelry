@@ -9,6 +9,8 @@
         ->orderBy('order', 'asc')
         ->get();
 
+    $onLoadProducts = collect([]);
+
     if ($selectedCategory = $mayLikedCategories->first()) {
         // Determine the most specific column and ID to use
         if (!empty($selectedCategory->child_sub_category_id)) {
