@@ -95,16 +95,25 @@ $(document).ready(function() {
     // Initially highlight first menu item
     $('.may_like_menu_item').first().addClass('text-blue-600');
 
-    function fadeInProducts() {
-        $('#productContainer .product_card').each(function(index) {
+    function fadeInProducts(callback) {
+        let $cards = $('#productContainer .product_card');
+        let total = $cards.length;
+        let completed = 0;
+
+        $cards.each(function(index) {
             $(this).delay(index * 100).queue(function(next) {
                 $(this).removeClass('opacity-0 translate-y-4');
+                completed++;
+                if (completed === total && typeof callback === 'function') {
+                    callback();
+                }
                 next();
             });
         });
     }
 
-    fadeInProducts(); // Fade-in on initial load
+    // Initial fade
+    fadeInProducts();
 
     $('.may_like_menu_item').on('click', function() {
         var $this = $(this);
@@ -124,12 +133,13 @@ $(document).ready(function() {
                 // Replace products
                 $('#productContainer').html(response);
 
-                // Hide loader
-                $('#productLoader').addClass('hidden');
-
                 // Add animation classes to new products
                 $('#productContainer .product_card').addClass('opacity-0 translate-y-4');
-                fadeInProducts();
+
+                // Animate, then hide loader
+                fadeInProducts(function() {
+                    $('#productLoader').addClass('hidden');
+                });
             },
             error: function(xhr) {
                 console.error('Error fetching products:', xhr);
@@ -139,3 +149,4 @@ $(document).ready(function() {
     });
 });
 </script>
+
