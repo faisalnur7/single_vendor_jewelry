@@ -10,6 +10,7 @@
         ->get();
 
     $onLoadProducts = collect([]);
+    $limit = 15;
 
     if ($selectedCategory = $mayLikedCategories->first()) {
         // Determine the most specific column and ID to use
@@ -25,7 +26,7 @@
         }
 
         // Fetch products only once
-        $onLoadProducts = \App\Models\Product::where($column, $id)->take(20)->get();
+        $onLoadProducts = \App\Models\Product::where($column, $id)->take($limit)->get();
     }
 
 @endphp
@@ -35,6 +36,7 @@
             @php
                 $productsCount = 0;
                 $route = '#';
+                $page_route = '#';
                 $categoryType = 'category';
                 $categorySlug = $mayLikedCategory->category->slug ?? null;
                 $subCategorySlug = $mayLikedCategory->subCategory->slug ?? null;
@@ -47,6 +49,7 @@
                     )->count();
                     $route = route('homePageProducts', ['childsubcategory' => $childCategorySlug]);
                     $categoryType = 'childsubcategory';
+                    $page_route = route('subcategory.show', [$categorySlug, $subCategorySlug, $childCategorySlug]);
                 } elseif (!empty($mayLikedCategory->sub_category_id)) {
                     $productsCount = \App\Models\Product::where(
                         'sub_category_id',
@@ -54,18 +57,20 @@
                     )->count();
                     $route = route('homePageProducts', ['subcategory' => $subCategorySlug]);
                     $categoryType = 'subcategory';
+                    $page_route = route('subcategory.show', [$categorySlug, $subCategorySlug]);
                 } elseif (!empty($mayLikedCategory->category_id)) {
                     $productsCount = \App\Models\Product::where('category_id', $mayLikedCategory->category_id)->count();
                     $route = route('homePageProducts', ['category' => $categorySlug]);
                     $categoryType = 'category';
+                    $page_route = route('category.show',$categorySlug);
                 }
             @endphp
 
             @if ($productsCount > 0)
                 <div>
                     <div class="flex flex-col items-center text-center mt-6">
-                        <p class="mt-2 text-md cursor-pointer may_like_menu_item"
-                            data-url="{{ $route }}" data-type="{{ $categoryType }}">
+                        <p class="mt-2 text-md cursor-pointer may_like_menu_item" data-url="{{ $route }}" data-page_url="{{$page_route}}"
+                            data-type="{{ $categoryType }}">
                             {{ $mayLikedCategory->name }}
                         </p>
                     </div>
@@ -78,8 +83,9 @@
 
     <div id="productContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 relative">
         <!-- Loader -->
-        <div id="productLoader" class="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 hidden z-10">
-            <img src="{{asset('/infinity_transparent.gif')}}" />
+        <div id="productLoader"
+            class="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 hidden z-10">
+            <img src="{{ asset('/infinity_transparent.gif') }}" />
         </div>
 
         @foreach ($onLoadProducts as $product)
@@ -88,65 +94,71 @@
             </div>
         @endforeach
     </div>
+    <div class="flex mx-auto w-full justify-center my-8">
+        <a href="" class="btn btn-dark btn-lg" id="view_more_button">View More</a>
+    </div>
 
 </div>
 <script>
-$(document).ready(function() {
-    // Initially highlight first menu item
-    $('.may_like_menu_item').first().addClass('text-blue-600');
+    $(document).ready(function() {
+        // Initially highlight first menu item
+        $('.may_like_menu_item').first().addClass('text-blue-600');
+        $('#view_more_button').prop('href',$('.may_like_menu_item').first().data('page_url'));
 
-    function fadeInProducts(callback) {
-        let $cards = $('#productContainer .product_card');
-        let total = $cards.length;
-        let completed = 0;
+        function fadeInProducts(callback) {
+            let $cards = $('#productContainer .product_card');
+            let total = $cards.length;
+            let completed = 0;
 
-        $cards.each(function(index) {
-            $(this).delay(index * 100).queue(function(next) {
-                $(this).removeClass('opacity-0 translate-y-4');
-                completed++;
-                if (completed === total && typeof callback === 'function') {
-                    callback();
+            $cards.each(function(index) {
+                $(this).delay(index * 100).queue(function(next) {
+                    $(this).removeClass('opacity-0 translate-y-4');
+                    completed++;
+                    if (completed === total && typeof callback === 'function') {
+                        callback();
+                    }
+                    next();
+                });
+            });
+        }
+
+        // Initial fade
+        fadeInProducts();
+
+        $('.may_like_menu_item').on('click', function() {
+            var $this = $(this);
+            var url = $this.data('url');
+
+            // Highlight menu
+            $('.may_like_menu_item').removeClass('text-blue-600');
+            $this.addClass('text-blue-600');
+
+            $('#view_more_button').prop('href',$(this).data('page_url'));
+
+            // Show loader
+            $('#productLoader').removeClass('hidden');
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    // Replace products
+                    $('#productContainer').html(response);
+
+                    // Add animation classes to new products
+                    $('#productContainer .product_card').addClass(
+                    'opacity-0 translate-y-4');
+
+                    // Animate, then hide loader
+                    fadeInProducts(function() {
+                        $('#productLoader').addClass('hidden');
+                    });
+                },
+                error: function(xhr) {
+                    console.error('Error fetching products:', xhr);
+                    $('#productLoader').addClass('hidden');
                 }
-                next();
             });
         });
-    }
-
-    // Initial fade
-    fadeInProducts();
-
-    $('.may_like_menu_item').on('click', function() {
-        var $this = $(this);
-        var url = $this.data('url');
-
-        // Highlight menu
-        $('.may_like_menu_item').removeClass('text-blue-600');
-        $this.addClass('text-blue-600');
-
-        // Show loader
-        $('#productLoader').removeClass('hidden');
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function(response) {
-                // Replace products
-                $('#productContainer').html(response);
-
-                // Add animation classes to new products
-                $('#productContainer .product_card').addClass('opacity-0 translate-y-4');
-
-                // Animate, then hide loader
-                fadeInProducts(function() {
-                    $('#productLoader').addClass('hidden');
-                });
-            },
-            error: function(xhr) {
-                console.error('Error fetching products:', xhr);
-                $('#productLoader').addClass('hidden');
-            }
-        });
     });
-});
 </script>
-
