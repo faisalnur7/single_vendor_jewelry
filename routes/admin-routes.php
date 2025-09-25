@@ -13,6 +13,7 @@ use App\Http\Controllers\PackageFeatureController;
 use App\Http\Controllers\PaymentOptionController;
 use App\Http\Controllers\SubscriptionRequestController;
 use App\Http\Controllers\ChildSubCategoryController;
+use App\Http\Controllers\CustomCategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShippingMethodController;
 use App\Http\Controllers\GeneralSettingController;
@@ -99,6 +100,17 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
             Route::post('/update/{id}', [CategoryController::class, 'update'])->name('category.update');
             Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
         });
+
+        // Custom Category Routes
+        Route::prefix('custom-categories')->group(function () {
+            Route::get('/list', [CustomCategoryController::class, 'index'])->name('custom-category.list');
+            Route::get('/create', [CustomCategoryController::class, 'create'])->name('custom-category.create');
+            Route::post('/store', [CustomCategoryController::class, 'store'])->name('custom-category.store');
+            Route::get('/edit/{id}', [CustomCategoryController::class, 'edit'])->name('custom-category.edit');
+            Route::post('/update/{id}', [CustomCategoryController::class, 'update'])->name('custom-category.update');
+            Route::delete('/delete/{id}', [CustomCategoryController::class, 'destroy'])->name('custom-category.delete');
+        });
+
 
         // SubCategory Routes
         Route::prefix('subcategories')->group(function () {

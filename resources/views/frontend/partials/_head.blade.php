@@ -25,7 +25,8 @@
 <style>
     body {
         /*font-family: "Playfair Display", serif; */
-        font-family: "Playfair Display", serif !important;
+        font-family: "Playfair Display", sans-serif !important;
+            text-size-adjust: 100%;
         zoom:0.98;
     }
 

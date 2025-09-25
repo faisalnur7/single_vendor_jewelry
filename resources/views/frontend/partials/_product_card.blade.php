@@ -29,7 +29,7 @@
 
         <!-- Product title -->
         <div
-            class="text-sm overflow-hidden whitespace-nowrap text-ellipsis w-full max-w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[350px] mt-2">
+            class="text-md overflow-hidden whitespace-nowrap text-ellipsis w-full max-w-full sm:max-w-[250px] md:max-w-[300px] lg:max-w-[350px] mt-2">
             <a href="#" class="block" data-translate>{{ $product->name }}</a>
         </div>
 

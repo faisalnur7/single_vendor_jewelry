@@ -44,7 +44,7 @@
         </div>
 
         <div id="loader" class="text-center py-4 flex hidden justify-center">
-            <img src="{{ asset('/infinity_loader.gif') }}" />
+            <img src="{{ asset('/infinity_loader_blue.gif') }}" />
         </div>
     </section>
 

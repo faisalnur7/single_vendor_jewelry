@@ -9,6 +9,9 @@ use App\Models\PostOffice;
 use App\Models\User;
 use App\Models\State;
 use App\Models\Product;
+use App\Models\ChildSubCategory;
+use App\Models\SubCategory;
+use App\Models\Category;
 use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -149,6 +152,32 @@ class CommonController extends Controller
 
         return view('frontend.partials.recent_products', compact('products'))->render();
     }
+
+
+    public function homePageProducts(Request $request)
+    {
+        $products = collect();
+
+        if ($request->has('childsubcategory')) {
+            $childSub = ChildSubCategory::where('slug', $request->childsubcategory)->first();
+            if ($childSub) {
+                $products = Product::where('child_sub_category_id', $childSub->id)->take(20)->get();
+            }
+        } elseif ($request->has('subcategory')) {
+            $sub = SubCategory::where('slug', $request->subcategory)->first();
+            if ($sub) {
+                $products = Product::where('sub_category_id', $sub->id)->take(20)->get();
+            }
+        } elseif ($request->has('category')) {
+            $cat = Category::where('slug', $request->category)->first();
+            if ($cat) {
+                $products = Product::where('category_id', $cat->id)->take(20)->get();
+            }
+        }
+
+        return view('frontend.partials._product_cards_ajax', compact('products'));
+    }
+
 
 
 }

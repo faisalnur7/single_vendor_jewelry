@@ -40,10 +40,11 @@ Route::get('/reboot', function () {
 Route::get('/', [DashboardController::class, 'index'])->name('homepage');
 Route::get('/collections', [DashboardController::class, 'product_list_page'])->name('collections');
 Route::get('/best_sellers', [DashboardController::class, 'best_sellers'])->name('best_sellers');
-Route::get('/collections/{category:slug}', [DashboardController::class, 'show_categorywise'])->name('category.show');
-Route::get('/collections/{category:slug}/{subcategory:slug}', [DashboardController::class, 'show_subcategorywise'])->name('subcategory.show');
 
-Route::get('/collections/{category:slug}/{subcategory:slug}/{childsubcategory:slug}', [DashboardController::class, 'show_child_subcategorywise'])->name('childsubcategory.show');
+Route::get('/collections/{category:slug}/{title?}', [DashboardController::class, 'show_categorywise'])->name('category.show');
+Route::get('/collections/{category:slug}/{subcategory:slug}/{title?}', [DashboardController::class, 'show_subcategorywise'])->name('subcategory.show');
+Route::get('/collections/{category:slug}/{subcategory:slug}/{childsubcategory:slug}/{title?}', [DashboardController::class, 'show_child_subcategorywise'])->name('childsubcategory.show');
+
 
 Route::get('/product/{product:slug}', [DashboardController::class, 'show_product'])->name('show_product');
 
@@ -175,6 +176,7 @@ Route::get('/get-states/{country_id}', [CommonController::class, 'getStates'])->
 Route::get('/get-cities/{state_id}', [CommonController::class, 'getCities'])->name('getCities');
 Route::post('/setCurrency', [CommonController::class, 'setCurrency'])->name('setCurrency');
 Route::post('/recent-products', [CommonController::class, 'recentProducts'])->name('recentProducts');
+Route::get('/homepage-products', [CommonController::class, 'homePageProducts'])->name('homePageProducts');
 
 // Product search
 Route::get('/ajax-search-products', [ProductController::class, 'ajaxSearchProducts'])->name('ajaxSearchProducts');

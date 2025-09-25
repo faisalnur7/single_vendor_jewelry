@@ -16,7 +16,7 @@ class ChildSubCategory extends Model
     ];
 
     public function category(){
-        return $this->belongsTo(Category::class,'category_id');
+        return $this->belongsTo(Category::class)->where('show_on_main_menu', 1);
     }
 
     public function subcategory(){

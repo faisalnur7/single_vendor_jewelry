@@ -60,7 +60,7 @@ class Product extends Model
 
 
     public function category() {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->where('show_on_main_menu', 1);
     }
 
     public function subCategory() {

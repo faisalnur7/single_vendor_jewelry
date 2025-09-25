@@ -8,7 +8,7 @@
 
     <!-- Product Section -->
     <section class="py-12 px-6">
-        <h2 class="text-4xl font-bold text-center mb-8">Wholesale Trending Discovery</h2>
+        <h2 class="text-5xl text-center mb-8 font-semibold not-italic antialiased tracking-[0.16px] text-black">Wholesale Trending Discovery</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-6">
             @include('frontend.partials._trending_card')
         </div>
@@ -16,10 +16,16 @@
 
     <!-- Featured Categories Section -->
     <section class="py-12 px-6">
-        <h2 class="text-4xl font-bold text-center mb-8">Featured Categories</h2>
+        <h2 class="text-5xl text-center mb-8 font-semibold not-italic antialiased tracking-[0.16px] text-black">Featured Categories</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
             @include('frontend.partials._featured_category_card')
         </div>
+    </section>
+
+    <!-- Product You May Like Section -->
+    <section class="py-12 px-6">
+        <h2 class="text-5xl text-center mb-6 font-semibold not-italic antialiased tracking-[0.16px] text-black">Products You May Like</h2>
+        @include('frontend.partials._product_may_like_card')
     </section>
 
     <section class="py-6 px-6 min-h-[600px] bg-cover md:bg-center bg-no-repeat" style="background-image: url('/assets/img/images/why_choose_us.webp')">

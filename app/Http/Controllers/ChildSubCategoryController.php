@@ -17,7 +17,7 @@ class ChildSubCategoryController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('show_on_main_menu', 1)->get();
         $subcategories = SubCategory::all();
         return view('admin.childsubcategories.create', compact('categories', 'subcategories'));
     }

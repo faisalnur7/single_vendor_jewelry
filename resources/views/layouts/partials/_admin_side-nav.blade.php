@@ -33,7 +33,7 @@
 
                 <!-- Product Management -->
                 <li
-                    class="nav-item {{ menuOpen(['product.*', 'stock', 'category.*', 'subcategory.*', 'childsubcategory.*', 'brand.*', 'attribute.*']) ? 'menu-is-opening menu-open' : '' }}">
+                    class="nav-item {{ menuOpen(['product.*', 'stock','custom-category.*', 'category.*', 'subcategory.*', 'childsubcategory.*', 'brand.*', 'attribute.*']) ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
                         <p>
@@ -61,6 +61,11 @@
                                 class="nav-link {{ request()->routeIs('childsubcategory.*') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Child Sub Categories</p>
+                            </a></li>
+                        <li class="nav-item"><a href="{{ route('custom-category.list') }}"
+                                class="nav-link {{ request()->routeIs('custom-category.*') ? 'active' : '' }}"><i
+                                    class="far fa-circle nav-icon"></i>
+                                <p>Custom Categories</p>
                             </a></li>
                         <li class="nav-item">
                             <a href="{{ route('stock') }}"

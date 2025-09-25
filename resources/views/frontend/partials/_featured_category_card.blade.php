@@ -1,12 +1,19 @@
 @php
-    $featuredCategories = \App\Models\Category::where('show_on_main_menu', '0')
-        ->where('is_featured', '1')
-        ->orderBy('order', 'asc')
-        ->get();
+    $featuredCategories = \App\Models\CustomCategory::where('type', \App\Models\CustomCategory::FEATURED)->orderBy('order', 'asc')->get();
 @endphp
 
 @foreach ($featuredCategories as $featuredCategory)
-    <a href="{{ route('category.show', $featuredCategory->slug) }}">
+    @php
+        $route = "#";
+        if(!empty($featuredCategory->child_sub_category_id)){
+            $route = route('childsubcategory.show', [$featuredCategory->category->slug, $featuredCategory->subCategory->slug, $featuredCategory->childSubCategory->slug]);
+        }else if(!empty($featuredCategory->sub_category_id)){
+            $route = route('subcategory.show', [$featuredCategory->category->slug, $featuredCategory->subCategory->slug]);
+        }else if(!empty($featuredCategory->category_id)){
+            $route = route('category.show', $featuredCategory->category->slug);
+        }
+    @endphp
+    <a href="{{ $route }}">
         <div class="flex flex-col items-center text-center mt-6">
             <div class="bg-white border rounded-full group overflow-hidden aspect-square">
                 <img src="{{$featuredCategory->image}}"
