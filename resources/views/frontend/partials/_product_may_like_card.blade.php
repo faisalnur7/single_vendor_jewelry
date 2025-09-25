@@ -79,7 +79,7 @@
     <div id="productContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 relative">
         <!-- Loader -->
         <div id="productLoader" class="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 hidden z-10">
-            <img src="{{asset('/infinity_loader_blue.gif')}}" />
+            <img src="{{asset('/infinity_transparent.gif')}}" />
         </div>
 
         @foreach ($onLoadProducts as $product)

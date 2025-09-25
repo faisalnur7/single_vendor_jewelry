@@ -13,7 +13,7 @@
     {{-- @include('frontend.partials._top_bar') --}}
     <!-- Loading Indicator -->
     <div id="loadingIndicator" class="fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
-            <img src="{{asset('/infinity_loader_blue.gif')}}" />
+            <img src="{{asset('/infinity_transparent.gif')}}" />
     </div>
 
     @include('frontend.partials._header')
