@@ -47,6 +47,7 @@
                 <table class="w-full text-left border border-gray-300">
                     <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                         <tr>
+                            <th class="px-4 py-2 border-b">Image</th>
                             <th class="px-4 py-2 border-b">Product</th>
                             <th class="px-4 py-2 border-b">Qty</th>
                             <th class="px-4 py-2 border-b">Price</th>
@@ -56,6 +57,7 @@
                     <tbody>
                         @foreach ($groupedItems as $item)
                             <tr class="border-b">
+                                <td class="px-4 py-2"><img class="w-32" src="{{ asset($item->product->image) }}" /></td>
                                 <td class="px-4 py-2">{{ $item->product->name ?? 'N/A' }}</td>
                                 <td class="px-4 py-2">{{ $item->quantity }}</td>
                                 <td class="px-4 py-2">৳{{ number_format($item->price, 2) }}</td>
