@@ -38,12 +38,13 @@ Route::get('/reboot', function () {
 // sail artisan cache:clear && sail artisan route:clear && sail artisan config:clear &&  sail artisan view:clear && sail artisan clear-compiled && sail artisan config:cache && sail artisan route:cache && sail artisan view:cache
 
 Route::get('/', [DashboardController::class, 'index'])->name('homepage');
-Route::get('/collections', [DashboardController::class, 'product_list_page'])->name('collections');
 Route::get('/best_sellers', [DashboardController::class, 'best_sellers'])->name('best_sellers');
 
-Route::get('/collections/{category:slug}/{title?}', [DashboardController::class, 'show_categorywise'])->name('category.show');
-Route::get('/collections/{category:slug}/{subcategory:slug}/{title?}', [DashboardController::class, 'show_subcategorywise'])->name('subcategory.show');
 Route::get('/collections/{category:slug}/{subcategory:slug}/{childsubcategory:slug}/{title?}', [DashboardController::class, 'show_child_subcategorywise'])->name('childsubcategory.show');
+Route::get('/collections/{category:slug}/{subcategory:slug}/{title?}', [DashboardController::class, 'show_subcategorywise'])->name('subcategory.show');
+Route::get('/collections/{category:slug}/{title?}', [DashboardController::class, 'show_categorywise'])->name('category.show');
+Route::get('/collections', [DashboardController::class, 'product_list_page'])->name('collections');
+
 
 
 Route::get('/product/{product:slug}', [DashboardController::class, 'show_product'])->name('show_product');
