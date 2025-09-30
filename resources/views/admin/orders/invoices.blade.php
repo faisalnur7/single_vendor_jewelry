@@ -10,12 +10,17 @@
 
 <body class="bg-gray-100 p-6">
 
+    @php
+        $general_settings = App\Models\GeneralSetting::first();
+    @endphp
+
     <div class="container mx-auto">
         <div id="printableArea"
             class="max-w-4xl mx-auto bg-white p-8 rounded-md shadow-md text-sm text-gray-700 font-sans">
             <!-- Header -->
             <div class="flex items-center justify-center pb-4 w-full">
-                <img src="{{ asset('assets/img/logo.webp') }}" alt="Company Logo" class="h-12 w-auto">
+                <img src="{{ asset($general_settings->site_logo ?? 'assets/img/logo.png') }}"
+                    alt="{{ $general_settings->site_title }}" class="h-10 object-contain" style="min-width: 150px" />
             </div>
             <div class="flex justify-between items-center border-b pb-4 mb-6">
 
@@ -38,7 +43,8 @@
                 <h3 class="text-lg font-semibold mb-1 text-gray-800">Customer Information</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <p><span class="font-medium">Name:</span> {{ $order->user->name ?? '-' }}</p>
-                    <p><span class="font-medium">Payment Method:</span> {{ ucwords(str_replace('_', ' ', $order->payment_option_name)) }}</p>
+                    <p><span class="font-medium">Payment Method:</span>
+                        {{ ucwords(str_replace('_', ' ', $order->payment_option_name)) }}</p>
                 </div>
             </div>
 
@@ -57,7 +63,8 @@
                     <tbody>
                         @foreach ($groupedItems as $item)
                             <tr class="border-b">
-                                <td class="px-4 py-2"><img class="w-32" src="{{ asset($item->product->image) }}" /></td>
+                                <td class="px-4 py-2"><img class="w-32" src="{{ asset($item->product->image) }}" />
+                                </td>
                                 <td class="px-4 py-2">{{ $item->product->name ?? 'N/A' }}</td>
                                 <td class="px-4 py-2">{{ $item->quantity }}</td>
                                 <td class="px-4 py-2">৳{{ number_format($item->price, 2) }}</td>
@@ -85,7 +92,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 console.log('Page loaded');
                 window.print();
@@ -94,7 +101,7 @@
     </script>
 
     @vite(['resources/js/app.js'])
-    
+
 </body>
 
 </html>
