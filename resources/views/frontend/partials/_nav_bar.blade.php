@@ -182,7 +182,7 @@
 
                 <!-- Extra Section -->
                 <div class="text-center pb-6">
-                    <a href="#"
+                    <a href="{{route('contact_us')}}"
                         class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-3 rounded-full shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 hover:scale-105 transition-all duration-200 font-semibold">
                         <i class="fa-solid fa-envelope"></i>
                         Contact Us
