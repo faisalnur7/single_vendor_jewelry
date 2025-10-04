@@ -65,56 +65,130 @@
 <!-- Mobile Navbar -->
 <div class="lg:hidden">
     <!-- Slide Menu -->
-    <div id="mobileMenu" class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300">
-        <!-- Overlay -->
-        <div id="menuOverlay" class="absolute inset-0 bg-black bg-opacity-50 hidden"></div>
+    <div id="mobileMenu"
+        class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <!-- Overlay with blur effect -->
+        <div id="menuOverlay"
+            class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/40 backdrop-blur-sm hidden transition-opacity duration-300 ease-in-out">
+        </div>
 
         <!-- Drawer -->
-        <div class="relative bg-white w-80 h-full shadow-lg p-6 overflow-y-auto">
-            <!-- Close button -->
-            <button id="closeMenuBtn" class="absolute top-4 right-4 text-2xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+        <div class="relative bg-white w-80 h-full shadow-2xl overflow-hidden">
 
-            <!-- Menu items -->
-            <h3 class="font-bold text-xl mb-4">Categories</h3>
-            <ul>
-                @foreach ($categories as $category)
-                    <li class="mb-3">
-                        <a href="{{ route('category.show', $category->slug) }}"
-                            class="block text-lg hover:text-orange-500" data-translate>
-                            {{ $category->name }}
-                        </a>
+            <!-- Gradient Header Background -->
+            <div
+                class="absolute top-0 left-0 right-0 h-20 bg-gradient-to-br from-orange-500 via-orange-600 to-red-500 opacity-10">
+            </div>
 
-                        @if ($category->subcategories->count())
-                            <ul class="ml-4 mt-2 space-y-2">
-                                @foreach ($category->subcategories as $subcategory)
-                                    <li>
-                                        <a href="{{ route('subcategory.show', [$category->slug, $subcategory->slug]) }}"
-                                            class="text-gray-600 hover:text-orange-500" data-translate>
-                                            {{ $subcategory->name }}
-                                        </a>
-                                        @if ($subcategory->child_sub_categories->count())
-                                            <ul class="ml-4 mt-1 space-y-1 !hidden">
-                                                @foreach ($subcategory->child_sub_categories as $child)
-                                                    <li>
-                                                        <a href="{{ route('childsubcategory.show', [$category->slug, $subcategory->slug, $child->slug]) }}"
-                                                            class="text-gray-500 hover:text-orange-500" data-translate>
-                                                            {{ $child->name }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </li>
-                @endforeach
-            </ul>
+            <div class="relative p-6 overflow-y-auto h-full">
+                <!-- Logo + Close button -->
+                <div class="flex items-center justify-between mb-8">
+                    <!-- Logo -->
+                    <a href="{{ url('/') }}" class="flex items-center gap-2 group">
+                        <div class="relative">
+                            <div
+                                class="absolute inset-0 bg-orange-500 rounded-lg blur opacity-20 group-hover:opacity-30 transition">
+                            </div>
+                            <img src="{{ asset($general_settings->site_logo ?? 'assets/img/logo.png') }}"
+                                alt="Logo"
+                                class="relative h-10 w-auto transform group-hover:scale-105 transition duration-200">
+                        </div>
+                    </a>
 
-            <hr class="my-4">
+                    <!-- Close button -->
+                    <button id="closeMenuBtn"
+                        class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-500 transition-all duration-200 transform hover:rotate-90">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Menu Header -->
+                <div class="mb-6">
+                    <h3
+                        class="font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 flex items-center gap-2">
+                        <i class="fa-solid fa-grid-2 text-orange-500"></i>
+                        Categories
+                    </h3>
+                    <div class="h-1 w-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mt-2"></div>
+                </div>
+
+                <!-- Menu items -->
+                <ul class="space-y-2 mb-6">
+                    @foreach ($categories as $category)
+                        <li>
+                            <button
+                                class="flex justify-between items-center w-full text-left px-4 py-3 rounded-xl text-base font-semibold text-gray-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 hover:text-orange-600 transition-all duration-200 group"
+                                onclick="toggleMenu(this)">
+                                <span class="flex items-center gap-3">
+                                    <span
+                                        class="w-1.5 h-1.5 rounded-full bg-orange-500 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                                    {{ $category->name }}
+                                </span>
+                                @if ($category->subcategories->count())
+                                    <i
+                                        class="fa-solid fa-chevron-down text-sm transition-transform duration-200 group-hover:text-orange-500"></i>
+                                @endif
+                            </button>
+
+                            @if ($category->subcategories->count())
+                                <ul class="ml-6 mt-1 space-y-1 hidden overflow-hidden transition-all duration-300">
+                                    @foreach ($category->subcategories as $subcategory)
+                                        <li>
+                                            <button
+                                                class="flex justify-between items-center w-full text-left px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 transition-all duration-200 group"
+                                                onclick="toggleMenu(this)">
+                                                <span class="flex items-center gap-2">
+                                                    <i
+                                                        class="fa-solid fa-circle text-[4px] text-gray-400 group-hover:text-orange-500"></i>
+                                                    {{ $subcategory->name }}
+                                                </span>
+                                                @if ($subcategory->child_sub_categories->count())
+                                                    <i
+                                                        class="fa-solid fa-chevron-right text-xs opacity-50 group-hover:opacity-100"></i>
+                                                @endif
+                                            </button>
+
+                                            @if ($subcategory->child_sub_categories->count())
+                                                <ul class="ml-6 mt-1 space-y-1 hidden">
+                                                    @foreach ($subcategory->child_sub_categories as $child)
+                                                        <li>
+                                                            <a href="{{ route('childsubcategory.show', [$category->slug, $subcategory->slug, $child->slug]) }}"
+                                                                class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-gray-500 hover:bg-gradient-to-r hover:from-orange-50 hover:to-transparent hover:text-orange-600 transition-all duration-200 group">
+                                                                <i
+                                                                    class="fa-solid fa-angle-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                                                {{ $child->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+
+                <!-- Divider with gradient -->
+                <div class="relative my-8">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="px-3 bg-white text-xs text-gray-400 uppercase tracking-wider">Get in touch</span>
+                    </div>
+                </div>
+
+                <!-- Extra Section -->
+                <div class="text-center pb-6">
+                    <a href="#"
+                        class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-3 rounded-full shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 hover:scale-105 transition-all duration-200 font-semibold">
+                        <i class="fa-solid fa-envelope"></i>
+                        Contact Us
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -180,4 +254,16 @@
             }
         });
     });
+
+    function toggleMenu(button) {
+        const submenu = button.nextElementSibling;
+        if (submenu) {
+            const icon = button.querySelector('i.fa-chevron-down, i.fa-chevron-right');
+            submenu.classList.toggle('hidden');
+            if (icon && icon.classList.contains('fa-chevron-down')) {
+                icon.style.transform = submenu.classList.contains('hidden') ? 'rotate(0deg)' :
+                    'rotate(180deg)';
+            }
+        }
+    }
 </script>
