@@ -66,11 +66,11 @@
 
 
     {{-- Right Icons --}}
-    <div class="flex flex-wrap items-center gap-4 pl-2 lg:pl-0 lg:gap-7 text-sm">
+    <div class="flex flex-wrap items-start justify-between gap-2 md:gap-4 pl-2 lg:pl-0 lg:gap-4 xl:gap-7 text-sm">
         <!-- WhatsApp Toggle -->
         <div class="relative hidden md:block">
             @include('frontend.partials.header_icons._whatsapp_icon')
-           
+
         </div>
 
         <!-- Globe Toggle -->
@@ -84,11 +84,11 @@
         </div>
 
         <!-- Script -->
-        <div class="relative">
+        <div class="relative hidden md:block">
             @include('frontend.partials.header_icons._user_icon')
         </div>
 
-        <div class="relative">
+        <div class="relative hidden md:block">
             @include('frontend.partials.header_icons._wishlist_icon')
         </div>
 
