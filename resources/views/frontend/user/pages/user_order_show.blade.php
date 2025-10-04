@@ -43,6 +43,7 @@
                 <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
                     <tr>
                         <th class="px-4 py-2 border">#</th>
+                        <th class="px-4 py-2 border">Image</th>
                         <th class="px-4 py-2 border">Product</th>
                         <th class="px-4 py-2 border">Quantity</th>
                         <th class="px-4 py-2 border">Price</th>
@@ -53,6 +54,7 @@
                     @foreach ($order->items as $key => $item)
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-2 border">{{ $key + 1 }}</td>
+                            <td class="px-4 py-2 border"><img src="{{ asset($item->product->image) }}" class="w-36" /></strong></td>
                             <td class="px-4 py-2 border">{{ $item->product->name }} | <strong>{{ $item->product->color }}</strong></td>
                             <td class="px-4 py-2 border">{{ $item->quantity }}</td>
                             <td class="px-4 py-2 border">${{ number_format($item->price, 2) }}</td>

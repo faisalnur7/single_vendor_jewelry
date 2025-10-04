@@ -1,5 +1,5 @@
 <aside id="sidebar"
-    class="z-30 w-full md:w-64 rounded-xl bg-white/80 backdrop-blur-lg shadow-xl border border-gray-200 transform md:translate-x-0 md:static transition-transform duration-300 ease-in-out">
+    class="z-30 w-full h-min md:w-64 rounded-xl bg-white/80 backdrop-blur-lg shadow-xl border border-gray-200 transform md:translate-x-0 md:static transition-transform duration-300 ease-in-out">
 
     <!-- Accordion Header -->
     <div id="account-toggle"
@@ -29,13 +29,13 @@
         </a>
 
         <a href="{{route('user_edit_profile')}}"
-            class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-orange-100 text-gray-700 transition
+            class="flex items-center gap-3 px-4 py-2 rounded-lg transition
             {{ request()->routeIs('user_edit_profile') ? 'bg-orange-500 text-white' : 'hover:bg-orange-100 text-gray-700' }}">
             <i class="fas fa-edit w-5"></i> Edit Profile
         </a>
 
         <a href="{{route('user_password_form')}}"
-            class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-orange-100 text-gray-700 transition
+            class="flex items-center gap-3 px-4 py-2 rounded-lg transition
             {{ request()->routeIs('user_password_form') ? 'bg-orange-500 text-white' : 'hover:bg-orange-100 text-gray-700' }}">
             <i class="fas fa-lock w-5"></i> Change Password
         </a>

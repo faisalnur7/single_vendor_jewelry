@@ -7,7 +7,7 @@
     <p class="text-lg">{{ session('success') ?? 'Your order has been placed successfully.' }}</p>
     <p class="text-xl text-red-600 font-bold">Please contact this WhatsApp number for the shipping details.</p>
     <p class="text-2xl text-green-600 font-bold">+8801812345678</p>
-    <a href="{{ route('homepage') }}" class="inline-block mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+    <a href="{{ route('homepage') }}" class="inline-block mt-6 px-6 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">
         Continue Shopping
     </a>
 </div>

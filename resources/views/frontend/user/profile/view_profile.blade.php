@@ -25,7 +25,7 @@
     </div>
 
     <div class="pt-4">
-        <a href="{{ route('user_edit_profile', auth()->user()->id) }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        <a href="{{ route('user_edit_profile', auth()->user()->id) }}" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">
             Edit Profile
         </a>
     </div>

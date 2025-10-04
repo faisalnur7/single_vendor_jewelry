@@ -3,7 +3,7 @@
 @section('user_contents')
 <div class="mb-4 flex justify-between items-center">
     <h2 class="text-lg font-semibold">My Shipping Addresses</h2>
-    <a href="{{ route('user_shipping_create') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+    <a href="{{ route('user_shipping_create') }}" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">
         Add New
     </a>
 </div>

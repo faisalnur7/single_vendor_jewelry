@@ -178,7 +178,7 @@
                     });
 
                     html += `<div class="w-full text-center mt-2">
-                            <button id="viewMoreBtn" data-keyword="${keyword}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">View More</button>
+                            <button id="viewMoreBtn" data-keyword="${keyword}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-orange-500">View More</button>
                         </div>`;
                 } else {
                     html = '<div class="text-gray-500">No products found</div>';

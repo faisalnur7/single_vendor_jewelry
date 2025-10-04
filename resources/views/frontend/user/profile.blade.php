@@ -5,7 +5,7 @@
     <div class="w-full bg-gradient-to-br from-orange-50 via-white to-white min-h-screen text-gray-800">
         <div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden md:hidden"></div>
 
-        <div class="mx-auto max-w-[1440px] flex flex-col md:flex-row px-4 md:px-0 py-6 gap-6">
+        <div class="mx-auto max-w-[1440px] h-auto min-h-screen flex flex-col md:flex-row px-4 md:px-0 py-6 gap-6">
             {{-- Sidebar --}}
             @include('frontend.user.components.sidebar')
 
