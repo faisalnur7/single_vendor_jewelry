@@ -73,7 +73,7 @@
         <!-- Newsletter -->
         <div>
             <h2 class="text-lg font-semibold mb-4">Subscribe to our newsletter</h2>
-            <form class="flex flex-row md:flex-col sm:items-center !items-start gap-3"
+            <form class="flex flex-col md:flex-row sm:items-center !items-start gap-3"
                 action="{{ route('subscribers.store') }}" method="POST" id="subscriberForm">
                 @csrf
                 <input type="email" name="email" id="subscriber_email" placeholder="Your email address"
