@@ -97,10 +97,8 @@
                             <div class="swiper-wrapper h-auto md:h-full">
                                 @foreach ($product->variants as $variant)
                                     <div class="swiper-slide w-32 h-min md:h-36 aspect-square cursor-pointer">
-                                        <img onclick="changeImage(this.src, this)" 
-                                            src="{{ asset($variant->image) }}"
+                                        <img onclick="changeImage(this.src, this)" src="{{ asset($variant->image) }}"
                                             data-weight="{{ $variant->weight }}"
-                                            data-variant-id="{{ $variant->id }}"
                                             class="w-full h-full object-cover sw-item rounded" />
                                     </div>
                                 @endforeach
@@ -120,7 +118,7 @@
                     class="w-full bg-white p-0 md:p-6 md:pt-0 pt-0 rounded shadow-none relative transition-all duration-300">
                     @include('frontend.partials._breadcrumbs')
 
-                    <input type="hidden" id="pdpProductId" value={{ $product->id }} />
+                    <input type="hidden" id="pdpProductId" value={{$product->id}} />
                     <h2 class="text-md md:text-xl font-semibold" data-translate>{{ $product->name }}</h2>
                     {{-- <p class="mt-2 text-sm text-gray-600">From collection <span class="bg-black text-white px-2 py-1 rounded">Liora</span></p> --}}
                     <!-- Tags -->
@@ -151,9 +149,7 @@
                             <div class=" overflow-y-auto overflow-x-auto">
                                 @foreach ($product->variants as $index => $variant)
                                     <div onclick="changeImage('{{ asset($variant->image) }}', this)"
-                                        data-image="{{ asset($variant->image) }}" 
-                                        data-weight="{{ $variant->weight }}"
-                                        data-variant-id="{{ $variant->id }}"
+                                        data-image="{{ asset($variant->image) }}" data-weight="{{ $variant->weight }}"
                                         class="grid grid-cols-3 items-center mt-1 border border-gray-300 variant_row hover:bg-gray-50 hover:border-black cursor-pointer text-xs sm:text-sm min-w-[320px]">
 
                                         <!-- Color + Image -->
@@ -249,55 +245,36 @@
                             </div>
 
                             <!-- Content (first one visible) -->
-                            <div class="descContent px-6 py-4">
-                                {{-- Loop through all variants and create description sections --}}
-                                @foreach ($product->variants as $index => $variant)
-                                    <div class="variant-description grid grid-cols-2 gap-y-1 text-sm"
-                                        data-variant-id="{{ $variant->id }}"
-                                        style="display: {{ $index === 0 ? 'grid' : 'none' }};">
+                            <div class="descContent px-6 py-4 grid grid-cols-2 gap-y-1 text-sm">
+                                <div data-translate>Quantity</div>
+                                <div>12 Pcs</div>
 
-                                        @if ($variant->has_description_json)
-                                            @php
-                                                $descriptions = json_decode($variant->description_json, true);
-                                            @endphp
+                                <div class="font-medium" data-translate>Plating Material</div>
+                                <div data-translate>18K Gold, Electroplating</div>
 
-                                            @foreach ($descriptions as $details)
-                                                <div data-translate>{{ $details['label'] }}</div>
-                                                <div>{{ $details['value'] }}</div>
-                                            @endforeach
-                                        @else
-                                            <div data-translate>Quantity</div>
-                                            <div>12 Pcs</div>
+                                <div>Spu</div>
+                                <div>{{ $product->sku }}</div>
 
-                                            <div class="font-medium" data-translate>Plating Material</div>
-                                            <div data-translate>18K Gold, Electroplating</div>
+                                <div data-translate>Classification</div>
+                                <div data-translate>{{ $product->category->name }}</div>
 
-                                            <div>Spu</div>
-                                            <div>{{ $product->sku }}</div>
+                                <div data-translate>Style</div>
+                                <div data-translate>Moderate Luxury</div>
 
-                                            <div data-translate>Classification</div>
-                                            <div data-translate>{{ $product->category->name }}</div>
+                                <div data-translate>Material</div>
+                                <div data-translate>Stainless Steel</div>
 
-                                            <div data-translate>Style</div>
-                                            <div data-translate>Moderate Luxury</div>
+                                <div data-translate>Weight</div>
+                                <div><span class="weight">{{ $product->variants->first()->weight }}</span>g</div>
 
-                                            <div data-translate>Material</div>
-                                            <div data-translate>Stainless Steel</div>
+                                <div data-translate>Occasion</div>
+                                <div data-translate>Daily, Holiday, Wedding</div>
 
-                                            <div data-translate>Weight</div>
-                                            <div><span class="weight">{{ $variant->weight }}</span>g</div>
+                                <div data-translate>Gender</div>
+                                <div data-translate>{{ $product->gender }}</div>
 
-                                            <div data-translate>Occasion</div>
-                                            <div data-translate>Daily, Holiday, Wedding</div>
-
-                                            <div data-translate>Gender</div>
-                                            <div data-translate>{{ $product->gender }}</div>
-
-                                            <div data-translate>Pendant Material</div>
-                                            <div>Titanium Steel</div>
-                                        @endif
-                                    </div>
-                                @endforeach
+                                <div data-translate>Pendant Material</div>
+                                <div>Titanium Steel</div>
                             </div>
                         </div>
 
@@ -360,7 +337,7 @@
                             <i class="fa-solid fa-chevron-left"></i>
                         </div>
                         <div class="swiper-wrapper h-auto md:h-full" id="recent-products">
-
+                            
                         </div>
 
                         <div class="swiper-button-next">

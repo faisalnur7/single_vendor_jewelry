@@ -31,8 +31,8 @@
                                 <option value="">Select Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
-                                        data-letter="{{ strtoupper(substr($category->name, 0, 1)) }}"
-                                        {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            data-letter="{{ strtoupper(substr($category->name, 0, 1)) }}"
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -64,7 +64,7 @@
                                 @endforeach
                             </select>
                         </div>
-
+                        
                         <div class="col-md-4 form-group">
                             <label>Supplier</label>
                             <select name="supplier_id" class="form-control select2" id="supplier_id" required>
@@ -72,8 +72,7 @@
                                 @foreach ($suppliers as $supplier)
                                     <option value="{{ $supplier->id }}"
                                         {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                                        {{ $supplier->contact_person }} - {{ $supplier->company_name }} -
-                                        {{ $supplier->mobile_number }}
+                                        {{ $supplier->contact_person }} - {{ $supplier->company_name }} - {{ $supplier->mobile_number }}
                                     </option>
                                 @endforeach
                             </select>
@@ -191,14 +190,12 @@
                                                         value="{{ $variant['price_rmb'] }}">
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <input type="text"
-                                                        name="variants[{{ $index }}][purchase_price]"
+                                                    <input type="text" name="variants[{{ $index }}][purchase_price]"
                                                         class="form-control" placeholder="Purchase price"
                                                         value="{{ $variant['purchase_price'] }}">
                                                 </div>
                                                 <div class="col-md-2 mt-2">
-                                                    <input type="text"
-                                                        name="variants[{{ $index }}][purchase_price_rmb]"
+                                                    <input type="text" name="variants[{{ $index }}][purchase_price_rmb]"
                                                         class="form-control" placeholder="Purchase price in RMB"
                                                         value="{{ $variant['purchase_price_rmb'] }}">
                                                 </div>
@@ -216,18 +213,15 @@
                                         <!-- Default One -->
                                         <div class="form-row variant-item mb-3 border p-3 rounded">
                                             <div class="col-md-12 d-flex align-items-center justify-end">
-                                                <button type="button"
-                                                    class="btn btn-outline-danger btn-sm remove-variant"><i
-                                                        class="fas fa-minus"></i></button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
                                             </div>
-
                                             <div class="col-md-4 mt-2">
                                                 <input type="text" name="variants[0][color]" class="form-control"
                                                     placeholder="Color">
                                             </div>
                                             <div class="col-md-4 mt-2">
-                                                <input type="text" name="variants[0][weight]" class="form-control"
-                                                    placeholder="Weight (grams)">
+                                                <input type="text" name="variants[0][weight]"
+                                                    class="form-control" placeholder="Weight (grams)">
                                             </div>
                                             <div class="col-md-4 mt-2">
                                                 <input type="text" name="variants[0][price]" class="form-control"
@@ -238,39 +232,22 @@
                                                     placeholder="Price in RMB">
                                             </div>
                                             <div class="col-md-4 mt-2">
-                                                <input type="text" name="variants[0][purchase_price]"
-                                                    class="form-control" placeholder="Purchase price">
+                                                <input type="text" name="variants[0][purchase_price]" class="form-control"
+                                                    placeholder="Purchase price">
                                             </div>
                                             <div class="col-md-4 mt-2">
-                                                <input type="text" name="variants[0][purchase_price_rmb]"
-                                                    class="form-control" placeholder="Purchase price in RMB">
+                                                <input type="text" name="variants[0][purchase_price_rmb]" class="form-control"
+                                                    placeholder="Purchase price in RMB">
                                             </div>
                                             <div class="col-md-3 mt-2">
                                                 <input type="file" name="variants[0][image]"
                                                     class="form-control-file">
                                             </div>
-
-                                            <!-- ✅ Description Pattern Section -->
-                                            <div class="col-md-12 mt-3 border-top pt-3">
-                                                <label><strong>Variant Descriptions</strong></label>
-                                                <div class="variant-descriptions">
-                                                    <div class="description-row d-flex gap-2 mb-2">
-                                                        <input type="text" name="variants[0][descriptions][0][label]"
-                                                            class="form-control" placeholder="Label (e.g. Height)">
-                                                        <input type="text" name="variants[0][descriptions][0][value]"
-                                                            class="form-control" placeholder="Value (e.g. 120mm)">
-                                                        <button type="button"
-                                                            class="btn btn-outline-danger btn-sm remove-description"><i
-                                                                class="fas fa-times"></i></button>
-                                                    </div>
-                                                </div>
-                                                <button type="button"
-                                                    class="btn btn-sm btn-outline-primary add-description mt-2">
-                                                    <i class="fas fa-plus"></i> Add More Description
-                                                </button>
-                                            </div>
+                                            {{-- <div class="col-md-12 mb-2">
+                                                <label>Description</label>
+                                                <textarea name="variants[0][description]" class="form-control summernote" rows="3"></textarea>
+                                            </div> --}}
                                         </div>
-
                                     @endif
                                 </div>
 
@@ -341,47 +318,32 @@
             // Add more variants
             $('#add_variant_btn').on('click', function() {
                 let variantHtml = `
-                    <div class="form-row variant-item mb-3 border p-3 rounded">
-                        <div class="col-md-12 d-flex align-items-center justify-end">
-                            <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <input type="text" name="variants[${variantIndex}][color]" class="form-control" placeholder="Color">
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <input type="text" name="variants[${variantIndex}][weight]" class="form-control" placeholder="Weight (grams)">
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <input type="text" name="variants[${variantIndex}][price_rmb]" class="form-control" placeholder="Price in RMB">
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <input type="text" name="variants[${variantIndex}][purchase_price_rmb]" class="form-control" placeholder="Purchase price in RMB">
-                        </div>
-                        <div class="col-md-3 mt-2">
-                            <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
-                        </div>
-
-                        <div class="col-md-12 mt-3 border-top pt-3">
-                            <label><strong>Variant Descriptions</strong></label>
-                            <div class="variant-descriptions">
-                                <div class="description-row d-flex gap-2 mb-2">
-                                    <input type="text" name="variants[${variantIndex}][descriptions][0][label]" class="form-control" placeholder="Label (e.g. Height)">
-                                    <input type="text" name="variants[${variantIndex}][descriptions][0][value]" class="form-control" placeholder="Value (e.g. 120mm)">
-                                    <button type="button" class="btn btn-outline-danger btn-sm remove-description"><i class="fas fa-times"></i></button>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-outline-primary add-description mt-2">
-                                <i class="fas fa-plus"></i> Add More Description
-                            </button>
-                        </div>
-                    </div>`;
-
+                <div class="form-row variant-item mb-3 border p-3 rounded">
+                    <div class="col-md-12 d-flex align-items-center justify-end">
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-variant"><i class="fas fa-minus"></i></button>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <input type="text" name="variants[${variantIndex}][color]" class="form-control" placeholder="Color">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <input type="text" name="variants[${variantIndex}][weight]" class="form-control" placeholder="Weight (grams)">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <input type="text" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <input type="text" name="variants[${variantIndex}][price_rmb]" class="form-control" placeholder="Price in RMB">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <input type="text" name="variants[${variantIndex}][purchase_price]" class="form-control" placeholder="Purchase price">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <input type="text" name="variants[${variantIndex}][purchase_price_rmb]" class="form-control" placeholder="Purchase price in RMB">
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <input type="file" name="variants[${variantIndex}][image]" class="form-control-file">
+                    </div>
+                </div>`;
                 $('#variants_container').append(variantHtml);
                 $(`.summernote`).last().summernote({
                     height: 100
@@ -393,28 +355,6 @@
             $(document).on('click', '.remove-variant', function() {
                 $(this).closest('.variant-item').remove();
             });
-
-            // Handle adding new description rows inside variants
-            $(document).on('click', '.add-description', function() {
-                const variantItem = $(this).closest('.variant-item');
-                const descriptionsContainer = variantItem.find('.variant-descriptions');
-                const variantIndex = variantItem.index(); // variant position
-                const descCount = descriptionsContainer.find('.description-row').length;
-
-                const newDescRow = `
-                            <div class="description-row d-flex gap-2 mb-2">
-                                <input type="text" name="variants[${variantIndex}][descriptions][${descCount}][label]" class="form-control" placeholder="Label (e.g. Height)">
-                                <input type="text" name="variants[${variantIndex}][descriptions][${descCount}][value]" class="form-control" placeholder="Value (e.g. 120mm)">
-                                <button type="button" class="btn btn-outline-danger btn-sm remove-description"><i class="fas fa-times"></i></button>
-                            </div>`;
-                descriptionsContainer.append(newDescRow);
-            });
-
-            // Handle removing description rows
-            $(document).on('click', '.remove-description', function() {
-                $(this).closest('.description-row').remove();
-            });
-
         });
     </script>
 @endsection
