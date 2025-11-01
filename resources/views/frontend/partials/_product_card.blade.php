@@ -2,7 +2,7 @@
     <a href="{{ route('show_product', $product->slug) }}">
 
         <!-- Image with overlay icons -->
-        <div class="relative bg-white border rounded-none group overflow-hidden">
+        <div class="relative bg-white border rounded-none group overflow-hidden min-h-124">
             <img loading="lazy" id="mainImage-{{ $product->id }}" src="{{ asset($product->image) }}" alt="Product Main"
                 class="mx-auto transition-transform duration-[3000ms] group-hover:scale-[1.5] opacity-100 transition-opacity duration-500" />
 
