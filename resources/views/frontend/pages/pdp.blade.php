@@ -253,11 +253,13 @@
                             <!-- Content (first one visible) -->
                             <div class="descContent px-6 py-4 grid grid-cols-2 gap-y-1 text-sm">
                                 <div data-translate>Quantity</div>
-                                <div>12 Pcs</div>
+                                <div>{{$product->min_order_qty}}pcs</div>
 
+                                @if($product->plating_material)
                                 <div class="font-medium" data-translate>Plating Material</div>
-                                <div data-translate>18K Gold, Electroplating</div>
-
+                                <div data-translate>{{$product->plating_material}}</div>
+                                {{-- <div data-translate>18K Gold, Electroplating</div> --}}
+                                @endif
                                 <div>Spu</div>
                                 <div>{{ $product->sku }}</div>
 
@@ -267,9 +269,11 @@
                                 <div data-translate>Style</div>
                                 <div data-translate>Moderate Luxury</div>
 
+                                @if($product->main_material)
                                 <div data-translate>Material</div>
-                                <div data-translate>Stainless Steel</div>
-
+                                <div data-translate>{{$product->main_material}}</div>
+                                {{-- <div data-translate>Stainless Steel</div> --}}
+                                @endif
                                 <div data-translate>Weight</div>
                                 <div><span class="weight">{{ $product->variants->first()->weight }}</span>g</div>
 
@@ -279,8 +283,10 @@
                                 <div data-translate>Gender</div>
                                 <div data-translate>{{ $product->gender }}</div>
 
+                                @if($product->pendant_material)
                                 <div data-translate>Pendant Material</div>
-                                <div>Titanium Steel</div>
+                                <div>{{$product->pendant_material}}</div>
+                                @endif
                             </div>
                         </div>
 

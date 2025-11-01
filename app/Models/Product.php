@@ -34,6 +34,9 @@ class Product extends Model
         'purchase_price',
         'purchase_price_rmb',
         'gender',
+        'plating_material',
+        'main_material',
+        'pendant_material',
     ];
 
     protected $casts = [

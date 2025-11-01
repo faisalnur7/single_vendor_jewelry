@@ -134,6 +134,21 @@
                             <input type="number" step="0.01" name="min_order_qty" class="form-control"
                                 value="{{ old('min_order_qty', 12) }}">
                         </div>
+                        
+                        <div class="col-md-4 form-group">
+                            <label>Plating Material</label>
+                            <input type="text" name="plating_material" class="form-control" value="{{ old('plating_material') }}">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>Material</label>
+                            <input type="text" name="main_material" class="form-control" value="{{ old('main_material') }}" required>
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>Pendant Material</label>
+                            <input type="text" name="pendant_material" class="form-control" value="{{ old('pendant_material') }}" required>
+                        </div>
 
                         <div class="col-md-4 form-group">
                             <label>Description</label>

@@ -131,15 +131,30 @@
                         <div class="col-md-4 form-group">
                             <label>Unit</label>
                             <select name="unit" class="form-control">
-                                <option value="pcs" {{ old('unit') == 'pcs' ? 'selected' : '' }}>Pcs</option>
-                                <option value="set" {{ old('unit') == 'set' ? 'selected' : '' }}>Set</option>
+                                <option value="pcs" {{ $product->unit == 'pcs' ? 'selected' : '' }}>Pcs</option>
+                                <option value="set" {{ $product->unit == 'set' ? 'selected' : '' }}>Set</option>
                             </select>
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label>Min Order Quantity</label>
                             <input type="number" step="0.01" name="min_order_qty" class="form-control"
-                                value="{{ old('min_order_qty', 12) }}">
+                                value="{{ $product->min_order_qty }}">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>Plating Material</label>
+                            <input type="text" name="plating_material" class="form-control" value="{{ $product->plating_material }}">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>Material</label>
+                            <input type="text" name="main_material" class="form-control" value="{{ $product->main_material }}">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>Pendant Material</label>
+                            <input type="text" name="pendant_material" class="form-control" value="{{ $product->pendant_material }}">
                         </div>
 
                         {{-- <div class="col-md-4 form-group">
