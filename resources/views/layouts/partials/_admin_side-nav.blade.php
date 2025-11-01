@@ -46,27 +46,32 @@
                                 class="nav-link {{ request()->routeIs('product.*') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Products</p>
-                            </a></li>
+                            </a>
+                        </li>
                         <li class="nav-item"><a href="{{ route('category.list') }}"
                                 class="nav-link {{ request()->routeIs('category.*') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Categories</p>
-                            </a></li>
+                            </a>
+                        </li>
                         <li class="nav-item"><a href="{{ route('subcategory.list') }}"
                                 class="nav-link {{ request()->routeIs('subcategory.*') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Sub Categories</p>
-                            </a></li>
+                            </a>
+                        </li>
                         <li class="nav-item"><a href="{{ route('childsubcategory.list') }}"
                                 class="nav-link {{ request()->routeIs('childsubcategory.*') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Child Sub Categories</p>
-                            </a></li>
+                            </a>
+                        </li>
                         <li class="nav-item"><a href="{{ route('custom-category.list') }}"
                                 class="nav-link {{ request()->routeIs('custom-category.*') ? 'active' : '' }}"><i
                                     class="far fa-circle nav-icon"></i>
                                 <p>Custom Categories</p>
-                            </a></li>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('stock') }}"
                                 class="nav-link {{ request()->routeIs('stock') ? 'active' : '' }}">

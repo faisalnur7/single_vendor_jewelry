@@ -33,7 +33,9 @@ class Product extends Model
         'has_variants',
         'purchase_price',
         'purchase_price_rmb',
-        'gender'
+        'gender',
+        'has_description_json',
+        'description_json'
     ];
 
     protected $casts = [

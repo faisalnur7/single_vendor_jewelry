@@ -56,6 +56,7 @@
             const $img = $("#mainImage");
             const $result = $("#result");
             const weight = $(el).data('weight');
+            const variantId = $(el).data('variant-id'); // Get variant ID from element
 
             // Update the selected row style
             $(".variant_row").removeClass("border-gray-700");
@@ -64,6 +65,10 @@
                 $(el).addClass("border-gray-700");
             }
             $('.weight').html(weight);
+
+            // Hide all variant descriptions and show the selected one
+            $('.variant-description').hide();
+            $(`.variant-description[data-variant-id="${variantId}"]`).css('display', 'grid');
 
             // Fade out current image
             $img.removeClass("opacity-100").addClass("opacity-0");

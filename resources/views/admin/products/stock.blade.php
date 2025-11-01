@@ -110,8 +110,8 @@
                 </div>
 
                 {{-- Pagination --}}
-                <div class="pagination-container flex justify-center mt-0">
-                    <div class="flex items-center space-x-1 [&_svg]:w-4 [&_svg]:h-4">
+                <div class="pagination-container flex justify-between mt-0 w-full">
+                    <div class="flex items-center justify-between space-x-1 [&_svg]:w-4 [&_svg]:h-4 w-full">
                         {{ $products->links() }}
                     </div>
                 </div>

@@ -88,7 +88,6 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'slug' => 'nullable|unique:products,slug',
-            //'price' => 'required|numeric',
             'image' => 'nullable|image',
             'gallery_images.*' => 'nullable|image',
         ]);
@@ -191,6 +190,11 @@ class ProductController extends Controller
                         $vProduct->image = 'uploads/products/' . $filename;
                     }
 
+                    if (!empty($variant['descriptions'])) {
+                        $vProduct->has_description_json = 1;
+                        $vProduct->description_json = is_array($variant['descriptions']) ? json_encode($variant['descriptions']) : $variant['descriptions'];
+                    }
+
                     $vProduct->save();
                 }
             }
@@ -249,115 +253,157 @@ class ProductController extends Controller
             'image' => 'nullable|image',
         ]);
 
-        $data = $request->all();
+        DB::beginTransaction();
 
-        // Slug generation
-        $data['slug'] = $request->slug ?: Str::slug($request->name) . '-' . uniqid();
+        try {
+            $data = $request->all();
 
-        // ✅ Regenerate SKU if category/subcategory changed
-        if ($request->category_id != $product->category_id || $request->sub_category_id != $product->sub_category_id) {
-            $category = Category::find($request->category_id);
-            $subCategory = SubCategory::find($request->sub_category_id);
+            // Slug generation
+            $data['slug'] = $request->slug ?: Str::slug($request->name) . '-' . uniqid();
 
-            // Category → 1 letter
-            $categoryInitial = $category ? strtoupper(Str::substr($category->name, 0, 1)) : '';
+            // ✅ Regenerate SKU if category/subcategory changed
+            if ($request->category_id != $product->category_id || $request->sub_category_id != $product->sub_category_id) {
+                $category = Category::find($request->category_id);
+                $subCategory = SubCategory::find($request->sub_category_id);
 
-            // Subcategory → max 2 letters, skip & and symbols
-            $subCategoryInitials = '';
-            if ($subCategory) {
-                $words = explode(' ', $subCategory->name);
+                // Category → 1 letter
+                $categoryInitial = $category ? strtoupper(Str::substr($category->name, 0, 1)) : '';
 
-                // filter out single-char words like "&"
-                $filteredWords = array_filter($words, fn($w) => strlen($w) > 1);
-                $filteredWords = array_values($filteredWords);
+                // Subcategory → max 2 letters, skip & and symbols
+                $subCategoryInitials = '';
+                if ($subCategory) {
+                    $words = explode(' ', $subCategory->name);
 
-                if (count($filteredWords) > 1) {
-                    $subCategoryInitials = strtoupper(
-                        Str::substr($filteredWords[0], 0, 1) .
-                        Str::substr($filteredWords[1], 0, 1)
-                    );
-                } elseif (count($filteredWords) === 1) {
-                    $subCategoryInitials = strtoupper(Str::substr($filteredWords[0], 0, 2));
+                    // filter out single-char words like "&"
+                    $filteredWords = array_filter($words, fn($w) => strlen($w) > 1);
+                    $filteredWords = array_values($filteredWords);
+
+                    if (count($filteredWords) > 1) {
+                        $subCategoryInitials = strtoupper(
+                            Str::substr($filteredWords[0], 0, 1) .
+                            Str::substr($filteredWords[1], 0, 1)
+                        );
+                    } elseif (count($filteredWords) === 1) {
+                        $subCategoryInitials = strtoupper(Str::substr($filteredWords[0], 0, 2));
+                    }
+                }
+
+                $data['sku'] = $categoryInitial
+                    . $subCategoryInitials
+                    . $request->category_id
+                    . ($request->sub_category_id ?? '0')
+                    . ($request->child_sub_category_id ?? '0')
+                    . $product->id;
+            } else {
+                // keep old SKU if category/subcategory not changed
+                $data['sku'] = $product->sku;
+            }
+
+            // ✅ Replace Cover Image
+            if ($request->hasFile('image')) {
+                if ($product->image && file_exists(public_path($product->image))) {
+                    unlink(public_path($product->image));
+                }
+                $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+                $request->file('image')->move(public_path('uploads/products'), $filename);
+                $data['image'] = 'uploads/products/' . $filename;
+            }
+
+            // ✅ Update Product
+            $product->update($data);
+
+            // ✅ Variant handling with description_json support
+            if ($request->has_variants) {
+                foreach ($request->variants as $key => $variant) {
+                    if (!empty($variant['id'])) {
+                        // Update existing variant
+                        $vProduct = Product::findOrFail($variant['id']);
+                        $vProduct->color = $variant['color'] ?? null;
+                        $vProduct->weight = $variant['weight'] ?? null;
+                        $vProduct->min_order_qty = $data['min_order_qty'] ?? 12;
+                        $vProduct->gender = $data['gender'] ?? null;
+                        $vProduct->price = $variant['price'] ?? null;
+                        $vProduct->price_rmb = $variant['price_rmb'] ?? null;
+                        $vProduct->purchase_price = $variant['purchase_price'] ?? null;
+                        $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'] ?? null;
+
+                        // ✅ Handle description_json
+                        if (!empty($variant['descriptions'])) {
+                            $vProduct->has_description_json = 1;
+                            $vProduct->description_json = is_array($variant['descriptions']) 
+                                ? json_encode($variant['descriptions']) 
+                                : $variant['descriptions'];
+                        } else {
+                            $vProduct->has_description_json = 0;
+                            $vProduct->description_json = null;
+                        }
+
+                        // Update variant image
+                        if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
+                            // Delete old image if exists
+                            if ($vProduct->image && file_exists(public_path($vProduct->image))) {
+                                unlink(public_path($vProduct->image));
+                            }
+                            $filename = time() . '_' . $variant['image']->getClientOriginalName();
+                            $variant['image']->move(public_path('uploads/products'), $filename);
+                            $vProduct->image = 'uploads/products/' . $filename;
+                        }
+
+                        $vProduct->save();
+                    } else {
+                        // Create new variant
+                        $vData = $data; // copy main product data
+                        $vData['slug'] = $product->slug . '-' . ($key + 1);
+                        $vData['sku'] = $product->sku . '.' . ($key + 1);
+
+                        $vProduct = Product::create($vData);
+                        $vProduct->name = $product->name . '-' . ($key + 1);
+                        $vProduct->color = $variant['color'] ?? null;
+                        $vProduct->weight = $variant['weight'] ?? null;
+                        $vProduct->min_order_qty = $data['min_order_qty'] ?? 12;
+                        $vProduct->gender = $data['gender'] ?? null;
+                        $vProduct->price = $variant['price'] ?? null;
+                        $vProduct->price_rmb = $variant['price_rmb'] ?? null;
+                        $vProduct->purchase_price = $variant['purchase_price'] ?? null;
+                        $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'] ?? null;
+                        $vProduct->parent_id = $product->id;
+                        $vProduct->sku = $product->sku . ($key + 1);
+                        $vProduct->has_variants = 0;
+
+                        // ✅ Handle description_json for new variant
+                        if (!empty($variant['descriptions'])) {
+                            $vProduct->has_description_json = 1;
+                            $vProduct->description_json = is_array($variant['descriptions']) 
+                                ? json_encode($variant['descriptions']) 
+                                : $variant['descriptions'];
+                        }
+
+                        // Variant image
+                        if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
+                            $filename = time() . '_' . $variant['image']->getClientOriginalName();
+                            $variant['image']->move(public_path('uploads/products'), $filename);
+                            $vProduct->image = 'uploads/products/' . $filename;
+                        }
+
+                        $vProduct->save();
+                    }
                 }
             }
 
-            $data['sku'] = $categoryInitial
-                . $subCategoryInitials
-                . $request->category_id
-                . ($request->sub_category_id ?? '0')
-                . ($request->child_sub_category_id ?? '0')
-                . $product->id;
-        } else {
-            // keep old SKU if category/subcategory not changed
-            $data['sku'] = $product->sku;
-        }
+            DB::commit();
 
-        // ✅ Replace Cover Image
-        if ($request->hasFile('image')) {
-            if ($product->image && file_exists(public_path($product->image))) {
-                unlink(public_path($product->image));
+            return redirect()->route('product.list')->with('success', 'Product updated successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Optionally delete uploaded files to avoid orphaned files
+            if (isset($filename) && file_exists(public_path('uploads/products/' . $filename))) {
+                @unlink(public_path('uploads/products/' . $filename));
             }
-            $filename = time() . '_' . $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('uploads/products'), $filename);
-            $data['image'] = 'uploads/products/' . $filename;
+
+            return redirect()->back()->withInput()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
-
-        // ✅ Update Product
-        $product->update($data);
-
-        // ✅ Variant handling (unchanged except SKU assignment fix)
-        if ($request->has_variants) {
-            foreach ($request->variants as $key => $variant) {
-                if (!empty($variant['id'])) {
-                    $vProduct = Product::findOrFail($variant['id']);
-                    $vProduct->color = $variant['color'];
-                    $vProduct->weight = $variant['weight'];
-                    $vProduct->min_order_qty = $data['min_order_qty'] ?? 12;
-                    $vProduct->gender = $data['gender'];
-                    $vProduct->price = $variant['price'];
-                    $vProduct->price_rmb = $variant['price_rmb'];
-                    $vProduct->purchase_price = $variant['purchase_price'];
-                    $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
-                    $vProduct->description = $variant['description'] ?? '';
-
-                    if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
-                        $filename = time() . '_' . $variant['image']->getClientOriginalName();
-                        $variant['image']->move(public_path('uploads/products'), $filename);
-                        $vProduct->image = 'uploads/products/' . $filename;
-                    }
-
-                    $vProduct->save();
-                } else {
-                    $data['slug'] = $product->slug . '-' . ($key + 1);
-                    $data['sku'] = $product->sku . '.' . ($key + 1);
-
-                    $vProduct = Product::create($data);
-                    $vProduct->name = $product->name . '-' . ($key + 1);
-                    $vProduct->color = $variant['color'];
-                    $vProduct->weight = $variant['weight'];
-                    $vProduct->min_order_qty = $data['min_order_qty'] ?? 12;
-                    $vProduct->gender = $data['gender'];
-                    $vProduct->price = $variant['price'];
-                    $vProduct->price_rmb = $variant['price_rmb'];
-                    $vProduct->purchase_price = $variant['purchase_price'];
-                    $vProduct->purchase_price_rmb = $variant['purchase_price_rmb'];
-                    $vProduct->description = $variant['description'] ?? '';
-                    $vProduct->parent_id = $product->id;
-                    $vProduct->sku = $product->sku . ($key + 1);
-                    $vProduct->has_variants = 0;
-
-                    if (isset($variant['image']) && $variant['image'] instanceof \Illuminate\Http\UploadedFile) {
-                        $filename = time() . '_' . $variant['image']->getClientOriginalName();
-                        $variant['image']->move(public_path('uploads/products'), $filename);
-                        $vProduct->image = 'uploads/products/' . $filename;
-                    }
-
-                    $vProduct->save();
-                }
-            }
-        }
-
-        return redirect()->route('product.list')->with('success', 'Product updated successfully.');
     }
 
     
