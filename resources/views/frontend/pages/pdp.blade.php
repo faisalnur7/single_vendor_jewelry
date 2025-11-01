@@ -225,12 +225,18 @@
 
                     <div class="mt-6">
                         <h3 class="text-lg font-semibold">Product Description</h3>
+                        @if($product->description)
+                            <p class="text-sm text-gray-600 mt-2" data-translate>
+                                {{$product->description}}
+                            </p>
+                        @else
                         <p class="text-sm text-gray-600 mt-2" data-translate>
                             "Our stainless steel jewelry is crafted from premium 304 and 316L corrosion-resistant stainless
                             steel, ensuring superior strength and longevity. Featuring a weatherproof finish and an
                             exquisite 18k gold plating, each piece combines luxury and durability with a sleek, modern
                             design, perfect for everyday wear or special occasions"
                         </p>
+                        @endif
                     </div>
 
                     <div class="mt-6">
