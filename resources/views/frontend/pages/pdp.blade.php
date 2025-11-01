@@ -255,10 +255,9 @@
                                 <div data-translate>Quantity</div>
                                 <div>{{$product->min_order_qty}}pcs</div>
 
-                                @if($product->plating_material)
-                                <div class="font-medium" data-translate>Plating Material</div>
-                                <div data-translate>{{$product->plating_material}}</div>
-                                {{-- <div data-translate>18K Gold, Electroplating</div> --}}
+                                @if(!empty($product->plating_material))
+                                    <div class="font-medium" data-translate>Plating Material</div>
+                                    <div data-translate>{{$product->plating_material}}</div>
                                 @endif
                                 <div>Spu</div>
                                 <div>{{ $product->sku }}</div>
@@ -269,10 +268,9 @@
                                 <div data-translate>Style</div>
                                 <div data-translate>Moderate Luxury</div>
 
-                                @if($product->main_material)
-                                <div data-translate>Material</div>
-                                <div data-translate>{{$product->main_material}}</div>
-                                {{-- <div data-translate>Stainless Steel</div> --}}
+                                @if(!empty($product->main_material))
+                                    <div data-translate>Material</div>
+                                    <div data-translate>{{$product->main_material}}</div>
                                 @endif
                                 <div data-translate>Weight</div>
                                 <div><span class="weight">{{ $product->variants->first()->weight }}</span>g</div>
@@ -283,9 +281,9 @@
                                 <div data-translate>Gender</div>
                                 <div data-translate>{{ $product->gender }}</div>
 
-                                @if($product->pendant_material)
-                                <div data-translate>Pendant Material</div>
-                                <div>{{$product->pendant_material}}</div>
+                                @if(!empty($product->pendant_material))
+                                    <div data-translate>Pendant Material</div>
+                                    <div>{{$product->pendant_material}}</div>
                                 @endif
                             </div>
                         </div>
