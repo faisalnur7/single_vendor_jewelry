@@ -162,6 +162,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Checkout routes
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::post('/payment/create-intent', [CheckoutController::class, 'createPaymentIntent'])->name('payment.create_intent');
     Route::post('/payment/process', [CheckoutController::class, 'processPayment'])->name('payment.process');
     Route::get('/payment/success', [CheckoutController::class, 'success'])->name('payment.success');
     Route::get('/payment/failed', [CheckoutController::class, 'failed'])->name('payment.failed');

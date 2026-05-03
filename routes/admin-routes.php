@@ -21,13 +21,19 @@ use App\Http\Controllers\ContactSettingController;
 use App\Http\Controllers\SocialMediaSettingController;
 use App\Http\Controllers\HomePageSettingController;
 use App\Http\Controllers\HomepageBannerController;
-use App\Http\Controllers\HomePageTrendingController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ReturnPolicyController;
 use App\Http\Controllers\ShippingPolicyController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\CacheSettingController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\BannerController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\HomePageTrendingController;
 use Illuminate\Support\Facades\Route;
 
 

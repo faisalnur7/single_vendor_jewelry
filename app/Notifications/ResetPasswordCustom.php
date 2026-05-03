@@ -38,7 +38,7 @@ class ResetPasswordCustom extends Notification
     {
         $setting = GeneralSetting::first();
         $site_logo = null;
-        $site_name = null;
+        $site_name = 'Stainless Steel Jewelry';
         
         if(!empty($setting)){
             $site_logo = $setting->site_logo;
@@ -50,7 +50,7 @@ class ResetPasswordCustom extends Notification
         ], false));
 
         return (new MailMessage)
-        ->subject('Reset Your Password')
+        ->subject('Reset Your Password - ' . $site_name)
         ->view('emails.password-reset', [
             'url' => $url,
             'user' => $notifiable,

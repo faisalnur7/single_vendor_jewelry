@@ -66,6 +66,21 @@ services:
         networks:
             - sail
 
+    mailpit:
+        image: 'axllent/mailpit:latest'
+        ports:
+            - '${MAILPIT_SMTP_PORT:-1025}:1025' # SMTP port
+            - '${MAILPIT_UI_PORT:-8025}:8025' # Web UI port
+        networks:
+            - sail
+        environment:
+            - TZ=UTC
+        healthcheck:
+            test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8025 || exit 1"]
+            interval: 30s
+            retries: 3
+            timeout: 5s
+
 networks:
     sail:
         driver: bridge

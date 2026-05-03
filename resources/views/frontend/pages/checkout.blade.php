@@ -1,24 +1,7 @@
 @extends('frontend.layouts.checkout_template')
 @section('title', 'Checkout')
 @section('head_scripts')
-    {{-- ✅ PayPal SDK (must come first before paypal.Buttons) --}}
-    <script src="https://www.paypal.com/sdk/js?client-id={{ config('paypal.clientId') }}&currency=USD&intent=authorize">
-    </script>
-
-    {{-- ✅ Braintree Core SDK --}}
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/client.min.js"></script>
-
-    {{-- ✅ Braintree Component SDKs --}}
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/hosted-fields.min.js"></script>
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/paypal-checkout.min.js"></script>
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/apple-pay.min.js"></script>
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/google-payment.min.js"></script>
-
-    {{-- ⚠️ Slightly older version for UnionPay --}}
-    <script src="https://js.braintreegateway.com/web/3.98.0/js/unionpay.min.js"></script>
-
-    <script async src="https://pay.google.com/gp/p/js/pay.js"></script>
-
+    <script src="https://js.stripe.com/v3/"></script>
 @endsection
 
 @section('contents')
@@ -26,17 +9,11 @@
     <section class="bg-transparent font-arial">
         <div class="w-full mx-auto flex justify-center flex-col-reverse md:flex-row">
             <!-- Left: Checkout Form (Scrollable) -->
-
             <div class="w-full bg-white p-6 flex justify-center md:justify-end">
-                <div class="w-full max-w-[500px] bg-white p-0 md:p-6 ">
+                <div class="w-full max-w-[500px] bg-white p-0 md:p-6">
                     <!-- Express Checkout -->
                     <h2 class="text-md font-semibold text-center mb-4">Express checkout</h2>
                     <div class="flex gap-4 mb-6 justify-between">
-                        <div id="paypal-button-container"
-                            class="flex w-full justify-center items-center gap-2 h-9  rounded font-semibold">
-                            {{-- <img src="{{ asset('assets/img/payment_icons/paypal.png') }}" alt="PayPal"
-                                class="w-auto h-11 flex justify-center items-center p-3"> --}}
-                        </div>
                         <div id="google-pay-button-container"
                             class="flex w-full justify-center items-center gap-2 bg-black text-white hover:bg-gray-800 rounded font-semibold">
                             <img src="{{ asset('assets/img/payment_icons/gpay.png') }}" alt="GPay"
@@ -69,18 +46,11 @@
                             </label>
                         </div>
 
-
-
                         <!-- Delivery -->
-                        <!-- DELIVERY SECTION -->
                         <div class="bg-gray-100 rounded-md border p-4 shadow-sm mb-6">
                             <h2 class="text-lg font-semibold mb-4">Delivery</h2>
                             <form id="payment-form" method="POST" action="{{ route('payment.process') }}">
                                 @csrf
-
-                                <!-- Country -->
-
-
 
                                 <!-- Name -->
                                 <div class="grid grid-cols-2 gap-4 mb-4">
@@ -121,13 +91,13 @@
                                         autocomplete="shipping country"
                                         class="w-full border-gray-300 rounded px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
                                         @foreach ($countries as $country)
-                                            <option value="{{ $country->id }}">{{$country->emoji}} {{ $country->name }}</option>
+                                            <option value="{{ $country->id }}">{{ $country->emoji }} {{ $country->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
+
                                 <!-- City, State, ZIP -->
                                 <div class="grid grid-rows-1 md:grid-cols-3 gap-4 mb-4">
-                                    
                                     <div>
                                         <label class="block text-sm font-medium mb-1">State</label>
                                         <select name="state" id="state"
@@ -168,8 +138,6 @@
                                             value="{{ $method->id }}" required>
                                         <img src="{{ $method->logo }}"
                                             class="h-8 max-w-40 md:w-auto object-contain p-[3px]" />
-
-                                        <!-- Background on selected -->
                                         <div
                                             class="absolute inset-0 bg-gray-200 opacity-0 peer-checked:opacity-100 rounded-lg transition-all duration-200 -z-10">
                                         </div>
@@ -178,32 +146,20 @@
                             </div>
                         </div>
 
-
-
-                        {{-- Delivery Section --}}
+                        {{-- Card Payment Section --}}
                         <div>
                             <h3 class="font-bold text-lg mb-4">Checkout with Cards</h3>
                             <div class="py-4 border border-gray-100 bg-gray-100 p-4 rounded-md">
-                                {{-- Total & Hidden Amount --}}
                                 <input type="hidden" name="amount" value="{{ $total }}">
+                                <input type="hidden" name="payment_intent_id" id="payment_intent_id">
 
                                 <div id="card-container" class="mt-0">
                                     @php
-                                        $paymentIcons = [
-                                            'visa',
-                                            'master',
-                                            'american_express',
-                                            'discover',
-                                            'jcb',
-                                            'maestro',
-                                        ];
-
-                                        $payment_image_class =
-                                            'w-12 h-8 object-contain border border-gray-300 rounded-md';
+                                        $paymentIcons = ['visa', 'master', 'american_express', 'discover', 'jcb', 'maestro'];
+                                        $payment_image_class = 'w-12 h-8 object-contain border border-gray-300 rounded-md';
                                     @endphp
 
-                                    <div
-                                        class="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center pb-4 gap-2 md:gap-0">
+                                    <div class="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center pb-4 gap-2 md:gap-0">
                                         <span class="font-bold text-md">Pay with</span>
                                         <div class="flex items-center justify-start flex-wrap gap-1">
                                             @foreach ($paymentIcons as $icon)
@@ -213,22 +169,22 @@
                                             @endforeach
                                         </div>
                                     </div>
+
                                     <div class="pb-4">
                                         <div id="card-number"
-                                            class="h-12 px-0 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
+                                            class="h-12 px-3 py-3 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
                                         </div>
                                     </div>
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div class="">
+                                        <div>
                                             <div id="expiration-date"
-                                                class="h-12 px-2 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
+                                                class="h-12 px-3 py-3 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
                                             </div>
                                         </div>
-
-                                        <div class="">
+                                        <div>
                                             <div id="cvv"
-                                                class="h-12 px-2 py-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
+                                                class="h-12 px-3 py-3 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 bg-white text-sm">
                                             </div>
                                         </div>
                                     </div>
@@ -236,15 +192,13 @@
 
                                 <div id="card-errors" class="text-red-500 text-sm mt-2"></div>
 
-                                <button type="submit"
-                                    class="mt-4 w-full bg-[#1773b0] text-white py-2.5 rounded-md hover:bg-[#105989] transition-colors text-sm font-semibold">
+                                <button type="submit" id="pay-btn"
+                                    class="mt-4 w-full bg-[#1773b0] text-white py-2.5 rounded-md hover:bg-[#105989] transition-colors text-sm font-semibold disabled:opacity-60">
                                     Pay now
                                 </button>
                             </div>
                         </div>
                         </form>
-
-
                     </div>
                 </div>
             </div>
@@ -256,18 +210,14 @@
                     <div class="space-y-4 max-h-96 overflow-y-auto">
                         @foreach ($cartItems as $item)
                             <div class="flex items-start gap-4 pt-4">
-                                <!-- Image with quantity badge -->
                                 <div class="relative">
                                     <img src="{{ asset($item['image']) }}"
                                         class="w-16 h-16 border border-gray-300 object-cover rounded" />
-
-                                    <!-- Quantity badge -->
                                     <span
                                         class="absolute -top-2 -right-2 bg-gray-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">
                                         {{ $item['quantity'] }}
                                     </span>
                                 </div>
-
                                 <div class="flex-1">
                                     <p class="text-sm font-medium w-3/4" style="font-family: Arial, sans-serif;">
                                         {{ $item['product_name'] }}
@@ -277,7 +227,6 @@
                             </div>
                         @endforeach
                     </div>
-
 
                     <div class="pt-6 mt-6 border-t">
                         <div class="flex justify-between text-sm font-bold text-gray-900 mt-2">
@@ -294,9 +243,7 @@
 @section('scripts')
     <script>
         $(function() {
-            $('.select2').select2({
-                placeholder: 'Select an option'
-            });
+            $('.select2').select2({ placeholder: 'Select an option' });
 
             $('#shipping-methods input[type=radio]').on('change', function() {
                 $('.shipping-option').removeClass('bg-gray-200');
@@ -305,299 +252,120 @@
 
             $('#country').on('change', function() {
                 const countryId = $(this).val();
-
                 $('#state').html('<option value="">Loading...</option>').trigger('change');
                 $('#city').html('<option value="">Select City</option>').trigger('change');
-
                 if (countryId) {
                     $.ajax({
                         url: '/get-states/' + countryId,
                         type: 'GET',
                         success: function(states) {
                             let options = '<option value="">Select State</option>';
-                            states.forEach(state => {
-                                options +=
-                                    `<option value="${state.id}">${state.name}</option>`;
-                            });
+                            states.forEach(state => { options += `<option value="${state.id}">${state.name}</option>`; });
                             $('#state').html(options).trigger('change');
                         }
                     });
                 }
             });
 
-            // On state change => fetch cities
             $('#state').on('change', function() {
                 const stateId = $(this).val();
-
                 $('#city').html('<option value="">Loading...</option>').trigger('change');
-
                 if (stateId) {
                     $.ajax({
                         url: '/get-cities/' + stateId,
                         type: 'GET',
                         success: function(cities) {
                             let options = '<option value="">Select City</option>';
-                            cities.forEach(city => {
-                                options +=
-                                    `<option value="${city.id}">${city.name}</option>`;
-                            });
+                            cities.forEach(city => { options += `<option value="${city.id}">${city.name}</option>`; });
                             $('#city').html(options).trigger('change');
                         }
                     });
                 }
             });
-        })
+        });
     </script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('payment-form');
-            const clientToken = "{{ $clientToken }}";
-            const totalAmount = '{{ $total ?? 10.0 }}';
+        document.addEventListener('DOMContentLoaded', function () {
+            const stripe = Stripe('{{ $stripeKey }}');
+            const elements = stripe.elements();
+            const totalAmount = {{ $total ?? 0 }};
 
-            function isPhoneValid() {
+            const style = {
+                base: { fontSize: '16px', color: '#333', '::placeholder': { color: '#aab7c4' } },
+                invalid: { color: '#e53e3e' }
+            };
+
+            const cardNumber = elements.create('cardNumber', { style });
+            const cardExpiry = elements.create('cardExpiry', { style });
+            const cardCvc   = elements.create('cardCvc',   { style });
+
+            cardNumber.mount('#card-number');
+            cardExpiry.mount('#expiration-date');
+            cardCvc.mount('#cvv');
+
+            [cardNumber, cardExpiry, cardCvc].forEach(el => {
+                el.on('change', function (event) {
+                    document.getElementById('card-errors').textContent = event.error ? event.error.message : '';
+                });
+            });
+
+            const form   = document.getElementById('payment-form');
+            const payBtn = document.getElementById('pay-btn');
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
                 const phone = document.getElementById('phone').value.trim();
-                if (phone === '') {
+                if (!phone) {
                     toastr.warning('Please enter your phone number before proceeding with payment.');
-                    return false;
-                }
-                return true;
-            }
-
-
-            braintree.client.create({
-                authorization: clientToken
-            }, function(clientErr, clientInstance) {
-                if (clientErr) {
-                    console.error('Client Error:', clientErr);
                     return;
                 }
 
-                // 1️⃣ Hosted Fields (Card)
-                braintree.hostedFields.create({
-                    client: clientInstance,
-                    styles: {
-                        'input': {
-                            'font-size': '16px',
-                            'color': '#333',
-                        }
-                    },
-                    fields: {
-                        number: {
-                            selector: '#card-number',
-                            placeholder: 'Card Number'
+                payBtn.disabled = true;
+                payBtn.textContent = 'Processing…';
+
+                try {
+                    // 1. Create PaymentIntent on server
+                    const intentRes = await fetch('{{ route('payment.create_intent') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
-                        cvv: {
-                            selector: '#cvv',
-                            placeholder: 'CVV'
-                        },
-                        expirationDate: {
-                            selector: '#expiration-date',
-                            placeholder: 'MM/YY'
-                        }
-                    }
-                }, function(hostedFieldsErr, hostedFieldsInstance) {
-                    if (hostedFieldsErr) {
-                        console.error('Hosted Fields Error:', hostedFieldsErr);
+                        body: JSON.stringify({ amount: totalAmount })
+                    });
+
+                    const intentData = await intentRes.json();
+
+                    if (!intentRes.ok || intentData.error) {
+                        document.getElementById('card-errors').textContent = intentData.error || 'Could not initiate payment.';
+                        payBtn.disabled = false;
+                        payBtn.textContent = 'Pay now';
                         return;
                     }
 
-                    form.addEventListener('submit', function(event) {
-                        event.preventDefault();
-
-                        if (!isPhoneValid()) return;
-
-                        hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
-                            if (tokenizeErr) {
-                                document.getElementById('card-errors').textContent =
-                                    tokenizeErr.message;
-                                return;
-                            }
-
-                            const nonceInput = document.createElement('input');
-                            nonceInput.type = 'hidden';
-                            nonceInput.name = 'payment_method_nonce';
-                            nonceInput.value = payload.nonce;
-                            form.appendChild(nonceInput);
-                            form.submit();
-                        });
+                    // 2. Confirm card payment
+                    const { paymentIntent, error } = await stripe.confirmCardPayment(intentData.clientSecret, {
+                        payment_method: { card: cardNumber }
                     });
-                });
 
-                // 2️⃣ PayPal
-                braintree.paypalCheckout.create({
-                    client: clientInstance
-                }, function(paypalErr, paypalCheckoutInstance) {
-                    if (paypalErr) return;
-
-                    paypal.Buttons({
-                        fundingSource: paypal.FUNDING.PAYPAL,
-                        createOrder: function() {
-                            return paypalCheckoutInstance.createPayment({
-                                flow: 'checkout',
-                                amount: totalAmount,
-                                currency: 'USD'
-                            });
-                        },
-                        onApprove: function(data, actions) {
-                            return paypalCheckoutInstance.tokenizePayment(data).then(
-                                function(payload) {
-                                    const nonceInput = document.createElement(
-                                        'input');
-                                    nonceInput.type = 'hidden';
-                                    nonceInput.name = 'payment_method_nonce';
-                                    nonceInput.value = payload.nonce;
-                                    
-                                    if (!isPhoneValid()) return;
-
-                                    form.appendChild(nonceInput);
-                                    form.submit();
-                                });
-                        }
-                    }).render('#paypal-button-container');
-                });
-
-                // 3️⃣ Google Pay
-                braintree.googlePayment.create({
-                    client: clientInstance,
-                    googlePayVersion: 2,
-                    googleMerchantId: 'BraintreeMerchant' // Replace in production
-                }, function(googleErr, googlePaymentInstance) {
-                    if (googleErr) {
-                        console.error('Google Pay Error:', googleErr);
+                    if (error) {
+                        document.getElementById('card-errors').textContent = error.message;
+                        payBtn.disabled = false;
+                        payBtn.textContent = 'Pay now';
                         return;
                     }
 
-                    const paymentsClient = new google.payments.api.PaymentsClient({
-                        environment: 'TEST' // Use 'PRODUCTION' for live
-                    });
+                    // 3. Submit form with payment_intent_id
+                    document.getElementById('payment_intent_id').value = paymentIntent.id;
+                    form.submit();
 
-                    const paymentDataRequest = googlePaymentInstance.createPaymentDataRequest({
-                        transactionInfo: {
-                            currencyCode: 'USD',
-                            totalPriceStatus: 'FINAL',
-                            totalPrice: totalAmount
-                        }
-                    });
-
-                    paymentsClient.isReadyToPay({
-                        apiVersion: 2,
-                        apiVersionMinor: 0,
-                        allowedPaymentMethods: paymentDataRequest.allowedPaymentMethods
-                    }).then(function(response) {
-                        if (response.result) {
-                            const googlePayButton = paymentsClient.createButton({
-                                onClick: function() {
-                                    
-                                    if (!isPhoneValid()) return;
-
-                                    paymentsClient.loadPaymentData(
-                                        paymentDataRequest).then(function(
-                                        paymentData) {
-                                        googlePaymentInstance
-                                            .parseResponse(paymentData,
-                                                function(err, payload) {
-                                                    if (err) {
-                                                        console.error(
-                                                            'GPay Tokenize Error:',
-                                                            err);
-                                                        return;
-                                                    }
-
-                                                    const nonceInput =
-                                                        document
-                                                        .createElement(
-                                                            'input');
-                                                    nonceInput.type =
-                                                        'hidden';
-                                                    nonceInput.name =
-                                                        'payment_method_nonce';
-                                                    nonceInput.value =
-                                                        payload.nonce;
-                                                    form.appendChild(
-                                                        nonceInput);
-                                                    form.submit();
-                                                });
-                                    });
-                                }
-                            });
-
-                            const container = document.getElementById(
-                                'google-pay-button-container');
-                            container.innerHTML = '';
-                            container.appendChild(googlePayButton);
-                        }
-                    }).catch(function(err) {
-                        console.error('Google Pay Availability Error:', err);
-                    });
-                });
-
-                // 4️⃣ Apple Pay
-                braintree.applePay.create({
-                    client: clientInstance
-                }, function(applePayErr, applePayInstance) {
-                    if (applePayErr) {
-                        console.error('Apple Pay Error:', applePayErr);
-                        return;
-                    }
-
-                    if (!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
-                        console.warn('Apple Pay not supported on this device/browser');
-                        return;
-                    }
-
-                    const paymentRequest = applePayInstance.createPaymentRequest({
-                        total: {
-                            label: 'Your Store',
-                            amount: totalAmount
-                        },
-                        requiredBillingContactFields: ['postalAddress']
-                    });
-
-                    const session = new ApplePaySession(3, paymentRequest);
-
-                    session.onvalidatemerchant = function(event) {
-                        applePayInstance.performValidation({
-                            validationURL: event.validationURL,
-                            displayName: 'Your Store'
-                        }, function(validationErr, merchantSession) {
-                            if (validationErr) {
-                                session.abort();
-                                return;
-                            }
-                            session.completeMerchantValidation(merchantSession);
-                        });
-                    };
-
-                    session.onpaymentauthorized = function(event) {
-                        applePayInstance.tokenize({
-                            token: event.payment.token
-                        }, function(tokenizeErr, payload) {
-                            if (tokenizeErr) {
-                                session.completePayment(ApplePaySession.STATUS_FAILURE);
-                                return;
-                            }
-
-                            if (!isPhoneValid()) {
-                                session.completePayment(ApplePaySession.STATUS_FAILURE);
-                                return;
-                            }
-
-                            const nonceInput = document.createElement('input');
-                            nonceInput.type = 'hidden';
-                            nonceInput.name = 'payment_method_nonce';
-                            nonceInput.value = payload.nonce;
-                            form.appendChild(nonceInput);
-                            form.submit();
-
-                            session.completePayment(ApplePaySession.STATUS_SUCCESS);
-                        });
-                    };
-
-                    document.getElementById('apple-pay-button').addEventListener('click',
-                        function() {
-                            session.begin();
-                        });
-                });
+                } catch (err) {
+                    document.getElementById('card-errors').textContent = 'An unexpected error occurred.';
+                    payBtn.disabled = false;
+                    payBtn.textContent = 'Pay now';
+                }
             });
         });
     </script>

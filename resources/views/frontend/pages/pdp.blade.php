@@ -227,7 +227,7 @@
                         <h3 class="text-lg font-semibold">Product Description</h3>
                         @if($product->description)
                             <p class="text-sm text-gray-600 mt-2" data-translate>
-                                {{$product->description}}
+                                {!! $product->description !!}
                             </p>
                         @else
                         <p class="text-sm text-gray-600 mt-2" data-translate>
@@ -273,7 +273,7 @@
                                     <div data-translate>{{$product->main_material}}</div>
                                 @endif
                                 <div data-translate>Weight</div>
-                                <div><span class="weight">{{ $product->variants->first()->weight }}</span>g</div>
+                                <div><span class="weight">{{ $product->variants->first()->weight ?? ''}}</span>g</div>
 
                                 <div data-translate>Occasion</div>
                                 <div data-translate>Daily, Holiday, Wedding</div>

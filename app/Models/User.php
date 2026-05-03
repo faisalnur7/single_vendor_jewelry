@@ -116,8 +116,9 @@ class User extends Authenticatable
         return $this->hasOne(Cart::class);
     }
 
-    public function sendPasswordResetNotification($token){
-        $this->notify(new ResetPasswordCustom($token));
+    public function sendPasswordResetLinkNotification($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordCustom($token));
     }
     
     public function shippingAddresses(){

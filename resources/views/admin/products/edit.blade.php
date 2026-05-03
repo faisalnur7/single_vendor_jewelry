@@ -325,7 +325,7 @@
                                             </div>
                                             <div class="col-md-12 mb-2">
                                                 <label>Description</label>
-                                                <textarea name="variants[{{ $index }}][description]" class="form-control summernote" rows="3">{{ $variant->description }}</textarea>
+                                                <textarea name="variants[0][description]" class="form-control summernote" rows="3"></textarea>
                                             </div>
                                         </div>
                                     @endif
