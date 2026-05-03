@@ -129,7 +129,7 @@
             });
         });
 
-        let currentLang = "{{ session('lang', 'en') }}";
+        window.currentLang = "{{ session('lang', 'en') }}";
 
         const languages = {
             'en': '🇬🇧',
@@ -188,7 +188,7 @@
                     translatePageContent(newLang);
 
                     // update currentLang
-                    currentLang = newLang;
+                    window.currentLang = newLang;
                 },
                 error: function() {
                     console.error("Translation failed");
@@ -201,7 +201,7 @@
 
 
         // translate page content
-        function translatePageContent(language) {
+        window.translatePageContent = function translatePageContent(language) {
             let elements = $("[data-translate]");
 
             if (language === 'en') {
@@ -278,7 +278,7 @@
             });
         });
 
-        currentLang = "{{ session('lang', 'en') }}";
+        window.currentLang = "{{ session('lang', 'en') }}";
         console.log(currentLang);
         if(currentLang !== 'en'){
             translatePageContent(currentLang);

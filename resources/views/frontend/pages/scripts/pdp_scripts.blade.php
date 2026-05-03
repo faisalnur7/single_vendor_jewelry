@@ -218,6 +218,18 @@
                 success: function(html) {
                     $('#recently-viewed #recent-products').html(html);
 
+                    // Register original texts for newly injected elements
+                    $('#recently-viewed [data-translate]').each(function() {
+                        if (!$(this).data('original')) {
+                            $(this).data('original', $(this).text().trim());
+                        }
+                    });
+
+                    // Re-translate if not English
+                    if (window.currentLang && window.currentLang !== 'en') {
+                        window.translatePageContent(window.currentLang);
+                    }
+
                     // Optional: fade-in effect
                     $('#recently-viewed .product_card').each(function(index) {
                         $(this).delay(index * 100).queue(function(next) {

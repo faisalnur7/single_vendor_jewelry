@@ -316,7 +316,7 @@
             </div>
 
             <div class="flex flex-col mt-12 gap-6">
-                <h2 class="text-4xl">You may also like</h2>
+                <h2 class="text-4xl" data-translate>You may also like</h2>
 
                 <div class="">
                     <div class="swiper productSwiper">
@@ -339,7 +339,7 @@
             </div>
 
             <div class="flex flex-col mt-12 gap-6" id="recently-viewed">
-                <h2 class="text-4xl">Recently Viewed</h2>
+                <h2 class="text-4xl" data-translate>Recently Viewed</h2>
 
                 <div>
                     <div class="swiper recentProductSwiper">
