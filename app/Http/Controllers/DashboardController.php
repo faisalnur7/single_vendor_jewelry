@@ -24,7 +24,11 @@ class DashboardController extends Controller
 
     public function best_sellers(){
         $data['title'] = $data['page_title'] = "Collections";
-        $data['products'] = Product::query()->with('variants')->where('parent_id',0)->get();
+        $data['products'] = Cache::remember('best_sellers_all', 600, fn() =>
+            Product::query()->with('variants')->where('parent_id', 0)->paginate(30)
+        );
+        $data['products'] = $this->mapProducts($data['products']);
+        $data['opacityZero'] = 'opacity-0';
         return view('frontend.pages.plp', $data);
     }
 
@@ -96,7 +100,7 @@ class DashboardController extends Controller
 
         $products = Cache::remember(
             $cacheKey,
-            60,
+            600,
             fn() => $this->filter($request, $filterParams)
         );
 

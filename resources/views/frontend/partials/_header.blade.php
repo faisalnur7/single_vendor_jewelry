@@ -18,8 +18,7 @@
         'cs' => ['name' => 'Czech', 'flag' => '🇨🇿'],
         'pl' => ['name' => 'Polish', 'flag' => '🇵🇱'],
     ];
-    $currentLang = session('lang', 'en');
-    $contactSettings = App\Models\ContactSetting::first();
+    $currentLang  = session('lang', 'en');
     $profile_link = auth()->check() ? route('user_profile') : '#';
     $wishlistCount = 0;
 
@@ -33,7 +32,6 @@
             : (session('guest_cart')
                 ? count(session('guest_cart'))
                 : 0);
-
 @endphp
 <header class="site_header flex items-center justify-between px-4 md:px-8 py-4 border-b sticky top-0 bg-white z-50">
 

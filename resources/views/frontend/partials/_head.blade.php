@@ -1,27 +1,34 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>@yield('title')</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <link rel="icon" href="{{ asset($general_settings->site_favicon) }}" type="image/ico">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-    rel="stylesheet">
-{{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+
+{{-- Preconnect for external origins --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+{{-- LCP image preload (first product on listing pages) --}}
+@if(isset($products) && $products instanceof \Illuminate\Contracts\Pagination\Paginator && $products->count())
+    <link rel="preload" as="image" href="{{ asset($products->first()->image) }}">
+@elseif(isset($products) && is_iterable($products) && count($products))
+    <link rel="preload" as="image" href="{{ asset(collect($products)->first()->image) }}">
+@endif
+
+{{-- Google Fonts: non-blocking, trimmed weights only --}}
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"></noscript>
+
+{{-- CSS only in <head> --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<!-- sweet alert 2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- toastr -->
 <link rel="stylesheet" href="{{ asset('assets/plugins/toastr/toastr.min.css') }}">
-<script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
-<script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
     body {
         /*font-family: "Playfair Display", serif; */
@@ -171,5 +178,9 @@
         }
     }
 </style>
+
+{{-- jQuery loaded in <head> so all inline scripts in partials can use $ --}}
+<script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
 @vite('resources/css/app.css')

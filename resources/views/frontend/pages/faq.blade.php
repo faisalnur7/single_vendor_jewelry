@@ -3,7 +3,7 @@
 @section('contents')
 
 @php
-    $contactInformation  = App\Models\ContactSetting::first();
+    $contactInformation = $contact_settings;
 @endphp
 <section class="mt-6 md:mt-24 pt-0 pb-12 px-6">
     <div class="mx-auto max-w-6xl">

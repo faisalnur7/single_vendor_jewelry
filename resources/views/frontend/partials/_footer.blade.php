@@ -1,17 +1,13 @@
 @php
-    $contact_settings = App\Models\ContactSetting::first();
-    $social_media_settings = App\Models\SocialMediaSetting::first();
-
     $companyEmail = $contact_settings->email ?? null;
     $companyPhone = $contact_settings->phone ?? null;
     $address = $contact_settings->address ?? null;
 
     $facebook = $social_media_settings->facebook ?? null;
-    $twitter = $social_media_settings->twitter ?? null;
+    $twitter  = $social_media_settings->twitter  ?? null;
     $instagram = $social_media_settings->instagram ?? null;
     $linkedin = $social_media_settings->linkedin ?? null;
-    $youtube = $social_media_settings->youtube ?? null;
-
+    $youtube  = $social_media_settings->youtube  ?? null;
 @endphp
 
 <footer class="bg-white text-black px-6 md:px-12 lg:px-20 py-10">
@@ -208,49 +204,36 @@
         function translatePageContent(language) {
             let elements = $("[data-translate]");
 
-            if (language === "en") {
+            if (language === 'en') {
                 elements.each(function() {
-                    animateTextChange($(this), $(this).data("original"));
+                    animateTextChange($(this), $(this).data('original'));
                 });
                 return;
             }
 
-            let textsToTranslate = [];
+            let texts = [];
             elements.each(function() {
-                textsToTranslate.push($(this).data("original"));
+                texts.push($(this).data('original'));
             });
-            showLoading();
-            let chunkSize = 50;
-            for (let i = 0; i < textsToTranslate.length; i += chunkSize) {
-                let chunk = textsToTranslate.slice(i, i + chunkSize);
-                let chunkIndex = i / chunkSize;
 
-                $.ajax({
-                    url: "{{ route('translateTexts') }}",
-                    type: "POST",
-                    data: {
-                        texts: chunk,
-                        language: language
-                    },
-                    success: function(data) {
-                        if (data.success) {
-                            Object.keys(data.translations).forEach((j) => {
-                                let globalIndex = chunkIndex * chunkSize + parseInt(j);
-                                if (data.translations[j]) {
-                                    animateTextChange($(elements[globalIndex]), data
-                                        .translations[j]);
-                                }
-                            });
-                        }
-                    },
-                    error: function() {
-                        console.error("Translation failed");
-                    },
-                    complete: function() {
-                        hideLoading();
+            showLoading();
+
+            $.ajax({
+                url: "{{ route('translateTexts') }}",
+                type: 'POST',
+                data: { texts: texts, language: language },
+                success: function(data) {
+                    if (data.success) {
+                        elements.each(function(i) {
+                            if (data.translations[i]) {
+                                animateTextChange($(this), data.translations[i]);
+                            }
+                        });
                     }
-                });
-            }
+                },
+                error: function() { console.error('Translation failed'); },
+                complete: function() { hideLoading(); }
+            });
         }
 
         // animate text change

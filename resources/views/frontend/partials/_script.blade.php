@@ -1,3 +1,7 @@
+{{-- Select2, Swiper, SweetAlert2, Toastr loaded at bottom of body --}}
+<script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/plugins/toastr/toastr.min.js') }}"></script>
 <script>
     toastr.options = {
@@ -15,29 +19,34 @@
         "hideEasing": "linear",
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
-
     }
 </script>
 <script>
-    // Title bouncer
+    // Title marquee — pauses when tab is hidden to save CPU
     document.addEventListener("DOMContentLoaded", function() {
         const originalTitle = document.title;
-        const spacer = " - "; // More spaces = smoother transition
-        const scrollText = originalTitle + spacer;
+        const scrollText = originalTitle + " - ";
         let scrollIndex = 0;
-        const speed = 200; // Lower is faster (try 100 or 80 for very smooth)
+        let marqueeTimer = null;
+        const speed = 200;
 
         function smoothMarquee() {
-            const part1 = scrollText.substring(scrollIndex);
-            const part2 = scrollText.substring(0, scrollIndex);
-            document.title = part1 + part2;
-
+            document.title = scrollText.substring(scrollIndex) + scrollText.substring(0, scrollIndex);
             scrollIndex = (scrollIndex + 1) % scrollText.length;
-            setTimeout(smoothMarquee, speed);
+            marqueeTimer = setTimeout(smoothMarquee, speed);
         }
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearTimeout(marqueeTimer);
+            } else {
+                smoothMarquee();
+            }
+        });
 
         smoothMarquee();
     });
+
 
     // Open Login Drawer
     function openLogin() {

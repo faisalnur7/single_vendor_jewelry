@@ -12,11 +12,11 @@
     </div>
 
     <p class="text-md mb-4 font-bold text-gray-900">Stainless Steel Jewelry</p>
-    <a href="{{ $contactSettings?->whatsapp_link }}" target="_blank">{{ $contactSettings?->whatsapp_link }}</a>
+    <a href="{{ $contact_settings?->whatsapp_link }}" target="_blank">{{ $contact_settings?->whatsapp_link }}</a>
     <span class="block text-sm font-semibold text-gray-600">WhatsApp Business Account</span>
 
     <!-- QR Code -->
     <div class="flex justify-center">
-        <img src="{{ asset($contactSettings?->whatsapp_qr) }}" alt="WhatsApp QR" class="w-42 h-42 rounded-md border" />
+        <img src="{{ asset($contact_settings?->whatsapp_qr) }}" alt="WhatsApp QR" class="w-42 h-42 rounded-md border" />
     </div>
 </div>

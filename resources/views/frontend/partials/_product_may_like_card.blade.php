@@ -2,18 +2,23 @@
     $mayLikedCategories = \App\Models\CustomCategory::where('type', \App\Models\CustomCategory::MAY_LIKED)
         ->orderBy('order', 'asc')
         ->get();
-    $mayLikedCategories = \App\Models\CustomCategory::where('type', \App\Models\CustomCategory::FEATURED)
-        ->orderBy('order', 'asc')
-        ->get();
-    $mayLikedCategories = \App\Models\CustomCategory::where('type', \App\Models\CustomCategory::TRENDING)
-        ->orderBy('order', 'asc')
-        ->get();
+
+    // Fallback: if no MAY_LIKED categories exist, use TRENDING then FEATURED
+    if ($mayLikedCategories->isEmpty()) {
+        $mayLikedCategories = \App\Models\CustomCategory::where('type', \App\Models\CustomCategory::TRENDING)
+            ->orderBy('order', 'asc')
+            ->get();
+    }
+    if ($mayLikedCategories->isEmpty()) {
+        $mayLikedCategories = \App\Models\CustomCategory::where('type', \App\Models\CustomCategory::FEATURED)
+            ->orderBy('order', 'asc')
+            ->get();
+    }
 
     $onLoadProducts = collect([]);
     $limit = 15;
 
     if ($selectedCategory = $mayLikedCategories->first()) {
-        // Determine the most specific column and ID to use
         if (!empty($selectedCategory->child_sub_category_id)) {
             $column = 'child_sub_category_id';
             $id = $selectedCategory->child_sub_category_id;
@@ -25,10 +30,9 @@
             $id = $selectedCategory->category_id;
         }
 
-        // Fetch products only once
-        $onLoadProducts = \App\Models\Product::where($column, $id)->take($limit)->get();
+        $onLoadProducts = \App\Models\Product::with('variants')->where($column, $id)->take($limit)->get();
+        $onLoadProducts->each(fn($p) => $p->price_range = show_price_range($p->variants));
     }
-
 @endphp
 <div class="flex gap-10 w-full flex-col">
     <div class="flex gap-10 w-full justify-center mx-auto may_like_menu">
@@ -81,18 +85,19 @@
     </div>
 
 
-    <div id="productContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 relative">
-        <!-- Loader -->
+    <div class="relative">
+        <!-- Loader: outside productContainer so it survives html() replacement -->
         <div id="productLoader"
             class="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 hidden z-10">
             <img src="{{ asset('/infinity_transparent.gif') }}" />
         </div>
 
-        @foreach ($onLoadProducts as $product)
-            <div class="product_card opacity-0 transform translate-y-4 transition-all duration-500">
+        <div id="productContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+            @foreach ($onLoadProducts as $product)
+                @php $opacityZero = ''; @endphp
                 @include('frontend.partials._product_card')
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
     <div class="flex mx-auto w-full justify-center my-8">
         <a href="" class="btn btn-dark btn-lg" id="view_more_button">View More</a>
@@ -101,56 +106,37 @@
 </div>
 <script>
     $(document).ready(function() {
-        // Initially highlight first menu item
         $('.may_like_menu_item').first().addClass('text-blue-600');
-        $('#view_more_button').prop('href',$('.may_like_menu_item').first().data('page_url'));
+        $('#view_more_button').prop('href', $('.may_like_menu_item').first().data('page_url'));
 
-        function fadeInProducts(callback) {
-            let $cards = $('#productContainer .product_card');
-            let total = $cards.length;
-            let completed = 0;
-
+        function fadeInProducts($cards, callback) {
             $cards.each(function(index) {
-                $(this).delay(index * 100).queue(function(next) {
-                    $(this).removeClass('opacity-0 translate-y-4');
-                    completed++;
-                    if (completed === total && typeof callback === 'function') {
-                        callback();
-                    }
-                    next();
-                });
+                var el = this;
+                setTimeout(function() {
+                    $(el).removeClass('opacity-0 translate-y-4');
+                    if (index === $cards.length - 1 && typeof callback === 'function') callback();
+                }, index * 80);
             });
         }
 
-        // Initial fade
-        fadeInProducts();
+        var $initial = $('#productContainer .product_card');
+        $initial.addClass('opacity-0 translate-y-4');
+        fadeInProducts($initial);
 
-        $('.may_like_menu_item').on('click', function() {
+        $(document).on('click', '.may_like_menu_item', function() {
             var $this = $(this);
-            var url = $this.data('url');
-
-            // Highlight menu
             $('.may_like_menu_item').removeClass('text-blue-600');
             $this.addClass('text-blue-600');
-
-            $('#view_more_button').prop('href',$(this).data('page_url'));
-
-            // Show loader
+            $('#view_more_button').prop('href', $this.data('page_url'));
             $('#productLoader').removeClass('hidden');
 
             $.ajax({
-                url: url,
+                url: $this.data('url'),
                 type: 'GET',
                 success: function(response) {
-                    // Replace products
                     $('#productContainer').html(response);
-
-                    // Add animation classes to new products
-                    $('#productContainer .product_card').addClass(
-                    'opacity-0 translate-y-4');
-
-                    // Animate, then hide loader
-                    fadeInProducts(function() {
+                    var $cards = $('#productContainer .product_card').addClass('opacity-0 translate-y-4');
+                    fadeInProducts($cards, function() {
                         $('#productLoader').addClass('hidden');
                     });
                 },

@@ -58,12 +58,12 @@
             let lastPage = {{ $products->lastPage() }};
 
             // Function to fade in products
-            function fadeInProducts($products) {
-                $products.each(function(index) {
-                    $(this).delay(index * 40).queue(function(next) {
-                        $(this).removeClass('opacity-0');
-                        next();
-                    });
+            function fadeInProducts($cards) {
+                $cards.each(function(index) {
+                    var el = this;
+                    setTimeout(function() {
+                        $(el).removeClass('opacity-0 translate-y-4');
+                    }, index * 40);
                 });
             }
 
@@ -82,16 +82,15 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     success: function(response) {
-                        let $newProducts = $(response.html).addClass('opacity-0'); // initially hidden
+                        let $newProducts = $(response.html).addClass('opacity-0 translate-y-4');
 
                         if (append) {
                             $('#productContainer').append($newProducts);
                         } else {
                             $('#productContainer').html($newProducts);
-                            page = 1; // reset page counter
+                            page = 1;
                         }
 
-                        // Fade in effect
                         fadeInProducts($newProducts);
 
                         // Update lastPage dynamically
@@ -127,7 +126,9 @@
             });
 
             // Initial fade-in for first load
-            fadeInProducts($('.product_card'));
+            var $initial = $('.product_card');
+            $initial.addClass('opacity-0 translate-y-4');
+            fadeInProducts($initial);
         });
     </script>
 @endsection

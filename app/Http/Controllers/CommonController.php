@@ -90,58 +90,48 @@ class CommonController extends Controller
     public function translateTexts(Request $request)
     {
         $request->validate([
-            'texts' => 'required|array|max:100',
-            'texts.*' => 'string|max:2000',
-            'language' => 'required|string|in:en,pt,ar,es,fr,it,de,sv,no,tr,hi,ru,el,ro,cs,pl'
+            'texts'    => 'required|array|max:200',
+            'texts.*'  => 'string|max:1000',
+            'language' => 'required|string|in:en,pt,ar,es,fr,it,de,sv,no,tr,hi,ru,el,ro,cs,pl',
         ]);
 
-        $texts = $request->texts;
+        $texts    = array_values($request->texts);
         $language = $request->language;
-        
+
         if ($language === 'en') {
-            return response()->json([
-                'success' => true,
-                'translations' => $texts
-            ]);
+            return response()->json(['success' => true, 'translations' => $texts]);
         }
 
-        $translations = [];
-        
+        // Cache key covers the entire batch so we only hit Google once per unique page+language
+        $cacheKey = 'trans_batch_' . $language . '_' . md5(implode('|', $texts));
+
         try {
-            $tr = new GoogleTranslate($language);
-            $tr->setSource('en');
-            
-            foreach ($texts as $key => $text) {
-                if (empty(trim($text))) {
-                    $translations[$key] = $text;
-                    continue;
+            $translations = Cache::remember($cacheKey, 86400, function () use ($texts, $language) {
+                $tr = new GoogleTranslate($language);
+                $tr->setSource('en');
+
+                // Join all texts with a delimiter that survives translation
+                $delimiter = ' ||| ';
+                $joined    = implode($delimiter, $texts);
+                $translated = $tr->translate($joined); // 1 HTTP call instead of N
+
+                $parts = array_map('trim', explode('|||', $translated));
+
+                // Ensure count matches — fall back to originals for any missing
+                foreach ($texts as $i => $original) {
+                    if (empty($parts[$i])) {
+                        $parts[$i] = $original;
+                    }
                 }
-                
-                $cacheKey = 'trans_' . md5($text . '_' . $language);
-                
-                $translated = Cache::remember($cacheKey, 86400, function () use ($tr, $text) {
-                    return $tr->translate($text);
-                });
-                
-                $translations[$key] = $translated;
-            }
-            
-            return response()->json([
-                'success' => true,
-                'translations' => $translations
-            ]);
-            
+
+                return array_values($parts);
+            });
+
+            return response()->json(['success' => true, 'translations' => $translations]);
+
         } catch (\Exception $e) {
-            \Log::error('Translation failed', [
-                'language' => $language,
-                'error' => $e->getMessage()
-            ]);
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Translation service temporarily unavailable',
-                'translations' => $texts // Return original texts as fallback
-            ]);
+            \Log::error('Translation failed', ['language' => $language, 'error' => $e->getMessage()]);
+            return response()->json(['success' => true, 'translations' => $texts]);
         }
     }
 
@@ -161,19 +151,21 @@ class CommonController extends Controller
         if ($request->has('childsubcategory')) {
             $childSub = ChildSubCategory::where('slug', $request->childsubcategory)->first();
             if ($childSub) {
-                $products = Product::where('child_sub_category_id', $childSub->id)->take(20)->get();
+                $products = Product::with('variants')->where('child_sub_category_id', $childSub->id)->take(20)->get();
             }
         } elseif ($request->has('subcategory')) {
             $sub = SubCategory::where('slug', $request->subcategory)->first();
             if ($sub) {
-                $products = Product::where('sub_category_id', $sub->id)->take(20)->get();
+                $products = Product::with('variants')->where('sub_category_id', $sub->id)->take(20)->get();
             }
         } elseif ($request->has('category')) {
             $cat = Category::where('slug', $request->category)->first();
             if ($cat) {
-                $products = Product::where('category_id', $cat->id)->take(20)->get();
+                $products = Product::with('variants')->where('category_id', $cat->id)->take(20)->get();
             }
         }
+
+        $products->each(fn($p) => $p->price_range = show_price_range($p->variants));
 
         return view('frontend.partials._product_cards_ajax', compact('products'));
     }

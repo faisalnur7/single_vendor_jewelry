@@ -1,9 +1,13 @@
-<div class="flex flex-col product_card {{$opacityZero ?? ''}} transform transition-opacity duration-700">
+<div class="flex flex-col product_card {{ $opacityZero ?? '' }} transform transition-all duration-500">
     <a href="{{ route('show_product', $product->slug) }}">
 
         <!-- Image with overlay icons -->
         <div class="relative bg-white border rounded-none group overflow-hidden min-h-124" style="min-height:290px">
-            <img loading="lazy" id="mainImage-{{ $product->id }}" src="{{ asset($product->image) }}" alt="Product Main"
+            <img {{ isset($loop) && $loop->first ? '' : 'loading="lazy"' }}
+                width="400" height="400"
+                id="mainImage-{{ $product->id }}"
+                src="{{ asset($product->image) }}"
+                alt="{{ $product->name }}"
                 class="mx-auto transition-transform duration-[3000ms] group-hover:scale-[1.5] opacity-100 transition-opacity duration-500" />
 
             <!-- Icons (eye + heart) -->
@@ -33,12 +37,7 @@
             <a href="#" class="block" data-translate>{{ $product->name }}</a>
         </div>
 
-        <!-- Product price -->
-        <div class="text-sm overflow-hidden text-ellipsis w-full max-w-full">
-            {{-- <p class="text-xl md:text-lg font-semibold  text-gray-800">{{ show_price_range($product->variants) }}</p> --}}
-            <p class="text-xl md:text-lg font-semibold text-gray-800">{{ $product->price_range }}</p>
-
-        </div>
+        {{-- Product price hidden --}}
 
         <!-- Thumbnails -->
         @php
@@ -64,7 +63,8 @@
                     md:@if ($index >= $mdShow) hidden @endif
                     sm:@if ($index >= $smShow) hidden @endif
                     ">
-                    <img src="{{ asset($variant->image) }}" alt="Product Variant"
+                    <img loading="lazy" width="56" height="56"
+                        src="{{ asset($variant->image) }}" alt="{{ $product->name }} variant"
                         class="variant-thumb max-w-full max-h-full object-cover cursor-pointer mx-auto transition-all duration-500 p-[1px] border-0 group-hover:bg-black"
                         data-main-image="mainImage-{{ $product->id }}"
                         data-variant-src="{{ asset($variant->image) }}" />
