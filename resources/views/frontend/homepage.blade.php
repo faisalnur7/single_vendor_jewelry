@@ -8,7 +8,7 @@
 
     <!-- Product Section -->
     <section class="py-12 px-6">
-        <h2 class="text-5xl text-center mb-8 font-semibold not-italic antialiased tracking-[0.16px] text-black">Wholesale Trending Discovery</h2>
+        <h2 class="text-5xl text-center mb-8 font-semibold not-italic antialiased tracking-[0.16px] text-black" data-translate>Wholesale Trending Discovery</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-6">
             @include('frontend.partials._trending_card')
         </div>
@@ -16,7 +16,7 @@
 
     <!-- Featured Categories Section -->
     <section class="py-12 px-6">
-        <h2 class="text-5xl text-center mb-8 font-semibold not-italic antialiased tracking-[0.16px] text-black">Featured Categories</h2>
+        <h2 class="text-5xl text-center mb-8 font-semibold not-italic antialiased tracking-[0.16px] text-black" data-translate>Featured Categories</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
             @include('frontend.partials._featured_category_card')
         </div>
@@ -24,14 +24,14 @@
 
     <!-- Product You May Like Section -->
     <section class="py-12 px-6">
-        <h2 class="text-5xl text-center mb-6 font-semibold not-italic antialiased tracking-[0.16px] text-black">Products You May Like</h2>
+        <h2 class="text-5xl text-center mb-6 font-semibold not-italic antialiased tracking-[0.16px] text-black" data-translate>Products You May Like</h2>
         @include('frontend.partials._product_may_like_card')
     </section>
 
     <section class="py-6 px-6 min-h-[600px] bg-cover md:bg-center bg-no-repeat" style="background-image: url('/assets/img/images/why_choose_us.webp')">
         <div class="flex w-full bg-transparent py-6 rounded">
             <div class="w-full md:w-1/2">
-                <h2 class="text-3xl  md:text-5xl font-bold mb-6">Why Choose Us</h2>
+                <h2 class="text-3xl  md:text-5xl font-bold mb-6" data-translate>Why Choose Us</h2>
                 <div class="why_choose_us_list">
                     {!! $homepage_setting->why_choose_us !!}
                 </div>
@@ -44,15 +44,15 @@
             <div class="w-1/2 hidden lg:block"></div>
             <div class="w-full lg:w-1/2">
                 <div class="why_choose_us_list">
-                <h2 class="text-3xl md:text-5xl font-bold mb-6">Welcome to Stainless Steel Jewellery</h2>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6" data-translate>Welcome to Stainless Steel Jewellery</h2>
                     {!! $homepage_setting->about !!}
 
                     <div class="max-w-md mt-6 grid gap-4">
-                        <button class="bg-black text-white py-3 text-sm tracking-widest uppercase transition duration-500 hover:bg-gray-700 hover:text-white">Learn More About Us</button>
+                        <button class="bg-black text-white py-3 text-sm tracking-widest uppercase transition duration-500 hover:bg-gray-700 hover:text-white" data-translate>Learn More About Us</button>
                         
                         <div class="grid grid-cols-2 gap-4">
-                            <a href="{{route('signup')}}" class="border border-black py-2 text-sm tracking-wider uppercase transition duration-500 hover:bg-black hover:text-white justify-center flex items-center">Register</a>
-                            <a href="{{route('signin')}}" class="border border-black py-2 text-sm tracking-wider uppercase transition duration-500 hover:bg-black hover:text-white justify-center flex items-center">Sign In</a>
+                            <a href="{{route('signup')}}" class="border border-black py-2 text-sm tracking-wider uppercase transition duration-500 hover:bg-black hover:text-white justify-center flex items-center" data-translate>Register</a>
+                            <a href="{{route('signin')}}" class="border border-black py-2 text-sm tracking-wider uppercase transition duration-500 hover:bg-black hover:text-white justify-center flex items-center" data-translate>Sign In</a>
                         </div>
                     </div>
                 </div>

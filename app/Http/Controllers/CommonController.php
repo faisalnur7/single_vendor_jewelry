@@ -90,7 +90,7 @@ class CommonController extends Controller
     public function translateTexts(Request $request)
     {
         $request->validate([
-            'texts'    => 'required|array|max:200',
+            'texts'    => 'required|array|max:500',
             'texts.*'  => 'string|max:1000',
             'language' => 'required|string|in:en,pt,ar,es,fr,it,de,sv,no,tr,hi,ru,el,ro,cs,pl',
         ]);
@@ -102,7 +102,6 @@ class CommonController extends Controller
             return response()->json(['success' => true, 'translations' => $texts]);
         }
 
-        // Cache key covers the entire batch so we only hit Google once per unique page+language
         $cacheKey = 'trans_batch_' . $language . '_' . md5(implode('|', $texts));
 
         try {
@@ -110,21 +109,19 @@ class CommonController extends Controller
                 $tr = new GoogleTranslate($language);
                 $tr->setSource('en');
 
-                // Join all texts with a delimiter that survives translation
-                $delimiter = ' ||| ';
-                $joined    = implode($delimiter, $texts);
-                $translated = $tr->translate($joined); // 1 HTTP call instead of N
+                $results = [];
+                foreach (array_chunk($texts, 50) as $chunk) {
+                    $delimiter  = ' ||| ';
+                    $joined     = implode($delimiter, $chunk);
+                    $translated = $tr->translate($joined);
+                    $parts      = array_map('trim', explode('|||', $translated));
 
-                $parts = array_map('trim', explode('|||', $translated));
-
-                // Ensure count matches — fall back to originals for any missing
-                foreach ($texts as $i => $original) {
-                    if (empty($parts[$i])) {
-                        $parts[$i] = $original;
+                    foreach ($chunk as $i => $original) {
+                        $results[] = !empty($parts[$i]) ? $parts[$i] : $original;
                     }
                 }
 
-                return array_values($parts);
+                return $results;
             });
 
             return response()->json(['success' => true, 'translations' => $translations]);

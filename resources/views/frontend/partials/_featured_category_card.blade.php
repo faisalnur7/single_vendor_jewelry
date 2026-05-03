@@ -19,7 +19,7 @@
                 <img src="{{$featuredCategory->image}}"
                     class="mx-auto w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
             </div>
-            <p class="mt-2 text-md font-bold text-gray-700">{{ $featuredCategory->name }}</p>
+            <p class="mt-2 text-md font-bold text-gray-700" data-translate>{{ $featuredCategory->name }}</p>
         </div>
     </a>
 @endforeach

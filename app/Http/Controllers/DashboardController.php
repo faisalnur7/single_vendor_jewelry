@@ -17,7 +17,24 @@ class DashboardController extends Controller
     public function index(){
         $data['title'] = $data['page_title'] = "Dashboard";
         $data['products'] = Product::query()->with('variants')->where('parent_id',0)->get();
-        $data['homepage_setting'] = HomePageSetting::first(); 
+        $setting = HomePageSetting::first();
+        $lang = session('lang', 'en');
+
+        if ($setting && $lang !== 'en') {
+            $fields = ['why_choose_us', 'about', 'down_paragraph'];
+            foreach ($fields as $field) {
+                if (!empty($setting->$field)) {
+                    $cacheKey = "homepage_{$field}_{$lang}_" . md5($setting->$field);
+                    $setting->$field = \Illuminate\Support\Facades\Cache::remember($cacheKey, 86400, function () use ($setting, $field, $lang) {
+                        $tr = new \Stichoza\GoogleTranslate\GoogleTranslate($lang);
+                        $tr->setSource('en');
+                        return $tr->translate($setting->$field);
+                    });
+                }
+            }
+        }
+
+        $data['homepage_setting'] = $setting;
         return view('frontend.homepage', $data);
     }
 

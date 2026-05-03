@@ -14,11 +14,11 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-t pt-12">
         <!-- Get In Touch -->
         <div>
-            <h2 class="text-lg font-semibold mb-4">Get In Touch</h2>
+            <h2 class="text-lg font-semibold mb-4" data-translate>Get In Touch</h2>
             <ul class="space-y-2 text-sm">
                 <li class="flex items-start gap-2">
                     <i class="fa fa-globe mt-1"></i>
-                    <span>{{ $address }}</span>
+                    <span data-translate>{{ $address }}</span>
                 </li>
                 <li class="flex items-center gap-2">
                     <i class="fa fa-envelope"></i>
@@ -45,36 +45,36 @@
 
         <!-- Shop -->
         <div>
-            <h2 class="text-lg font-semibold mb-4">Shop</h2>
+            <h2 class="text-lg font-semibold mb-4" data-translate>Shop</h2>
             <ul class="space-y-2 text-sm">
-                <li><a href="#" class="hover:underline">About Us</a></li>
-                <li><a href="{{ route('contact_us') }}" class="hover:underline">Contact Us</a></li>
-                <li><a href="{{ route('faq') }}" class="hover:underline">FAQ</a></li>
-                <li><a href="#" class="hover:underline">Payment Method</a></li>
+                <li><a href="#" class="hover:underline" data-translate>About Us</a></li>
+                <li><a href="{{ route('contact_us') }}" class="hover:underline" data-translate>Contact Us</a></li>
+                <li><a href="{{ route('faq') }}" class="hover:underline" data-translate>FAQ</a></li>
+                <li><a href="#" class="hover:underline" data-translate>Payment Method</a></li>
             </ul>
         </div>
 
         <!-- Policy -->
         <div>
-            <h2 class="text-lg font-semibold mb-4">Policy</h2>
+            <h2 class="text-lg font-semibold mb-4" data-translate>Policy</h2>
             <ul class="space-y-2 text-sm">
-                <li><a href="{{ route('return_policy') }}" class="hover:underline">Return Policy</a></li>
-                <li><a href="{{ route('shipping_policy') }}" class="hover:underline">Shipping Policy</a></li>
-                <li><a href="{{ route('privacy_policy') }}" class="hover:underline">Privacy Policy</a></li>
-                <li><a href="#" class="hover:underline">Cookie Policy</a></li>
-                <li><a href="#" class="hover:underline">Terms & Conditions</a></li>
+                <li><a href="{{ route('return_policy') }}" class="hover:underline" data-translate>Return Policy</a></li>
+                <li><a href="{{ route('shipping_policy') }}" class="hover:underline" data-translate>Shipping Policy</a></li>
+                <li><a href="{{ route('privacy_policy') }}" class="hover:underline" data-translate>Privacy Policy</a></li>
+                <li><a href="#" class="hover:underline" data-translate>Cookie Policy</a></li>
+                <li><a href="#" class="hover:underline" data-translate>Terms & Conditions</a></li>
             </ul>
         </div>
 
         <!-- Newsletter -->
         <div>
-            <h2 class="text-lg font-semibold mb-4">Subscribe to our newsletter</h2>
+            <h2 class="text-lg font-semibold mb-4" data-translate>Subscribe to our newsletter</h2>
             <form class="flex flex-col md:flex-row sm:items-center !items-start gap-3"
                 action="{{ route('subscribers.store') }}" method="POST" id="subscriberForm">
                 @csrf
                 <input type="email" name="email" id="subscriber_email" placeholder="Your email address"
                     class="flex-1 border border-gray-300 px-4 py-2 rounded outline-none w-full sm:w-auto" />
-                <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 w-full sm:w-auto">
+                <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 w-full sm:w-auto" data-translate>
                     Subscribe
                 </button>
             </form>
@@ -83,7 +83,7 @@
 
     <!-- Bottom Bar -->
     <div class="mt-10 border-t pt-6 text-center text-sm">
-        <p>Copyright © 2025 All rights reserved.</p>
+        <p data-translate>Copyright © 2025 All rights reserved.</p>
     </div>
 </footer>
 

@@ -74,7 +74,7 @@
                 <div>
                     <div class="flex flex-col items-center text-center mt-6">
                         <p class="mt-2 text-md cursor-pointer may_like_menu_item" data-url="{{ $route }}" data-page_url="{{$page_route}}"
-                            data-type="{{ $categoryType }}">
+                            data-type="{{ $categoryType }}" data-translate>
                             {{ $mayLikedCategory->name }}
                         </p>
                     </div>
@@ -100,7 +100,7 @@
         </div>
     </div>
     <div class="flex mx-auto w-full justify-center my-8">
-        <a href="" class="btn btn-dark btn-lg" id="view_more_button">View More</a>
+        <a href="" class="btn btn-dark btn-lg" id="view_more_button" data-translate>View More</a>
     </div>
 
 </div>
@@ -139,6 +139,15 @@
                     fadeInProducts($cards, function() {
                         $('#productLoader').addClass('hidden');
                     });
+                    // Register and translate newly injected product cards
+                    $('#productContainer [data-translate]').each(function() {
+                        if (!$(this).data('original')) {
+                            $(this).data('original', $(this).text().trim());
+                        }
+                    });
+                    if (window.currentLang && window.currentLang !== 'en') {
+                        window.translatePageContent(window.currentLang);
+                    }
                 },
                 error: function(xhr) {
                     console.error('Error fetching products:', xhr);

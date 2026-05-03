@@ -19,7 +19,7 @@
                 class="mx-auto flex justify-center items-center transition-transform duration-1000 object-contain scale-[1.05] group-hover:scale-[1.5] group-hover:rotate-12" />
             <div
                 class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                <span class="text-white text-lg font-semibold text-center px-2">{{ $trending->name }}</span>
+                <span class="text-white text-lg font-semibold text-center px-2" data-translate>{{ $trending->name }}</span>
             </div>
         </div>
     </a>
