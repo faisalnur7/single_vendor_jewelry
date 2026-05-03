@@ -93,6 +93,16 @@
 
                         fadeInProducts($newProducts);
 
+                        // Register and translate newly injected product cards
+                        $newProducts.find('[data-translate]').each(function() {
+                            if (!$(this).data('original')) {
+                                $(this).data('original', $(this).text().trim());
+                            }
+                        });
+                        if (window.currentLang && window.currentLang !== 'en') {
+                            window.translatePageContent(window.currentLang);
+                        }
+
                         // Update lastPage dynamically
                         lastPage = response.lastPage;
 
